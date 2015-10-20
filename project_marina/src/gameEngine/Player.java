@@ -17,8 +17,8 @@ public class Player extends GameObject {
 
     private VertexArrayObject vao;
 
-    public Vector3f position;
-    public Vector3f movement;
+    //public Vector3f position;
+    //public Vector3f movement;
     public Vector3i iposition;
     public Vector3i imovement;
 
@@ -41,11 +41,11 @@ public class Player extends GameObject {
 
     public Player() {
         this.count = indices.length;
-        this.position = new Vector3f();
+        //this.position = new Vector3f();
         this.iposition = new Vector3i();
         vao = new VertexArrayObject(this.vertices, this.indices);
         this.vaoID = vao.getVaoID();
-        this.movement = new Vector3f();
+        //this.movement = new Vector3f();
         this.imovement = new Vector3i();
     }
 

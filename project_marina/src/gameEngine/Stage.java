@@ -67,8 +67,8 @@ public class Stage {
                     }*/
                     if ((player.iposition.x >= tile.iposition.x &&
                             player.iposition.x < tile.iposition.x + Globals.TILE_WIDTH_P) ||
-                            (player.iposition.x + Globals.ACTOR_WIDTH_P >= tile.iposition.x &&
-                                    player.iposition.x + Globals.ACTOR_WIDTH_P < tile.iposition.x + Globals.TILE_WIDTH_P)) {
+                            (player.iposition.x + Globals.ACTOR_WIDTH_P  - 1 >= tile.iposition.x &&
+                                    player.iposition.x + Globals.ACTOR_WIDTH_P - 1 < tile.iposition.x + Globals.TILE_WIDTH_P)) {
                         if (player.iposition.y <= tile.iposition.y + Globals.TILE_HEIGHT_P &&
                                 player.iposition.y + Globals.ACTOR_HEIGHT_P > tile.iposition.y + Globals.TILE_HEIGHT_P) {
                             if (player.iposition.y < tile.iposition.y + Globals.TILE_HEIGHT_P) {
@@ -90,10 +90,16 @@ public class Stage {
                                     player.iposition.y + Globals.ACTOR_HEIGHT_P >= tile.iposition.y + Globals.TILE_HEIGHT_P)) {
                         if (player.iposition.x - 4 <= tile.iposition.x + Globals.TILE_WIDTH_P &&
                                 player.iposition.x > tile.iposition.x) {
+                            if (player.imovement.x < 0) {
+                                player.iposition.x = tile.iposition.x + Globals.TILE_WIDTH_P;
+                            }
                             leftWall = true;
                         }
                         if (player.iposition.x + Globals.ACTOR_WIDTH_P + 4 >= tile.iposition.x &&
                                 player.iposition.x < tile.iposition.x) {
+                            if (player.imovement.x > 0) {
+                                player.iposition.x = tile.iposition.x - Globals.TILE_WIDTH_P;
+                            }
                             rightWall = true;
                         }
                     }
