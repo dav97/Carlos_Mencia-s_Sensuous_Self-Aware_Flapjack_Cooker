@@ -7,21 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
-      <library name="lwjgl-3.0.0b">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/lwjgl.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/javadoc.zip!/" />
-        </JAVADOC>
-        <NATIVE>
-          <root url="file://$MODULE_DIR$/lib/native" />
-        </NATIVE>
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/src.zip!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
