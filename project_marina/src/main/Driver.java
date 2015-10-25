@@ -14,10 +14,13 @@ import utils.Globals;
  * Created by Rick on 10/18/2015.
  */
 public class Driver {
-
     public boolean running = false;
+
+    //local reference to window size variables
     public static int WIDTH = Globals.WINDOW_WIDTH;
     public static int HEIGHT = Globals.WINDOW_HEIGHT;
+
+    //window handle
     public long window;
 
     private GLFWKeyCallback keyCallback;
@@ -27,7 +30,7 @@ public class Driver {
     public void init() {
         this.running = true;
 
-        //start glfw start
+        //start glfw setup
 
         if (glfwInit() != GL_TRUE) {
             System.err.println("GLFW init failed");
@@ -49,6 +52,13 @@ public class Driver {
 
         //finish glfw setup
 
+        //openGL orthographic translation, don't know if we'll need
+        //glMatrixMode(GL_PROJECTION);
+        //glLoadIdentity();
+        //glOrtho(0, WIDTH, 0, HEIGHT, 0, 1);
+        //glMatrixMode(GL_MODELVIEW);
+        //glLoadIdentity();
+
         stage = new Stage();
     }
 
@@ -62,14 +72,17 @@ public class Driver {
     }
 
     public void update() {
+        //update window?
         glfwPollEvents();
 
+        //update stage
         stage.update();
     }
 
     public void run() {
         init();
 
+        //separation of logic and framerate setup
         long lastTime = System.nanoTime();
         double delta = 0.0;
         double ns = 1000000000.0 / 60.0;
@@ -82,7 +95,8 @@ public class Driver {
             delta += (now - lastTime) / ns;
             lastTime = now;
 
-            if (delta >= 1.0) {
+            //fixed update clock
+            if (delta >= 0.5) {
                 update();
                 updates++;
                 delta--;
@@ -98,12 +112,11 @@ public class Driver {
                 frames = 0;
             }
 
-            if (glfwWindowShouldClose(window) == GL_TRUE) {
+            //handle program termination
+            if (glfwWindowShouldClose(window) == GL_TRUE ||
+                    Keyboard.isKeyDown(GLFW_KEY_ESCAPE)) {
                 running = false;
-            }
-
-            if (Keyboard.isKeyDown(GLFW_KEY_ESCAPE)) {
-                running = false;
+                glfwTerminate();
                 System.exit(0);
             }
         }

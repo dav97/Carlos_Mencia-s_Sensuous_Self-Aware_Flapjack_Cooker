@@ -25,4 +25,12 @@ public class Vector3f {
         this.z += vec.z;
     }
 
+    public Vector3i toVector3i() {
+        return new Vector3i(
+                (int)((x + 1) * (Globals.WINDOW_WIDTH / 2)),
+                (int)((y + 1) * (Globals.WINDOW_HEIGHT / 2)),
+                0
+        );
+    }
+
 }
