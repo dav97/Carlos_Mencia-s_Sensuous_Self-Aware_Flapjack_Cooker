@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="600" height="13" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="maptile1" tilewidth="16" tileheight="16" spacing="1" tilecount="413">
+  <image source="E:/Documents/project MARINA/Graphics/Map Elements/Map Tiles/maptile1.PNG" width="118" height="1002"/>
+ </tileset>
+ <layer name="Tile Layer 2" width="600" height="13">
+  <data encoding="base64" compression="zlib">
+   eJzt1kEJwEAAA8Gr3fMvoA5S+gqBGVgPe59zrn4FAJC0X2UxAICk/SqLAQAk7VdZDAAgab/KYgAASftVFgMASNqvshgAQNJ+lcUAAJL2qywGAJC0X2UxAICk/SqLAQAk7VdZCwDgS/tXFgMASF6PCaII
+  </data>
+ </layer>
+ <layer name="Tile Layer 1" width="600" height="13">
+  <data encoding="base64" compression="zlib">
+   eJzt3EtOwzAUheEbVF6isIFuDVbAHsoAJoVJUwaFSSlCYgGsg6d4CpC6FWwaK1Fw4rhuQ1v9n3SEXashYnTkmMQi0pPldaty55n7gmvtRiJ70azvGAAALLozlfOCtf0l6BKmXz1J2p9cY/oVAAAIYetXsYz3tC5Vbmq/I7e26jgH0d+fNqZffUjao1xj+hUAAAhh61f95LMrlevks/aC9grTr0aS9ijXmH4FAABClPWrMkX7RfOG81cAAKBuk/arWeuoHnOc5CSg02T7VfasVT7ZNfoVAAAIMa1+Na3nh6ZXHanESXqB/WpV0vNVetyQtEs1kui1dZU1oV8BAIAwtn41UBnWfyu/upleNa1+ZfrUKBnrjvWg8ihpv9JrulvpjkW/AgAAIcrez1DVjufcyL7/wbZvZXIY8IzwWeXFkjeV94K114Jr0a8AAEAVk/arZibbnvOujN8BcSrpuyBs+1b5PSzzPZ98qnx55ttyHX2P9CsAAFCF6VdNR8rOV215zvvJ7zUZSrV+lf9endF/I/oVAACownSHyJFWydqK59z0pAsZd6tOwXPBfL8aCP0KAADMP9MdNhxplaxtes7N/yeWnbkqOoP1X3tY9CsAAFDVDxjRA0Q=
+  </data>
+ </layer>
+</map>
