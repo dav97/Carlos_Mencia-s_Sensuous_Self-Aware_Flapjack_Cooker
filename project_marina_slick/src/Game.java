@@ -26,6 +26,9 @@ class Game extends StateBasedGame {
         super(name);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
         int stateId = 0; //id should be passed to each game state and post-fix iterated
@@ -43,6 +46,9 @@ class Game extends StateBasedGame {
      * Private listener class for a state requests to change state.
      */
     private class ChangeStateListener implements ActionListener {
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void actionPerformed(ActionEvent changeStateRequest) {
             int newStateId = Integer.parseInt(changeStateRequest.getActionCommand());

@@ -5,8 +5,8 @@ package utils;
  */
 public class Globals {
 
-    public static int WINDOW_WIDTH = 960;
-    public static int WINDOW_HEIGHT = 416;
+    public static int WINDOW_WIDTH = 1600;
+    public static int WINDOW_HEIGHT = 900;
     public static int SCALE = 2;
     public static int MAP_WIDTH = 77;
     public static int MAP_HEIGHT = 20;

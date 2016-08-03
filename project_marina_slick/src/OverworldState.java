@@ -5,7 +5,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -17,11 +16,10 @@ import java.awt.event.ActionListener;
  * @since 2016.08.01
  */
 class OverworldState extends BasicGameState {
-    private int id;
-    private ActionListener changeStateListener;
-
     OverworldModel overworldModel;
     OverworldView overworldView;
+    private int id;
+    private ActionListener changeStateListener;
 
     /**
      * State constructor. Stores reference parameters.
@@ -34,27 +32,52 @@ class OverworldState extends BasicGameState {
         this.changeStateListener = changeStateListener;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getID() {
         return id;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         overworldModel = new OverworldModel();
         overworldView = new OverworldView();
 
-        //TODO: load in the map, pass it to the view... and the model...?
-        //TiledMap tiledMap = new TiledMap("res/debug/debug.tmx");
+        TiledMap tiledMap = new TiledMap("res/debug/debug.tmx");
+        Boolean mapClip[][] = new Boolean[tiledMap.getWidth()][tiledMap.getHeight()]; //true means passable, false means not passable
+
+        int tileId;
+        for (int x = 0; x < tiledMap.getWidth(); ++x) {
+            for (int y = 0; y < tiledMap.getHeight(); ++y) {
+                tileId = tiledMap.getTileId(x, y, 0);
+                mapClip[x][y] = tiledMap.getTileProperty(tileId, "clip", "1").equals("1");
+            }
+        }
+
+        overworldModel.setMapModel(tiledMap.getWidth(), tiledMap.getHeight(), mapClip);
+        overworldView.setMap(tiledMap);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         overworldView.draw(g);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+
+
         //example of requesting game state change, i.e. to the main menu or fight state
         /*if (false) {
             ActionEvent e = new ActionEvent(this, 0, String.valueOf(id));
