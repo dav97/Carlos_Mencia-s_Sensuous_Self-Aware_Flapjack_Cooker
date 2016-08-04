@@ -13,12 +13,15 @@ class OverworldModel {
     Boolean[][] mapClip; //the grid of passable (clip true) and not passable (clip false)
     String[][] mapHooks;
 
+    //TODO: move these to a separate class
     int playerWidth;
     int playerHeight;
-    int playerX;
-    int playerY;
-    int playerDX;
-    int playerDY;
+    //storing floats for this makes movement and drawing easier,
+    //may make collision handling much harder...
+    float playerX;
+    float playerY;
+    float playerDX;
+    float playerDY;
 
     /**
      * Default constructor for this model.
@@ -88,20 +91,67 @@ class OverworldModel {
     }
 
     /**
+     * Get the raw player width in pixels.
+     *
+     * @return int: The raw player width in pixels.
+     */
+    int getPlayerWidth() {
+        return playerWidth;
+    }
+
+    /**
+     * Get the raw player height in pixels.
+     *
+     * @return int: The raw player width in pixels.
+     */
+    int getPlayerHeight() {
+        return playerHeight;
+    }
+
+    /**
      * Get the logical X coordinate of the player.
      *
-     * @return int: The logical X coordinate of the player.
+     * @return float: The logical X coordinate of the player.
      */
-    int getPlayerX() {
+    float getPlayerX() {
         return playerX;
+    }
+
+    /**
+     * Set the logical player X coordinate.
+     *
+     * @param playerX float: The logical X coordinate of the player.
+     */
+    void setPlayerX(float playerX) {
+        this.playerX = playerX;
     }
 
     /**
      * Get the logical Y coordinate of the player.
      *
-     * @return int: The logical Y coordinate of the player.
+     * @return float: The logical Y coordinate of the player.
      */
-    int getPlayerY() {
+    float getPlayerY() {
         return playerY;
+    }
+
+    /**
+     * Set the logical player Y coordinate.
+     *
+     * @param playerY float: The logical Y coordinate of the player.
+     */
+    void setPlayerY(float playerY) {
+        this.playerY = playerY;
+    }
+
+    /**
+     * Set the logical player X and Y coordinate.
+     *
+     * @param playerX float: The logical X coordinate of the player.
+     * @param playerY float: The logical Y coordinate of the player.
+     */
+    void setPlayerLocation(float playerX, float playerY) {
+        this.playerX = playerX;
+        this.playerY = playerY;
     }
 }
