@@ -119,19 +119,37 @@ class OverworldState extends BasicGameState {
 
         //example of updating player location/
         //crummy but functional player controls for testing purposes
+        float playerDX = 0;
+        float playerDY = 0;
+
         if (container.getInput().isKeyDown(Input.KEY_W)) {
+            playerDY = -0.1f;
             overworldModel.setPlayerY(playerY - 0.1f);
         }
         if (container.getInput().isKeyDown(Input.KEY_A)) {
-            overworldModel.setPlayerX(playerX - 0.1f);
+            playerDX = -0.1f;
+            //overworldModel.setPlayerX(playerX - 0.1f);
         }
         if (container.getInput().isKeyDown(Input.KEY_S)) {
+            playerDY = 0.1f;
             overworldModel.setPlayerY(playerY + 0.1f);
         }
         if (container.getInput().isKeyDown(Input.KEY_D)) {
-            overworldModel.setPlayerX(playerX + 0.1f);
+            playerDX = 0.1f;
+            //overworldModel.setPlayerX(playerX + 0.1f);
         }
 
+        if (playerDX != 0) {
+            float adjustedDX = overworldModel.getHorizontalCollisionByDX(playerDX);
+
+            overworldModel.setPlayerDX(adjustedDX);
+        } else {
+            overworldModel.setPlayerDX(playerDX);
+        }
+
+        overworldModel.setPlayerX(overworldModel.getPlayerX() + overworldModel.getPlayerDX());
+
+        //view updating
         float playerWidth = overworldModel.getPlayerWidth();
         float playerHeight = overworldModel.getPlayerHeight();
 
@@ -145,6 +163,7 @@ class OverworldState extends BasicGameState {
         float centeredPlayerY = ((Globals.WINDOW_HEIGHT / 2) / scale) - (playerHeight / 2);
 
         overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
+        //end view updating
 
         //example of requesting game state change, i.e. to the main menu or fight state
         /*if (false) {

@@ -90,6 +90,41 @@ class OverworldModel {
         }
     }
 
+    float getHorizontalCollisionByDX(float dX) {
+        //TODO: need to check for collision at middle and bottom of player too, currently just top
+        float playerXTest = playerX;
+
+        if (dX < 0) {
+            playerXTest = playerX + dX;
+        } else if (dX > 0) {
+            playerXTest = playerX + playerWidth + dX;
+        }
+
+        int mapXTest = (int) (playerXTest / tileWidth);
+        int mapYTest = (int) (playerY / tileWidth);
+
+        if (!mapClip[mapXTest][mapYTest]) {
+            float collisionDX = 0;
+            if (dX < 0) {
+                //I do not understand why this works TODO: figure it out
+                collisionDX = ((mapXTest + 1) * tileWidth) - playerX;
+            } else if (dX > 0) {
+                //I do not understand why this works TODO: figure it out
+                collisionDX = ((mapXTest - 1) * tileWidth) - playerX;
+            }
+            System.out.println("Collision detected, distance (dx) to tile is: " + collisionDX);
+            System.out.println("playerX is " + playerX + ", playerY " + playerY);
+            System.out.println("mapXTest is " + mapXTest + ", " + mapXTest * tileWidth + ", mapYTest " + mapYTest + ", " + mapYTest * tileWidth);
+            return collisionDX;
+        }
+
+        return dX;
+    }
+
+    float getVerticalCollisionByDY() {
+        return playerDY;
+    }
+
     /**
      * Get the raw player width in pixels.
      *
@@ -153,5 +188,13 @@ class OverworldModel {
     void setPlayerLocation(float playerX, float playerY) {
         this.playerX = playerX;
         this.playerY = playerY;
+    }
+
+    float getPlayerDX() {
+        return playerDX;
+    }
+
+    void setPlayerDX(float playerDX) {
+        this.playerDX = playerDX;
     }
 }
