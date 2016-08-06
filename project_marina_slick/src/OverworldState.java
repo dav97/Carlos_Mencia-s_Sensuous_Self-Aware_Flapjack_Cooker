@@ -24,6 +24,8 @@ class OverworldState extends BasicGameState {
     private OverworldModel overworldModel;
     private OverworldView overworldView;
     private float scale = 6;
+    //private boolean staleJumpInput = false; //not sure about this one
+    private boolean staleUseInput = false; //TODO: move this, and player input update handling, to a class
 
     /**
      * State constructor. Stores reference parameters.
@@ -161,6 +163,8 @@ class OverworldState extends BasicGameState {
      */
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        //TODO: split this method up
+
         if (container.getWidth() != WINDOW_WIDTH || container.getHeight() != WINDOW_HEIGHT) {
             WINDOW_WIDTH = container.getWidth();
             WINDOW_HEIGHT = container.getHeight();
@@ -170,7 +174,6 @@ class OverworldState extends BasicGameState {
             overworldView.setScale(scale);
         }
 
-        //TODO: split this method up
         float playerX = overworldModel.getPlayerX();
         float playerY = overworldModel.getPlayerY();
         float playerDX = overworldModel.getPlayerDX();
@@ -203,11 +206,17 @@ class OverworldState extends BasicGameState {
 
         //player input
         //jump
-        if (container.getInput().isKeyDown(Input.KEY_W)) {
+        if (container.getInput().isKeyDown(Input.KEY_W)
+            //&& !staleJumpInput
+                ) {
             if (overworldModel.getVerticalCollisionDistanceByDY(overworldModel.getMaxDXDueToInput()) == 0) { //if the player has solid ground beneath her
+                //staleJumpInput = true;
                 proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
             }
         }
+        /*if (!container.getInput().isKeyDown(Input.KEY_W)) {
+            staleJumpInput = false;
+        }*/
         //move right
         if (container.getInput().isKeyDown(Input.KEY_A)) {
             if (playerDX > -(overworldModel.getMaxDXDueToInput())) {
@@ -229,7 +238,9 @@ class OverworldState extends BasicGameState {
         }
         //"use", currently disallowed while jumping or falling
         if ((container.getInput().isKeyDown(Input.KEY_E)) &&
-                (overworldModel.getPlayerDY() == 0)) {
+                (overworldModel.getPlayerDY() == 0) &&
+                !staleUseInput) {
+            staleUseInput = true;
             String hooks[] = overworldModel.getIntersectingTileHooks();
             //String feedback = "Intersecting tile hooks:";
 
@@ -245,12 +256,13 @@ class OverworldState extends BasicGameState {
                             break outerLoop;
                         }
                     }
-
                     //feedback += " " + hooks[i_hook];
                 }
             }
-
             //System.out.println(feedback);
+        }
+        if (!container.getInput().isKeyDown(Input.KEY_E)) {
+            staleUseInput = false;
         }
         //end player input
 
