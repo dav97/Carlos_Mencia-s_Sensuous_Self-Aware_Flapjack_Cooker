@@ -23,6 +23,12 @@ class OverworldModel {
     float playerDX;
     float playerDY;
 
+    float standardInputDelta;
+    float instantaneousJumpDY;
+
+    float maxDYDueToGravity;
+    float dDYDueToGravity;
+
     /**
      * Default constructor for this model.
      */
@@ -290,5 +296,37 @@ class OverworldModel {
      */
     void setPlayerDY(float playerDY) {
         this.playerDY = playerDY;
+    }
+
+    float getStandardInputDelta() {
+        return standardInputDelta;
+    }
+
+    void setStandardInputDelta(float standardInputDelta) {
+        this.standardInputDelta = standardInputDelta;
+    }
+
+    float getInstantaneousJumpDY() {
+        return instantaneousJumpDY;
+    }
+
+    void setInstantaneousJumpDY(float instantaneousJumpDY) {
+        this.instantaneousJumpDY = instantaneousJumpDY;
+    }
+
+    float getDDYDueToGravity() {
+        return dDYDueToGravity;
+    }
+
+    void setDDYDueToGravity(float dDYDueToGravity) {
+        this.dDYDueToGravity = dDYDueToGravity;
+    }
+
+    float getMaxDYDueToGravity() {
+        return maxDYDueToGravity;
+    }
+
+    void setMaxDYDueToGravity(float maxDYDueToGravity) {
+        this.maxDYDueToGravity = maxDYDueToGravity;
     }
 }
