@@ -81,7 +81,6 @@ class OverworldState extends BasicGameState {
 
         Image tiledMapImage = new Image("res/debug/debug.png", false, Image.FILTER_NEAREST);
 
-        //overworldView.setupMapViewModel(tiledMap);
         overworldView.setMapImage(tiledMapImage);
 
         //end map setup
@@ -97,7 +96,6 @@ class OverworldState extends BasicGameState {
         overworldView.setupPlayerViewModel(playerBasic);
 
         overworldModel.spawnPlayer("spawn");
-        //overworldView.setPlayerLocation(overworldModel.getPlayerX(), overworldModel.getPlayerY());
         //end player setup
     }
 
@@ -114,40 +112,46 @@ class OverworldState extends BasicGameState {
      */
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        //TODO: split this method up
         float playerX = overworldModel.getPlayerX();
         float playerY = overworldModel.getPlayerY();
 
         //example of updating player location/
         //crummy but functional player controls for testing purposes
-        float playerDX = 0;
-        float playerDY = 0;
+        float proposedPlayerDX = 0;
+        float proposedPlayerDY = 0;
 
         if (container.getInput().isKeyDown(Input.KEY_W)) {
-            playerDY = -0.1f;
-            overworldModel.setPlayerY(playerY - 0.1f);
+            proposedPlayerDY = -0.1f;
         }
         if (container.getInput().isKeyDown(Input.KEY_A)) {
-            playerDX = -0.1f;
-            //overworldModel.setPlayerX(playerX - 0.1f);
+            proposedPlayerDX = -0.1f;
         }
         if (container.getInput().isKeyDown(Input.KEY_S)) {
-            playerDY = 0.1f;
-            overworldModel.setPlayerY(playerY + 0.1f);
+            proposedPlayerDY = 0.1f;
         }
         if (container.getInput().isKeyDown(Input.KEY_D)) {
-            playerDX = 0.1f;
-            //overworldModel.setPlayerX(playerX + 0.1f);
+            proposedPlayerDX = 0.1f;
         }
 
-        if (playerDX != 0) {
-            float adjustedDX = overworldModel.getHorizontalCollisionByDX(playerDX);
+        if (proposedPlayerDX != 0) {
+            float adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
 
             overworldModel.setPlayerDX(adjustedDX);
         } else {
-            overworldModel.setPlayerDX(playerDX);
+            overworldModel.setPlayerDX(proposedPlayerDX);
+        }
+
+        if (proposedPlayerDY != 0) {
+            float adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
+
+            overworldModel.setPlayerDY(adjustedDY);
+        } else {
+            overworldModel.setPlayerDY(proposedPlayerDY);
         }
 
         overworldModel.setPlayerX(overworldModel.getPlayerX() + overworldModel.getPlayerDX());
+        overworldModel.setPlayerY(overworldModel.getPlayerY() + overworldModel.getPlayerDY());
 
         //view updating
         float playerWidth = overworldModel.getPlayerWidth();
