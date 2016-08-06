@@ -67,6 +67,11 @@
     <property name="clip" value="0"/>
    </properties>
   </tile>
+  <tile id="54">
+   <properties>
+    <property name="hook" value="debug_house"/>
+   </properties>
+  </tile>
   <tile id="143">
    <properties>
     <property name="clip" value="0"/>
@@ -290,7 +295,7 @@
  </tileset>
  <layer name="reflayer" width="600" height="13">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3WsQ3DQAADMWcfT/b7D5DWlYxUigASuB3ufK7r6KcAAJL2qywGAJC0X2UxAICk/SqLAQAk7VdZDAAgab/KYgAASftVFgMASJ7fcP/BuywEAJC0X2UxAICk/SqLAQAk7VdZDAAgab/KWgAAb9q/shgAQPIFLc+wl+B5AAA=
+   H4sIAAAAAAAAC+3WsQkCAQAEwbcfc3v6/gswMPnoQBDPkxnYHva8HceptwIASNqvshgAQNJ+lcUAAJL2qywGAJC0X2UxAICk/SqLAQAk7VdZDAAguX7D/Qfe5Vs9jlf+CgD4tPbn+CsA4N+0P2cxAICk/SqLAQAk7VdZDAAgab/KYgAAyRMDVCox4HkAAA==
   </data>
  </layer>
  <layer name="foreground" width="600" height="13">
