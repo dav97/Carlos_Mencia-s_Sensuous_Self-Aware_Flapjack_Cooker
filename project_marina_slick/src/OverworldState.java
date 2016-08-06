@@ -18,13 +18,11 @@ class OverworldState extends BasicGameState {
     private static int WINDOW_HEIGHT;
     private static float WINDOW_CENTER_HORIZONTAL;
     private static float WINDOW_CENTER_VERTIAL;
-
-    private final int id;
+    private static String MAP_HOOK;
     //private final ActionListener changeStateListener; //TODO: needs redoing
-
+    private final int id;
     private OverworldModel overworldModel;
     private OverworldView overworldView;
-
     private float scale = 6;
 
     /**
@@ -64,7 +62,44 @@ class OverworldState extends BasicGameState {
         //end component setup
 
         //map setup
-        TiledMap tiledMap = new TiledMap(OverworldGlobals.DEFAULT_TILED_MAP_PATH);
+        String defaultMapName = OverworldGlobals.MAP_HOOK_LIST[OverworldGlobals.DEFAULT_MAP_ID];
+
+        loadMap(defaultMapName);
+        //end map setup
+
+        //player setup
+        Image playerBasic = new Image(OverworldGlobals.DEFAULT_CHARACTER_IMAGE_PATH, false, Image.FILTER_NEAREST);
+
+        int playerWidth = playerBasic.getWidth(); //the logical player width is the raw graphic width
+        int playerHeight = playerBasic.getHeight(); //the logical player height is the raw graphic height
+
+        overworldModel.setupPlayerModel(playerWidth, playerHeight);
+        overworldView.setupPlayerViewModel(playerBasic);
+
+        overworldModel.spawnPlayer(OverworldGlobals.TILED_HOOK_PROPERTY_SPAWN);
+
+        overworldModel.setDDXDueToInput(OverworldGlobals.STANDARD_DDX_DUE_TO_INPUT);
+        overworldModel.setMaxDXDueToInput(OverworldGlobals.STANDARD_MAX_DX_DUE_TO_INPUT);
+        overworldModel.setInstantaneousJumpDY(OverworldGlobals.STANDARD_INSTANTANEOUS_JUMP_DY);
+        overworldModel.setDDYDueToGravity(OverworldGlobals.STANDARD_DDY_DUE_TO_GRAVITY);
+        overworldModel.setMaxDYDueToGravity(OverworldGlobals.STANDARD_MAX_DY_DUE_TO_GRAVITY);
+        //end player setup
+    }
+
+    /**
+     * Load in a TiledMap and map graphic from the map name. Update the model with map logic
+     * and pass the new map graphic to the view.
+     *
+     * @param loadMapName String: The name of the map to load. Should always match one of the
+     *                    strings in OverworldGlobals.MAP_HOOK_LIST. The Tiled map and graphic
+     *                    files should be stored in OverworldGlobals.MAP_RESOURCE_PATH. Graphic
+     *                    should have extension OverworldGlobals.GRAPHIC_EXTENSION.
+     *
+     * @throws SlickException Slick library exception.
+     */
+    private void loadMap(String loadMapName) throws SlickException {
+        TiledMap tiledMap = new TiledMap(OverworldGlobals.MAP_RESOURCE_PATH +
+                loadMapName + OverworldGlobals.TILED_MAP_EXTENSION);
         int tiledForegroundLayerId = tiledMap.getLayerIndex(OverworldGlobals.TILED_FOREGROUND_LAYER_NAME);
         int tiledReferenceLayerId = tiledMap.getLayerIndex(OverworldGlobals.TILED_REFERENCE_LAYER_NAME);
 
@@ -89,29 +124,28 @@ class OverworldState extends BasicGameState {
 
         overworldModel.setupMapModel(tiledMap.getWidth(), tiledMap.getHeight(), tiledMap.getTileWidth(), mapClip, mapHooks);
 
-        Image tiledMapImage = new Image(OverworldGlobals.DEFAULT_MAP_IMAGE_PATH, false, Image.FILTER_NEAREST);
+        Image tiledMapImage = new Image(OverworldGlobals.MAP_RESOURCE_PATH +
+                loadMapName + OverworldGlobals.GRAPHICS_EXTENSION,
+                false, Image.FILTER_NEAREST);
 
         overworldView.setMapImage(tiledMapImage);
 
-        //end map setup
+        MAP_HOOK = loadMapName;
+    }
 
-        //player setup
-        Image playerBasic = new Image(OverworldGlobals.DEFAULT_CHARACTER_IMAGE_PATH, false, Image.FILTER_NEAREST);
+    /**
+     * Transition to a new map. Load the new map and spawn the player at the hook associated
+     * with the map transitioning from.
+     *
+     * @param newMapHook String: The name of the map to load.
+     * @param spawnHook  String: The hook to use for spawning the player in the new map.
+     *
+     * @throws SlickException Slick library exception.
+     */
+    private void transitionMap(String newMapHook, String spawnHook) throws SlickException {
+        loadMap(newMapHook);
 
-        int playerWidth = playerBasic.getWidth(); //the logical player width is the raw graphic width
-        int playerHeight = playerBasic.getHeight(); //the logical player height is the raw graphic height
-
-        overworldModel.setupPlayerModel(playerWidth, playerHeight);
-        overworldView.setupPlayerViewModel(playerBasic);
-
-        overworldModel.spawnPlayer(OverworldGlobals.TILED_HOOK_PROPERTY_SPAWN);
-
-        overworldModel.setDDXDueToInput(OverworldGlobals.STANDARD_DDX_DUE_TO_INPUT);
-        overworldModel.setMaxDXDueToInput(OverworldGlobals.STANDARD_MAX_DX_DUE_TO_INPUT);
-        overworldModel.setInstantaneousJumpDY(OverworldGlobals.STANDARD_INSTANTANEOUS_JUMP_DY);
-        overworldModel.setDDYDueToGravity(OverworldGlobals.STANDARD_DDY_DUE_TO_GRAVITY);
-        overworldModel.setMaxDYDueToGravity(OverworldGlobals.STANDARD_MAX_DY_DUE_TO_GRAVITY);
-        //end player setup
+        overworldModel.spawnPlayer(spawnHook);
     }
 
     /**
@@ -199,11 +233,22 @@ class OverworldState extends BasicGameState {
             String hooks[] = overworldModel.getIntersectingTileHooks();
             //String feedback = "Intersecting tile hooks:";
 
-            /*for (int i = 0; i < hooks.length; ++i) {
-                if (!hooks[i].equals("")) {
-                    feedback += " " + hooks[i];
+            outerLoop:
+            //TODO: naming loops to break multiple layers is discouraged, revisit
+            for (String hook : hooks) {
+                if (!hook.equals("")) {
+                    for (int i_map_id = 0; i_map_id < OverworldGlobals.MAP_HOOK_LIST.length; ++i_map_id) {
+                        if (hook.equals(OverworldGlobals.MAP_HOOK_LIST[i_map_id])) {
+                            System.out.println("Valid map hook found: <" + hook + ">");
+                            System.out.println("Transitioning to <" + hook + "> from <" + MAP_HOOK + ">");
+                            transitionMap(hook, MAP_HOOK);
+                            break outerLoop;
+                        }
+                    }
+
+                    //feedback += " " + hooks[i_hook];
                 }
-            }*/
+            }
 
             //System.out.println(feedback);
         }

@@ -3,6 +3,18 @@
  */
 public class OverworldGlobals {
 
+    public static final String[] MAP_HOOK_LIST = new String[]{
+            "debug",
+            "debug_house"
+    };
+
+    public static final int DEFAULT_MAP_ID = 0;
+
+    public static final String MAP_RESOURCE_PATH = "res/debug/";
+
+    public static final String TILED_MAP_EXTENSION = ".tmx";
+    public static final String GRAPHICS_EXTENSION = ".png";
+
     public static final String DEFAULT_TILED_MAP_PATH = "res/debug/debug.tmx";
 
     public static final String TILED_FOREGROUND_LAYER_NAME = "foreground";

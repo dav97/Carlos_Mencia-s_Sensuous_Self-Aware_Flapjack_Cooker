@@ -86,14 +86,17 @@ class OverworldModel {
      * @param hook String: A reference point in the map.
      */
     void spawnPlayer(String hook) {
+        System.out.println("Spawning player at hook <" + hook + ">");
+
         for (int x = 0; x < mapWidth; ++x) {
             for (int y = 0; y < mapHeight; ++y) {
                 if (mapHooks[x][y].equals(hook)) {
+                    System.out.println("Hook <" + hook + "> found at <" + x + ", " + y + ">");
                     playerX = x * tileWidth;
                     playerY = y * tileWidth;
                     playerDX = 0;
                     playerDY = 0;
-                    break;
+                    return;
                 }
             }
         }

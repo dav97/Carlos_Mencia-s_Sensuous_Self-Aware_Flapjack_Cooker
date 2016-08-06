@@ -7,6 +7,26 @@
     <property name="hook" value="debug"/>
    </properties>
   </tile>
+  <tile id="311">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="317">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="319">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="328">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="reflayer" width="23" height="13">
   <data encoding="base64" compression="gzip">
