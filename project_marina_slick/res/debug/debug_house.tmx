@@ -10,7 +10,7 @@
  </tileset>
  <layer name="reflayer" width="23" height="13">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGAWjYBRgAx5D1OzhCgB0GcYarAQAAA==
+   H4sIAAAAAAAAC2NgGAX4QBYj5XjU7KFptgcWPUPB3aSYPZQAAFgNaaOsBAAA
   </data>
  </layer>
  <layer name="background" width="23" height="13">
