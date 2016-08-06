@@ -121,19 +121,38 @@ class OverworldState extends BasicGameState {
         float proposedPlayerDX = 0;
         float proposedPlayerDY = 0;
 
+        //gravity
+        //TODO: abstract 0.25 to a global
+        //if the player dy is less than the max dy due to gravity, add to it
+        if (overworldModel.getPlayerDY() < 0.25) {
+            //TODO: abstract 0.001 to a global
+            proposedPlayerDY = overworldModel.getPlayerDY() + 0.001f;
+        } else {
+            proposedPlayerDY = overworldModel.getPlayerDY();
+        }
+        //end gravity
+
+        //player input
         if (container.getInput().isKeyDown(Input.KEY_W)) {
-            proposedPlayerDY = -0.1f;
+            //TODO: abstract 0.1 to a global
+            if (overworldModel.getVerticalCollisionDistanceByDY(0.1f) == 0) { //if the player has solid ground beneath her
+                //TODO: abstract -0.35 to a global
+                proposedPlayerDY = -0.35f;
+            }
         }
         if (container.getInput().isKeyDown(Input.KEY_A)) {
             proposedPlayerDX = -0.1f;
         }
         if (container.getInput().isKeyDown(Input.KEY_S)) {
-            proposedPlayerDY = 0.1f;
+            //proposedPlayerDY = 0.1f;
         }
         if (container.getInput().isKeyDown(Input.KEY_D)) {
             proposedPlayerDX = 0.1f;
         }
+        //end player input
 
+        //update player movement and location
+        //if the proposed player dx is non-zero, check for collisions and use the collision distance for setting dx
         if (proposedPlayerDX != 0) {
             float adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
 
@@ -142,6 +161,7 @@ class OverworldState extends BasicGameState {
             overworldModel.setPlayerDX(proposedPlayerDX);
         }
 
+        //if the proposed player dy is non-zero, check for collisions and use the collision distance for setting dy
         if (proposedPlayerDY != 0) {
             float adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
 
@@ -152,6 +172,7 @@ class OverworldState extends BasicGameState {
 
         overworldModel.setPlayerX(overworldModel.getPlayerX() + overworldModel.getPlayerDX());
         overworldModel.setPlayerY(overworldModel.getPlayerY() + overworldModel.getPlayerDY());
+        //end update player movement and location
 
         //view updating
         float playerWidth = overworldModel.getPlayerWidth();
