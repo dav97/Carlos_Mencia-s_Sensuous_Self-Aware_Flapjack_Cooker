@@ -202,6 +202,11 @@
     <property name="clip" value="0"/>
    </properties>
   </tile>
+  <tile id="218">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
   <tile id="219">
    <properties>
     <property name="clip" value="0"/>

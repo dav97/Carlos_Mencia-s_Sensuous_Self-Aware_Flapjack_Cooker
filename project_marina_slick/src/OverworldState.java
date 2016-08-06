@@ -106,7 +106,7 @@ class OverworldState extends BasicGameState {
 
         overworldModel.spawnPlayer(OverworldGlobals.TILED_HOOK_PROPERTY_SPAWN);
 
-        overworldModel.setdDXDueToInput(OverworldGlobals.STANDARD_DDX_DUE_TO_INPUT);
+        overworldModel.setDDXDueToInput(OverworldGlobals.STANDARD_DDX_DUE_TO_INPUT);
         overworldModel.setMaxDXDueToInput(OverworldGlobals.STANDARD_MAX_DX_DUE_TO_INPUT);
         overworldModel.setInstantaneousJumpDY(OverworldGlobals.STANDARD_INSTANTANEOUS_JUMP_DY);
         overworldModel.setDDYDueToGravity(OverworldGlobals.STANDARD_DDY_DUE_TO_GRAVITY);
@@ -155,7 +155,7 @@ class OverworldState extends BasicGameState {
         }
         //end gravity
 
-        //reduce horizontal player movement
+        //horizontal player movement fade
         //if it's close enough to 0, just make it 0 - was experiencing a floating point error otherwise
         if ((playerDX < OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND) &&
                 (playerDX > -(OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND))) {
@@ -165,7 +165,7 @@ class OverworldState extends BasicGameState {
         } else if (playerDX < 0) {
             proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
         }
-        //end reduce horizontal player movement
+        //end horizontal player movement fade
 
         //player input
         if (container.getInput().isKeyDown(Input.KEY_W)) {

@@ -173,6 +173,15 @@ class OverworldModel {
             playerYTest = playerY + playerHeight + dY;
         }
 
+        //map bounds checking
+        if (playerYTest < 0) {
+            return -(playerY);
+        }
+        if (playerYTest > (((mapHeight) * tileWidth))) {
+            return (((mapHeight) * tileWidth) - (playerY + playerHeight));
+        }
+        //end map bounds checking
+
         int maxMapXCollisionTiles = 1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) + 1; //check the mapX, at minimum, level with the left and right side of the player
 
         int[] mapXTest = new int[maxMapXCollisionTiles];
@@ -304,7 +313,7 @@ class OverworldModel {
         return dDXDueToInput;
     }
 
-    void setdDXDueToInput(float dDXDueToInput) {
+    void setDDXDueToInput(float dDXDueToInput) {
         this.dDXDueToInput = dDXDueToInput;
     }
 
