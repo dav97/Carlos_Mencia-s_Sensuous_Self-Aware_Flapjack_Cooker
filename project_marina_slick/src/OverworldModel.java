@@ -121,6 +121,15 @@ class OverworldModel {
             playerXTest = playerX + playerWidth + dX;
         }
 
+        //map bounds checking
+        if (playerXTest < 0) {
+            return -(playerX);
+        }
+        if (playerXTest > (((mapWidth) * tileWidth))) {
+            return (((mapWidth) * tileWidth) - (playerX + playerWidth));
+        }
+        //end map bounds checking
+
         int maxMapXCollisionTiles = 1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) + 1; //check the mapY, at minimum, level with the top and bottom of the player
 
         int mapXTest = (int) (playerXTest / tileWidth);
