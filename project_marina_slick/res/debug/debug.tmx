@@ -82,6 +82,11 @@
     <property name="clip" value="0"/>
    </properties>
   </tile>
+  <tile id="146">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
   <tile id="150">
    <properties>
     <property name="clip" value="0"/>
@@ -197,7 +202,7 @@
     <property name="clip" value="0"/>
    </properties>
   </tile>
-  <tile id="218">
+  <tile id="219">
    <properties>
     <property name="clip" value="0"/>
    </properties>

@@ -20,10 +20,14 @@ public class OverworldGlobals {
 
     public static final String DEFAULT_CHARACTER_IMAGE_PATH = "res/Overworld Characters/PCs/Marina/mf.png";
 
-    public static final float STANDARD_INPUT_DELTA = 0.1f;
+    public static final float STANDARD_DDX_DUE_TO_INPUT = 0.001f;
+    public static final float STANDARD_MAX_DX_DUE_TO_INPUT = 0.1f;
+
+    public static final float STANDARD_DX_FADE_SANITY_BOUND = 0.01f;
+
     public static final float STANDARD_INSTANTANEOUS_JUMP_DY = -0.35f;
 
-    public static final float STANDARD_MAX_DY_DUE_TO_GRAVITY = 0.25f;
     public static final float STANDARD_DDY_DUE_TO_GRAVITY = 0.001f;
+    public static final float STANDARD_MAX_DY_DUE_TO_GRAVITY = 0.25f;
 
 }

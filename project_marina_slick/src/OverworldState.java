@@ -106,7 +106,8 @@ class OverworldState extends BasicGameState {
 
         overworldModel.spawnPlayer(OverworldGlobals.TILED_HOOK_PROPERTY_SPAWN);
 
-        overworldModel.setStandardInputDelta(OverworldGlobals.STANDARD_INPUT_DELTA);
+        overworldModel.setdDXDueToInput(OverworldGlobals.STANDARD_DDX_DUE_TO_INPUT);
+        overworldModel.setMaxDXDueToInput(OverworldGlobals.STANDARD_MAX_DX_DUE_TO_INPUT);
         overworldModel.setInstantaneousJumpDY(OverworldGlobals.STANDARD_INSTANTANEOUS_JUMP_DY);
         overworldModel.setDDYDueToGravity(OverworldGlobals.STANDARD_DDY_DUE_TO_GRAVITY);
         overworldModel.setMaxDYDueToGravity(OverworldGlobals.STANDARD_MAX_DY_DUE_TO_GRAVITY);
@@ -138,6 +139,7 @@ class OverworldState extends BasicGameState {
         //TODO: split this method up
         float playerX = overworldModel.getPlayerX();
         float playerY = overworldModel.getPlayerY();
+        float playerDX = overworldModel.getPlayerDX();
 
         //example of updating player location/
         //crummy but functional player controls for testing purposes
@@ -153,20 +155,40 @@ class OverworldState extends BasicGameState {
         }
         //end gravity
 
+        //reduce horizontal player movement
+        //if it's close enough to 0, just make it 0 - was experiencing a floating point error otherwise
+        if ((playerDX < OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND) &&
+                (playerDX > -(OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND))) {
+            proposedPlayerDX = 0;
+        } else if (playerDX > 0) {
+            proposedPlayerDX = playerDX - overworldModel.getDDXDueToInput();
+        } else if (playerDX < 0) {
+            proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
+        }
+        //end reduce horizontal player movement
+
         //player input
         if (container.getInput().isKeyDown(Input.KEY_W)) {
-            if (overworldModel.getVerticalCollisionDistanceByDY(overworldModel.getStandardInputDelta()) == 0) { //if the player has solid ground beneath her
+            if (overworldModel.getVerticalCollisionDistanceByDY(overworldModel.getMaxDXDueToInput()) == 0) { //if the player has solid ground beneath her
                 proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
             }
         }
         if (container.getInput().isKeyDown(Input.KEY_A)) {
-            proposedPlayerDX = -(overworldModel.getStandardInputDelta());
+            if (playerDX > -(overworldModel.getMaxDXDueToInput())) {
+                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput());
+            } else {
+                proposedPlayerDX = playerDX;
+            }
         }
         /*if (container.getInput().isKeyDown(Input.KEY_S)) {
             //not yet implemented
         }*/
         if (container.getInput().isKeyDown(Input.KEY_D)) {
-            proposedPlayerDX = overworldModel.getStandardInputDelta();
+            if (playerDX < overworldModel.getMaxDXDueToInput()) {
+                proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
+            } else {
+                proposedPlayerDX = playerDX;
+            }
         }
         //end player input
 
