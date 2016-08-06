@@ -168,11 +168,13 @@ class OverworldState extends BasicGameState {
         //end horizontal player movement fade
 
         //player input
+        //jump
         if (container.getInput().isKeyDown(Input.KEY_W)) {
             if (overworldModel.getVerticalCollisionDistanceByDY(overworldModel.getMaxDXDueToInput()) == 0) { //if the player has solid ground beneath her
                 proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
             }
         }
+        //move right
         if (container.getInput().isKeyDown(Input.KEY_A)) {
             if (playerDX > -(overworldModel.getMaxDXDueToInput())) {
                 proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput());
@@ -183,12 +185,27 @@ class OverworldState extends BasicGameState {
         /*if (container.getInput().isKeyDown(Input.KEY_S)) {
             //not yet implemented
         }*/
+        //move left
         if (container.getInput().isKeyDown(Input.KEY_D)) {
             if (playerDX < overworldModel.getMaxDXDueToInput()) {
                 proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
             } else {
                 proposedPlayerDX = playerDX;
             }
+        }
+        //"use", currently disallowed while jumping or falling
+        if ((container.getInput().isKeyDown(Input.KEY_E)) &&
+                (overworldModel.getPlayerDY() == 0)) {
+            String hooks[] = overworldModel.getIntersectingTileHooks();
+            //String feedback = "Intersecting tile hooks:";
+
+            /*for (int i = 0; i < hooks.length; ++i) {
+                if (!hooks[i].equals("")) {
+                    feedback += " " + hooks[i];
+                }
+            }*/
+
+            //System.out.println(feedback);
         }
         //end player input
 
