@@ -2,6 +2,8 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 import utils.Globals;
 
+import java.io.File;
+
 /**
  * Launcher will create and start the game.
  *
@@ -21,6 +23,8 @@ class Launcher {
      * @throws SlickException
      */
     public static void main(String[] args) throws SlickException {
+        System.setProperty("org.lwjgl.librarypath", new File("lib/slick").getAbsolutePath());
+
         AppGameContainer app = new AppGameContainer(new Game("Project Marina"));
 
         app.setDisplayMode(WIDTH, HEIGHT, false);

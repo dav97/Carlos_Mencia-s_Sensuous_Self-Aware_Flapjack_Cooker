@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Class-Path: lib/slick/lib/ibxm.jar lib/slick/lib/jinput.jar lib/slick/
+ lib/jnlp.jar lib/slick/lib/jogg-0.0.7.jar lib/slick/lib/jorbis-0.0.15
+ .jar lib/slick/lib/lwjgl.jar lib/slick/lib/lwjgl_util.jar lib/slick/l
+ ib/lwjgl_util_applet.jar lib/slick/lib/natives-windows.jar lib/slick/
+ lib/Pack200Task.jar lib/slick/lib/slick-examples.jar lib/slick/lib/sl
+ ick.jar lib/slick/lib/tinylineapp.jar
+Main-Class: Launcher
+
