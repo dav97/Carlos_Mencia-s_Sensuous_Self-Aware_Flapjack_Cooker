@@ -83,6 +83,9 @@ class OverworldState extends BasicGameState {
         overworldModel.setDDXDueToInput(OverworldGlobals.STANDARD_DDX_DUE_TO_INPUT);
         overworldModel.setMaxDXDueToInput(OverworldGlobals.STANDARD_MAX_DX_DUE_TO_INPUT);
         overworldModel.setInstantaneousJumpDY(OverworldGlobals.STANDARD_INSTANTANEOUS_JUMP_DY);
+        overworldModel.setInstantaneousWallJumpDY(OverworldGlobals.STANDARD_INSTANTANEOUS_WALL_JUMP_DY);
+        overworldModel.setInstantaneousWallJumpLeftDX(OverworldGlobals.STANDARD_INSTANTANEOUS_WALL_JUMP_LEFT_DX);
+        overworldModel.setInstantaneousWallJumpRightDX(OverworldGlobals.STANDARD_INSTANTANEOUS_WALL_JUMP_RIGHT_DX);
         overworldModel.setDDYDueToGravity(OverworldGlobals.STANDARD_DDY_DUE_TO_GRAVITY);
         overworldModel.setMaxDYDueToGravity(OverworldGlobals.STANDARD_MAX_DY_DUE_TO_GRAVITY);
         overworldModel.setMaxDYOnWall(OverworldGlobals.STANDARD_MAX_DY_ON_WALL);
@@ -235,11 +238,17 @@ class OverworldState extends BasicGameState {
         if (container.getInput().isKeyDown(Input.KEY_W)
             //&& !staleJumpInput
                 ) {
-            if (overworldModel.getVerticalCollisionDistanceByDY(overworldModel.getMaxDXDueToInput()) == 0) { //if the player has solid ground beneath her
+            if (overworldModel.isPlayerCollisionDown()) { //if the player has solid ground beneath her
                 //staleJumpInput = true;
-                overworldModel.setPlayerOnWallLeft(false);
-                overworldModel.setPlayerOnWallRight(false);
                 proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
+            } else if (overworldModel.isPlayerOnWallLeft()) {
+                overworldModel.setPlayerOnWallLeft(false);
+                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
+                proposedPlayerDX = overworldModel.getInstantaneousWallJumpRightDX();
+            } else if (overworldModel.isPlayerCollisionRight()) {
+                overworldModel.setPlayerOnWallRight(false);
+                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
+                proposedPlayerDX = overworldModel.getInstantaneousWallJumpLeftDX();
             }
         }
         /*if (!container.getInput().isKeyDown(Input.KEY_W)) {

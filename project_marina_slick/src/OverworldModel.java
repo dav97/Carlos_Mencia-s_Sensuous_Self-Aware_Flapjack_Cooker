@@ -30,6 +30,9 @@ class OverworldModel {
     float maxDXDueToInput;
 
     float instantaneousJumpDY;
+    float instantaneousWallJumpDY;
+    float instantaneousWallJumpLeftDX;
+    float instantaneousWallJumpRightDX;
 
     float dDYDueToGravity;
     float maxDYDueToGravity;
@@ -447,6 +450,30 @@ class OverworldModel {
 
     void setInstantaneousJumpDY(float instantaneousJumpDY) {
         this.instantaneousJumpDY = instantaneousJumpDY;
+    }
+
+    float getInstantaneousWallJumpDY() {
+        return instantaneousWallJumpDY;
+    }
+
+    void setInstantaneousWallJumpDY(float instantaneousWallJumpDY) {
+        this.instantaneousWallJumpDY = instantaneousWallJumpDY;
+    }
+
+    float getInstantaneousWallJumpLeftDX() {
+        return instantaneousWallJumpLeftDX;
+    }
+
+    void setInstantaneousWallJumpLeftDX(float instantaneousWallJumpLeftDX) {
+        this.instantaneousWallJumpLeftDX = instantaneousWallJumpLeftDX;
+    }
+
+    float getInstantaneousWallJumpRightDX() {
+        return instantaneousWallJumpRightDX;
+    }
+
+    void setInstantaneousWallJumpRightDX(float instantaneousWallJumpRightDX) {
+        this.instantaneousWallJumpRightDX = instantaneousWallJumpRightDX;
     }
 
     float getDDYDueToGravity() {

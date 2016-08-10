@@ -43,6 +43,9 @@ public class OverworldGlobals {
     public static final float STANDARD_DX_FADE_SANITY_BOUND = 0.01f;
 
     public static final float STANDARD_INSTANTANEOUS_JUMP_DY = -0.35f;
+    public static final float STANDARD_INSTANTANEOUS_WALL_JUMP_DY = -0.2f;
+    public static final float STANDARD_INSTANTANEOUS_WALL_JUMP_LEFT_DX = -0.2f;
+    public static final float STANDARD_INSTANTANEOUS_WALL_JUMP_RIGHT_DX = 0.2f;
 
     public static final float STANDARD_DDY_DUE_TO_GRAVITY = 0.001f;
     public static final float STANDARD_MAX_DY_DUE_TO_GRAVITY = 0.25f;
