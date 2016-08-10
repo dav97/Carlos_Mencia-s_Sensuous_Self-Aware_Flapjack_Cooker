@@ -32,6 +32,11 @@ public class OverworldGlobals {
 
     public static final String DEFAULT_CHARACTER_IMAGE_PATH = "res/Overworld Characters/PCs/Marina/mf.png";
 
+    public static final float STANDARD_COLLISION_CHECK_DISTANCE_UP = -0.1f;
+    public static final float STANDARD_COLLISION_CHECK_DISTANCE_DOWN = 0.1f;
+    public static final float STANDARD_COLLISION_CHECK_DISTANCE_LEFT = -0.1f;
+    public static final float STANDARD_COLLISION_CHECK_DISTANCE_RIGHT = 0.1f;
+
     public static final float STANDARD_DDX_DUE_TO_INPUT = 0.001f;
     public static final float STANDARD_MAX_DX_DUE_TO_INPUT = 0.1f;
 
