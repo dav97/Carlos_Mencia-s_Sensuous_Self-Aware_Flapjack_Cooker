@@ -23,6 +23,9 @@ class OverworldModel {
     float playerDX;
     float playerDY;
 
+    boolean playerOnWallLeft;
+    boolean playerOnWallRight;
+
     float dDXDueToInput;
     float maxDXDueToInput;
 
@@ -96,6 +99,8 @@ class OverworldModel {
                     playerY = y * tileWidth;
                     playerDX = 0;
                     playerDY = 0;
+                    playerOnWallLeft = false;
+                    playerOnWallRight = false;
                     return;
                 }
             }
@@ -171,7 +176,7 @@ class OverworldModel {
      *
      * @return boolean: True if there is collision immediately left of the player.
      */
-    boolean isCollisionLeft() {
+    boolean isPlayerCollisionLeft() {
         return (getHorizontalCollisionDistanceByDX(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_LEFT) == 0.0f);
     }
 
@@ -181,7 +186,7 @@ class OverworldModel {
      *
      * @return boolean: True if there is collision immediately right of the player.
      */
-    boolean isCollisionRight() {
+    boolean isPlayerCollisionRight() {
         return (getHorizontalCollisionDistanceByDX(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_RIGHT) == 0.0f);
     }
 
@@ -246,7 +251,7 @@ class OverworldModel {
      *
      * @return boolean: True if there is collision immediately above the player.
      */
-    boolean isCollisionUp() {
+    boolean isPlayerCollisionUp() {
         return (getVerticalCollisionDistanceByDY(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_UP) == 0.0f);
     }
 
@@ -256,7 +261,7 @@ class OverworldModel {
      *
      * @return boolean: True if there is collision immediately below the player.
      */
-    boolean isCollisionDown() {
+    boolean isPlayerCollisionDown() {
         return (getVerticalCollisionDistanceByDY(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_DOWN) == 0.0f);
     }
 
@@ -401,6 +406,22 @@ class OverworldModel {
      */
     void setPlayerDY(float playerDY) {
         this.playerDY = playerDY;
+    }
+
+    boolean isPlayerOnWallLeft() {
+        return playerOnWallLeft;
+    }
+
+    void setPlayerOnWallLeft(boolean playerOnWallLeft) {
+        this.playerOnWallLeft = playerOnWallLeft;
+    }
+
+    boolean isPlayerOnWallRight() {
+        return playerOnWallRight;
+    }
+
+    void setPlayerOnWallRight(boolean playerOnWallRight) {
+        this.playerOnWallRight = playerOnWallRight;
     }
 
     float getDDXDueToInput() {

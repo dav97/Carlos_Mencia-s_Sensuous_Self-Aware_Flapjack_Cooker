@@ -178,10 +178,19 @@ class OverworldState extends BasicGameState {
         float playerY = overworldModel.getPlayerY();
         float playerDX = overworldModel.getPlayerDX();
 
-        //example of updating player location/
-        //crummy but functional player controls for testing purposes
         float proposedPlayerDX = 0;
         float proposedPlayerDY;
+
+        //if there is not collision to the left of the player or the player is on solid ground,
+        //unset the playerOnWallLeft flag
+        if (!overworldModel.isPlayerCollisionLeft() || overworldModel.isPlayerCollisionDown()) {
+            overworldModel.setPlayerOnWallLeft(false);
+        }
+        //if there is not collision to the right of the player or the player is on solid ground,
+        //unset the playerOnWallRight flag
+        if (!overworldModel.isPlayerCollisionRight() || overworldModel.isPlayerCollisionDown()) {
+            overworldModel.setPlayerOnWallRight(false);
+        }
 
         //gravity
         //if the player dy is less than the max dy due to gravity, add to it
@@ -211,6 +220,8 @@ class OverworldState extends BasicGameState {
                 ) {
             if (overworldModel.getVerticalCollisionDistanceByDY(overworldModel.getMaxDXDueToInput()) == 0) { //if the player has solid ground beneath her
                 //staleJumpInput = true;
+                overworldModel.setPlayerOnWallLeft(false);
+                overworldModel.setPlayerOnWallRight(false);
                 proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
             }
         }
@@ -224,10 +235,11 @@ class OverworldState extends BasicGameState {
             } else {
                 proposedPlayerDX = playerDX;
             }
+            if (overworldModel.isPlayerCollisionRight() &&
+                    !overworldModel.isPlayerCollisionDown()) {
+                overworldModel.setPlayerOnWallRight(true);
+            }
         }
-        /*if (container.getInput().isKeyDown(Input.KEY_S)) {
-            //not yet implemented
-        }*/
         //move left
         if (container.getInput().isKeyDown(Input.KEY_D)) {
             if (playerDX < overworldModel.getMaxDXDueToInput()) {
@@ -235,6 +247,16 @@ class OverworldState extends BasicGameState {
             } else {
                 proposedPlayerDX = playerDX;
             }
+            if (overworldModel.isPlayerCollisionLeft() &&
+                    !overworldModel.isPlayerCollisionDown()) {
+                overworldModel.setPlayerOnWallLeft(true);
+            }
+        }
+        //"move down"
+        //will currently cause the player to let go of the wall and do nothing else
+        if (container.getInput().isKeyDown(Input.KEY_S)) {
+            overworldModel.setPlayerOnWallLeft(false);
+            overworldModel.setPlayerOnWallRight(false);
         }
         //"use", currently disallowed while jumping or falling
         if ((container.getInput().isKeyDown(Input.KEY_E)) &&
