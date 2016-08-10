@@ -166,6 +166,26 @@ class OverworldModel {
     }
 
     /**
+     * Check for collision immediately to the left of the player.
+     * (i.e. she is touching a wall to the left)
+     *
+     * @return boolean: True if there is collision immediately left of the player.
+     */
+    boolean isCollisionLeft() {
+        return (getHorizontalCollisionDistanceByDX(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_LEFT) == 0.0f);
+    }
+
+    /**
+     * Check for collision immediately to the right of the player.
+     * (i.e. she is touching a wall to the right)
+     *
+     * @return boolean: True if there is collision immediately right of the player.
+     */
+    boolean isCollisionRight() {
+        return (getHorizontalCollisionDistanceByDX(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_RIGHT) == 0.0f);
+    }
+
+    /**
      * Collision checking method. Given a proposed amount of
      * player movement, check for map tiles within that distance
      * of the player. If there are any, return that distance.
@@ -218,6 +238,26 @@ class OverworldModel {
         }
 
         return dY;
+    }
+
+    /**
+     * Check for collision immediately above the player.
+     * (i.e. her head is touching the ceiling)
+     *
+     * @return boolean: True if there is collision immediately above the player.
+     */
+    boolean isCollisionUp() {
+        return (getVerticalCollisionDistanceByDY(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_UP) == 0.0f);
+    }
+
+    /**
+     * Check for collision immediately below the player.
+     * (i.e. she is standing on solid ground)
+     *
+     * @return boolean: True if there is collision immediately below the player.
+     */
+    boolean isCollisionDown() {
+        return (getVerticalCollisionDistanceByDY(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_DOWN) == 0.0f);
     }
 
     /**
