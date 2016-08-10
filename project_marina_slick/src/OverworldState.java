@@ -85,6 +85,7 @@ class OverworldState extends BasicGameState {
         overworldModel.setInstantaneousJumpDY(OverworldGlobals.STANDARD_INSTANTANEOUS_JUMP_DY);
         overworldModel.setDDYDueToGravity(OverworldGlobals.STANDARD_DDY_DUE_TO_GRAVITY);
         overworldModel.setMaxDYDueToGravity(OverworldGlobals.STANDARD_MAX_DY_DUE_TO_GRAVITY);
+        overworldModel.setMaxDYOnWall(OverworldGlobals.STANDARD_MAX_DY_ON_WALL);
         //end player setup
     }
 
@@ -179,7 +180,7 @@ class OverworldState extends BasicGameState {
         float playerDX = overworldModel.getPlayerDX();
 
         float proposedPlayerDX = 0;
-        float proposedPlayerDY;
+        float proposedPlayerDY = 0;
 
         //if there is not collision to the left of the player or the player is on solid ground,
         //unset the playerOnWallLeft flag
@@ -193,11 +194,27 @@ class OverworldState extends BasicGameState {
         }
 
         //gravity
-        //if the player dy is less than the max dy due to gravity, add to it
-        if (overworldModel.getPlayerDY() < overworldModel.getMaxDYDueToGravity()) {
-            proposedPlayerDY = overworldModel.getPlayerDY() + overworldModel.getDDYDueToGravity();
-        } else {
-            proposedPlayerDY = overworldModel.getPlayerDY();
+        //if the player is on a wall,
+        if (overworldModel.isPlayerOnWallLeft() || overworldModel.isPlayerOnWallRight()) {
+            //if the player dy is less than the max due to gravity while on a wall, add to it
+            if (overworldModel.getPlayerDY() < overworldModel.getMaxDYOnWall()) {
+                proposedPlayerDY = overworldModel.getPlayerDY() + overworldModel.getDDYDueToGravity();
+            }
+            //else if the player dy is greater than the max due to gravity while on a wall, remove from it
+            else if (overworldModel.getPlayerDY() > overworldModel.getMaxDYOnWall()) {
+                proposedPlayerDY = overworldModel.getPlayerDY() - overworldModel.getDDYDueToGravity();
+            }
+        }
+        //else if the player is not on solid ground,
+        else if (!overworldModel.isPlayerCollisionDown()) {
+            //if the player dy is less than the max dy due to gravity, add to it
+            if (overworldModel.getPlayerDY() < overworldModel.getMaxDYDueToGravity()) {
+                proposedPlayerDY = overworldModel.getPlayerDY() + overworldModel.getDDYDueToGravity();
+            }
+            //else, just propose the last player dy
+            else {
+                proposedPlayerDY = overworldModel.getPlayerDY();
+            }
         }
         //end gravity
 
@@ -235,9 +252,10 @@ class OverworldState extends BasicGameState {
             } else {
                 proposedPlayerDX = playerDX;
             }
-            if (overworldModel.isPlayerCollisionRight() &&
+            if (overworldModel.isPlayerCollisionLeft() &&
                     !overworldModel.isPlayerCollisionDown()) {
-                overworldModel.setPlayerOnWallRight(true);
+                overworldModel.setPlayerOnWallLeft(true);
+                System.out.println("Player is on left wall");
             }
         }
         //move left
@@ -247,9 +265,10 @@ class OverworldState extends BasicGameState {
             } else {
                 proposedPlayerDX = playerDX;
             }
-            if (overworldModel.isPlayerCollisionLeft() &&
+            if (overworldModel.isPlayerCollisionRight() &&
                     !overworldModel.isPlayerCollisionDown()) {
-                overworldModel.setPlayerOnWallLeft(true);
+                overworldModel.setPlayerOnWallRight(true);
+                System.out.println("Player is on right wall");
             }
         }
         //"move down"

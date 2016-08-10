@@ -33,6 +33,7 @@ class OverworldModel {
 
     float dDYDueToGravity;
     float maxDYDueToGravity;
+    float maxDYOnWall;
 
     /**
      * Default constructor for this model.
@@ -462,5 +463,13 @@ class OverworldModel {
 
     void setMaxDYDueToGravity(float maxDYDueToGravity) {
         this.maxDYDueToGravity = maxDYDueToGravity;
+    }
+
+    float getMaxDYOnWall() {
+        return maxDYOnWall;
+    }
+
+    void setMaxDYOnWall(float maxDYOnWall) {
+        this.maxDYOnWall = maxDYOnWall;
     }
 }
