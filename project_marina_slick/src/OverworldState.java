@@ -148,7 +148,7 @@ class OverworldState extends BasicGameState {
      *
      * @throws SlickException Slick library exception.
      */
-    private void transitionMap(String newMapHook, String spawnHook) throws SlickException {
+    void transitionMap(String newMapHook, String spawnHook) throws SlickException {
         loadMap(newMapHook);
 
         overworldModel.spawnPlayer(spawnHook);

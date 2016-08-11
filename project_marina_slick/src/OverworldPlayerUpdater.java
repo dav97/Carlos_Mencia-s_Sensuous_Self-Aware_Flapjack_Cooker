@@ -1,11 +1,13 @@
 class PlayerUpdater {
+	private OverworldState overworldState;
 	private OverworldModel overworldModel;
 	private Input input;
 	
 	private boolean staleInputUp;
     private boolean staleInputUse;
 
-	PlayerUpdater() {
+	PlayerUpdater(OverworldState overworldState) {
+		this.overworldState = overworldState;
 		staleInputUp = false;
 		staleInputUse = false;
 	}
@@ -117,8 +119,8 @@ class PlayerUpdater {
                         if (hook.equals(OverworldGlobals.MAP_HOOK_LIST[i_map_id])) {
                             System.out.println("Valid map hook found: <" + hook + ">");
                             System.out.println("Transitioning to <" + hook + "> from <" + MAP_HOOK + ">");
-                            transitionMap(hook, MAP_HOOK);
-                            break outerLoop;
+                            overworldState.transitionMap(hook, MAP_HOOK);
+                            return; //if we're transitioning, don't want to handle any other player action
                         }
                     }
                     //feedback += " " + hooks[i_hook];
@@ -133,7 +135,7 @@ class PlayerUpdater {
 
         //update player movement and location
         //if the proposed player dx is non-zero, check for collisions and use the collision distance for setting dx
-        if (proposedPlayerDX != 0) {
+        if (proposedPlayerDX != 0.0f) {
             float adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
 
             //if the proposed player movement was left or right but she ends up on a wall
@@ -141,7 +143,7 @@ class PlayerUpdater {
             //flag - allows player to jump back and forth between walls by just pressing the
             //jump key
             if (adjustedDX == 0.0f) {
-                if (proposedPlayerDX < 0) {
+                if (proposedPlayerDX < 0.0f) {
                     overworldModel.setPlayerOnWallLeft(true);
                 } else {
                     overworldModel.setPlayerOnWallRight(true);
@@ -154,7 +156,7 @@ class PlayerUpdater {
         }
 
         //if the proposed player dy is non-zero, check for collisions and use the collision distance for setting dy
-        if (proposedPlayerDY != 0) {
+        if (proposedPlayerDY != 0.0f) {
             float adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
 
             overworldModel.setPlayerDY(adjustedDY);
@@ -181,9 +183,9 @@ class PlayerUpdater {
 	}
 	
 	float getProposedDYDueToGravity(float playerDY, boolean wall) {
-		float proposedPlayerDY = 0;
-		float maxDYOnWall = 0;
-		float maxDYDueToGravity = 0;
+		float proposedPlayerDY = 0.0f;
+		float maxDYOnWall = 0.0f;
+		float maxDYDueToGravity = 0.0f;
 		
 		//gravity
         //if the player is on a wall,
@@ -216,24 +218,24 @@ class PlayerUpdater {
 	}
 	
 	float getProposedDXDueToFade(float playerDX, boolean floor) {
-		float proposedPlayerDX = 0;
+		float proposedPlayerDX = 0.0f;
 	
 		//horizontal player movement fade
         //if it's close enough to 0, just make it 0 - was experiencing a floating point error otherwise
         if ((playerDX < OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND) &&
                 (playerDX > -(OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND))) {
-            proposedPlayerDX = 0;
-        } else if (playerDX > 0) {
+            proposedPlayerDX = 0.0f;
+        } else if (playerDX > 0.0f) {
             if (floor) {
                 proposedPlayerDX = playerDX - overworldModel.getDDXDueToInput();
             } else {
-                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput() / 2);
+                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput() / 2.0f);
             }
-        } else if (playerDX < 0) {
+        } else if (playerDX < 0.0f) {
             if (floor) {
                 proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
             } else {
-                proposedPlayerDX = playerDX + (overworldModel.getDDXDueToInput() / 2);
+                proposedPlayerDX = playerDX + (overworldModel.getDDXDueToInput() / 2.0f);
             }
         }
         //end horizontal player movement fade
