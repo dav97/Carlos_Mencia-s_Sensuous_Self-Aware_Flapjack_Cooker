@@ -159,6 +159,34 @@ class OverworldState extends BasicGameState {
      */
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+        //check window size change and update logic
+        if (WINDOW_WIDTH != Display.getWidth() || WINDOW_HEIGHT != Display.getHeight()) {
+            WINDOW_WIDTH = Display.getWidth();
+            WINDOW_HEIGHT = Display.getHeight();
+            scale = Math.min((WINDOW_WIDTH / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (WINDOW_HEIGHT / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+            overworldView.setScale(scale);
+            WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
+            WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
+        }
+        //end check window size change and update logic
+        
+        //view updating
+        float playerX = overworldModel.getPlayerX();
+        float playerY = overworldModel.getPlayerY();
+        float playerWidth = overworldModel.getPlayerWidth();
+        float playerHeight = overworldModel.getPlayerHeight();
+
+        float mapX = -(playerX + (playerWidth / 2) - WINDOW_CENTER_HORIZONTAL);
+        float mapY = -(playerY + (playerHeight / 2) - WINDOW_CENTER_VERTIAL);
+
+        overworldView.setMapLocation(mapX, mapY);
+
+        float centeredPlayerX = WINDOW_CENTER_HORIZONTAL - (playerWidth / 2);
+        float centeredPlayerY = WINDOW_CENTER_VERTIAL - (playerHeight / 2);
+
+        overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
+        //end view updating
+        
         overworldView.draw(g);
     }
 
@@ -168,15 +196,6 @@ class OverworldState extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         //TODO: split this method up
-
-        if (container.getWidth() != WINDOW_WIDTH || container.getHeight() != WINDOW_HEIGHT) {
-            WINDOW_WIDTH = container.getWidth();
-            WINDOW_HEIGHT = container.getHeight();
-            WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
-            WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
-            scale = Math.min((container.getWidth() / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (container.getHeight() / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
-            overworldView.setScale(scale);
-        }
 
         float playerX = overworldModel.getPlayerX();
         float playerY = overworldModel.getPlayerY();
@@ -360,21 +379,6 @@ class OverworldState extends BasicGameState {
         overworldModel.setPlayerX(overworldModel.getPlayerX() + overworldModel.getPlayerDX());
         overworldModel.setPlayerY(overworldModel.getPlayerY() + overworldModel.getPlayerDY());
         //end update player movement and location
-
-        //view updating
-        float playerWidth = overworldModel.getPlayerWidth();
-        float playerHeight = overworldModel.getPlayerHeight();
-
-        float mapX = -(playerX + (playerWidth / 2) - WINDOW_CENTER_HORIZONTAL);
-        float mapY = -(playerY + (playerHeight / 2) - WINDOW_CENTER_VERTIAL);
-
-        overworldView.setMapLocation(mapX, mapY);
-
-        float centeredPlayerX = WINDOW_CENTER_HORIZONTAL - (playerWidth / 2);
-        float centeredPlayerY = WINDOW_CENTER_VERTIAL - (playerHeight / 2);
-
-        overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
-        //end view updating
 
         //example of requesting game state change, i.e. to the main menu or fight state
         /*if (false) {
