@@ -1,0 +1,243 @@
+class PlayerUpdater {
+	private OverworldModel overworldModel;
+	private Input input;
+	
+	private boolean staleInputUp;
+    private boolean staleInputUse;
+
+	PlayerUpdater() {
+		staleInputUp = false;
+		staleInputUse = false;
+	}
+	
+	void update(OverworldModel overworldModel, Input input) {
+		this.overworldModel = overworldModel;
+		this.input = input;
+	
+		float playerX = overworldModel.getPlayerX();
+        float playerY = overworldModel.getPlayerY();
+        float playerDX = overworldModel.getPlayerDX();
+		float playerDY = overworldModel.getPlayerDY();
+
+        float proposedPlayerDX = 0;
+        float proposedPlayerDY = 0;
+
+		boolean playerFloor = overworldModel.isPlayerCollisionDown();
+
+		boolean playerInputLeft = input.isKeyDown(input.KEY_A);
+        boolean playerInputRight = input.isKeyDown(input.KEY_D);
+        boolean playerInputUp = input.isKeyDown(input.KEY_W);
+        boolean playerInputDown = input.isKeyDown(input.KEY_S);
+        boolean playerInputUse = input.isKeyDown(input.KEY_E);
+        
+		checkOffWall(playerFloor);
+
+		boolean playerOnWallLeft = overworldModel.isPlayerOnWallLeft();
+		boolean playerOnWallRight = overworldModel.isPLayerOnWallRight();
+
+		//if the player is not on solid ground, we need to calculate the effects of gravity
+		if (!playerFloor) {	
+			proposedPlayerDY = getProposedPlayerDYDueToGravity(playerDY,
+															   playerOnWallLeft || playerOnWallRight);
+        }
+        
+        //if the player is not trying to move left or right, fade her horizontal movement until stopped
+		if (!(playerInputLeft || playerInputRight) && playerDX != 0.0f) {
+			proposedDX = getProposedPlayerDXDueToFade();
+		}
+
+        //player input
+        //move left
+        if (playerInputLeft && !playerInputRight) {
+            if (playerDX > -(overworldModel.getMaxDXDueToInput())) {
+                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput());
+            } else {
+                proposedPlayerDX = playerDX;
+            }
+            if (overworldModel.isPlayerCollisionLeft() &&
+                    !overworldModel.isPlayerCollisionDown()) {
+                overworldModel.setPlayerOnWallLeft(true);
+                //System.out.println("Player is on left wall");
+            }
+        }
+        //move right
+        if (playerInputRight && !playerInputLeft) {
+            if (playerDX < overworldModel.getMaxDXDueToInput()) {
+                proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
+            } else {
+                proposedPlayerDX = playerDX;
+            }
+            if (overworldModel.isPlayerCollisionRight() &&
+                    !overworldModel.isPlayerCollisionDown()) {
+                overworldModel.setPlayerOnWallRight(true);
+                //System.out.println("Player is on right wall");
+            }
+        }
+        //jump
+        if (playerInputUp
+                && !staleInputUp
+                ) {
+            if (playerFloor) { //if the player has solid ground beneath her
+                staleInputUp = true;
+                proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
+            } else if (playerOnWallLeft) {
+                staleInputUp = true;
+                overworldModel.setPlayerOnWallLeft(false);
+                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
+                proposedPlayerDX = overworldModel.getInstantaneousWallJumpRightDX();
+            } else if (playerOnWallRight) {
+                staleInputUp = true;
+                overworldModel.setPlayerOnWallRight(false);
+                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
+                proposedPlayerDX = overworldModel.getInstantaneousWallJumpLeftDX();
+            }
+        }
+        if (!playerInputUp) {
+            staleInputUp = false;
+        }
+        //"move down"
+        //will currently cause the player to let go of the wall and do nothing else
+        if (playerInputDown) {
+            overworldModel.setPlayerOnWallLeft(false);
+            overworldModel.setPlayerOnWallRight(false);
+        }
+        //"use", currently disallowed while jumping or falling
+        if (playerInputUse &&
+                (playerDY == 0.0f) &&
+                !staleInputUse) {
+            staleInputUse = true;
+            String hooks[] = overworldModel.getIntersectingTileHooks();
+            //String feedback = "Intersecting tile hooks:";
+
+            outerLoop:
+            //TODO: naming loops to break multiple layers is discouraged, revisit
+            for (String hook : hooks) {
+                if (!hook.equals("")) {
+                    for (int i_map_id = 0; i_map_id < OverworldGlobals.MAP_HOOK_LIST.length; ++i_map_id) {
+                        if (hook.equals(OverworldGlobals.MAP_HOOK_LIST[i_map_id])) {
+                            System.out.println("Valid map hook found: <" + hook + ">");
+                            System.out.println("Transitioning to <" + hook + "> from <" + MAP_HOOK + ">");
+                            transitionMap(hook, MAP_HOOK);
+                            break outerLoop;
+                        }
+                    }
+                    //feedback += " " + hooks[i_hook];
+                }
+            }
+            //System.out.println(feedback);
+        }
+        if (!playerInputUse) {
+            staleInputUse = false;
+        }
+        //end player input
+
+        //update player movement and location
+        //if the proposed player dx is non-zero, check for collisions and use the collision distance for setting dx
+        if (proposedPlayerDX != 0) {
+            float adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
+
+            //if the proposed player movement was left or right but she ends up on a wall
+            //(such as from faded movement or jump off of wall movement) set the playerOnWall
+            //flag - allows player to jump back and forth between walls by just pressing the
+            //jump key
+            if (adjustedDX == 0.0f) {
+                if (proposedPlayerDX < 0) {
+                    overworldModel.setPlayerOnWallLeft(true);
+                } else {
+                    overworldModel.setPlayerOnWallRight(true);
+                }
+            }
+
+            overworldModel.setPlayerDX(adjustedDX);
+        } else {
+            overworldModel.setPlayerDX(proposedPlayerDX);
+        }
+
+        //if the proposed player dy is non-zero, check for collisions and use the collision distance for setting dy
+        if (proposedPlayerDY != 0) {
+            float adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
+
+            overworldModel.setPlayerDY(adjustedDY);
+        } else {
+            overworldModel.setPlayerDY(proposedPlayerDY);
+        }
+
+        overworldModel.setPlayerX(overworldModel.getPlayerX() + overworldModel.getPlayerDX());
+        overworldModel.setPlayerY(overworldModel.getPlayerY() + overworldModel.getPlayerDY());
+        //end update player movement and location
+	}
+	
+	void checkOffWall(boolean floor) {
+		//if there is not collision to the left of the player or the player is on solid ground,
+        //unset the playerOnWallLeft flag
+        if (!overworldModel.isPlayerCollisionLeft() || floor) {
+            overworldModel.setPlayerOnWallLeft(false);
+        }
+        //if there is not collision to the right of the player or the player is on solid ground,
+        //unset the playerOnWallRight flag
+        if (!overworldModel.isPlayerCollisionRight() || floor) {
+            overworldModel.setPlayerOnWallRight(false);
+        }
+	}
+	
+	float getProposedDYDueToGravity(float playerDY, boolean wall) {
+		float proposedPlayerDY = 0;
+		float maxDYOnWall = 0;
+		float maxDYDueToGravity = 0;
+		
+		//gravity
+        //if the player is on a wall,
+        if (wall) {
+            maxDYOnWall = overworldModel.getMaxDYOnWall();
+            //if the player dy is less than the max due to gravity while on a wall, add to it
+            if (playerDY < maxDYOnWall) {
+                proposedPlayerDY = playerDY() + overworldModel.getDDYDueToGravity();
+            }
+            //else if the player dy is greater than the max due to gravity while on a wall, remove from it
+            else if (playerDY() > maxDYOnWall) {
+                proposedPlayerDY = overworldModel.getPlayerDY() - overworldModel.getDDYDueToGravity();
+            }
+        }
+        //else if the player is not on solid ground,
+        else if (!overworldModel.isPlayerCollisionDown()) {
+			maxDYDueToGravity = overworldModel.getMaxDYDueToGravity();
+            //if the player dy is less than the max dy due to gravity, add to it
+            if (overworldModel.getPlayerDY() < maxDYDueToGravity) {
+                proposedPlayerDY = playerDY() + overworldModel.getDDYDueToGravity();
+            }
+            //else, just propose the last player dy
+            else {
+                proposedPlayerDY = playerDY;
+            }
+        }
+        //end gravity
+        
+        return proposedPlayerDY;
+	}
+	
+	float getProposedDXDueToFade(float playerDX, boolean floor) {
+		float proposedPlayerDX = 0;
+	
+		//horizontal player movement fade
+        //if it's close enough to 0, just make it 0 - was experiencing a floating point error otherwise
+        if ((playerDX < OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND) &&
+                (playerDX > -(OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND))) {
+            proposedPlayerDX = 0;
+        } else if (playerDX > 0) {
+            if (floor) {
+                proposedPlayerDX = playerDX - overworldModel.getDDXDueToInput();
+            } else {
+                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput() / 2);
+            }
+        } else if (playerDX < 0) {
+            if (floor) {
+                proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
+            } else {
+                proposedPlayerDX = playerDX + (overworldModel.getDDXDueToInput() / 2);
+            }
+        }
+        //end horizontal player movement fade
+        
+        return proposedPlayerDX;
+	}
+}
