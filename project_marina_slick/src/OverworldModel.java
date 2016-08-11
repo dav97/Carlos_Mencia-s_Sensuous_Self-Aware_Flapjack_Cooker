@@ -268,6 +268,75 @@ class OverworldModel {
     boolean isPlayerCollisionDown() {
         return (getVerticalCollisionDistanceByDY(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_DOWN) == 0.0f);
     }
+    
+    float[] getDiagonalCollisionDistanceByDXAndDY(float dX, float dY) {
+		float[] dXdY = new float[2];
+		float playerXTest = 0;
+		float playerYTest = 0;
+		int mapXTest = -1;
+		int mapYTest = -1;
+		float collisionDX;
+		float collisionDY;
+		
+		if (dX < 0.0f) {
+            playerXTest = playerX + dX;
+        } else if (dX > 0.0f) {
+            playerXTest = playerX + playerWidth + dX;
+        }
+        
+        if (dY < 0.0f) {
+            playerYTest = playerY + dY;
+        } else if (dY > 0.0f) {
+            playerYTest = playerY + playerHeight + dY;
+        }
+		
+		if (dX < 0.0f || dX > 0.0f) {
+			mapXTest = (int) (playerXTest / tileWidth);
+		}
+		
+		if (dY < 0.0f || dY > 0.0f) {
+			mapYTest = (int) (playerYTest / tileWidth);
+		}
+		
+		if (mapXTest != -1 && mapYTest != -1) {
+			if (!mapClip[mapXTest][mapYTest]) {
+				if (Math.abs(dX) >= Math.abs(dY)) {
+					//if the scalar change in X is greater or equal to the scalar change in Y,
+					//prioritize moving in the X direction - below or above the tile
+					//we are hitting the corner of
+					float[0] = dX;
+					if (dY < 0.0f) {
+						collisionDY = (((mapYTest + 1) * tileWidth)) - playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
+					} else if (dY > 0.0f) {
+						collisionDY = ((mapYTest) * tileWidth) - ((playerY + playerHeight)); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
+					}
+					float[1] = collisionDY;
+				}
+				else {
+					//if the scalar change in X is less than the scalar change in Y,
+					//prioritize moving in the Y direction - left or right of the tile
+					//we are hitting the corner of
+					if (dX < 0.0f) {
+						collisionDX = (((mapXTest + 1) * tileWidth)) - playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
+					} else if (dX > 0.0f) {
+						collisionDX = ((mapXTest) * tileWidth) - ((playerX + playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
+					}
+					float[0] = collisionDX;
+					float[1] = dY;
+				}
+			}
+			else {
+				float[0] = dX;
+				float[1] = dY;
+			}
+		}
+		else {
+			float[0] = dX;
+			float[1] = dY;
+		}
+		
+		return dXdY;
+	}
 
     /**
      * Get a list of the hooks attached to all tiles with player is intersecting with.
