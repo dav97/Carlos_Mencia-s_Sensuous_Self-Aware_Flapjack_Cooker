@@ -48,7 +48,7 @@ public class OverworldGlobals {
     public static final float STANDARD_INSTANTANEOUS_WALL_JUMP_RIGHT_DX = 0.2f;
 
     public static final float STANDARD_DDY_DUE_TO_GRAVITY = 0.001f;
-    public static final float STANDARD_MAX_DY_DUE_TO_GRAVITY = 0.25f;
-    public static final float STANDARD_MAX_DY_ON_WALL = 0.05f;
+    public static final float STANDARD_MAX_DY_DUE_TO_GRAVITY = 0.20f;
+    public static final float STANDARD_MAX_DY_ON_WALL = 0.02f;
 
 }

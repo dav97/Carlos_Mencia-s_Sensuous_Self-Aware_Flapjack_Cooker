@@ -24,7 +24,7 @@ class OverworldState extends BasicGameState {
     private OverworldModel overworldModel;
     private OverworldView overworldView;
     private float scale = 6;
-    //private boolean staleJumpInput = false; //not sure about this one
+    private boolean staleJumpInput = false; //not sure about this one
     private boolean staleUseInput = false; //TODO: move this, and player input update handling, to a class
 
     /**
@@ -227,33 +227,21 @@ class OverworldState extends BasicGameState {
                 (playerDX > -(OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND))) {
             proposedPlayerDX = 0;
         } else if (playerDX > 0) {
-            proposedPlayerDX = playerDX - overworldModel.getDDXDueToInput();
+            if (overworldModel.isPlayerCollisionDown()) {
+                proposedPlayerDX = playerDX - overworldModel.getDDXDueToInput();
+            } else {
+                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput() / 2);
+            }
         } else if (playerDX < 0) {
-            proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
+            if (overworldModel.isPlayerCollisionDown()) {
+                proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
+            } else {
+                proposedPlayerDX = playerDX + (overworldModel.getDDXDueToInput() / 2);
+            }
         }
         //end horizontal player movement fade
 
         //player input
-        //jump
-        if (container.getInput().isKeyDown(Input.KEY_W)
-            //&& !staleJumpInput
-                ) {
-            if (overworldModel.isPlayerCollisionDown()) { //if the player has solid ground beneath her
-                //staleJumpInput = true;
-                proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
-            } else if (overworldModel.isPlayerOnWallLeft()) {
-                overworldModel.setPlayerOnWallLeft(false);
-                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
-                proposedPlayerDX = overworldModel.getInstantaneousWallJumpRightDX();
-            } else if (overworldModel.isPlayerCollisionRight()) {
-                overworldModel.setPlayerOnWallRight(false);
-                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
-                proposedPlayerDX = overworldModel.getInstantaneousWallJumpLeftDX();
-            }
-        }
-        /*if (!container.getInput().isKeyDown(Input.KEY_W)) {
-            staleJumpInput = false;
-        }*/
         //move right
         if (container.getInput().isKeyDown(Input.KEY_A)) {
             if (playerDX > -(overworldModel.getMaxDXDueToInput())) {
@@ -279,6 +267,28 @@ class OverworldState extends BasicGameState {
                 overworldModel.setPlayerOnWallRight(true);
                 System.out.println("Player is on right wall");
             }
+        }
+        //jump
+        if (container.getInput().isKeyDown(Input.KEY_W)
+                && !staleJumpInput
+                ) {
+            if (overworldModel.isPlayerCollisionDown()) { //if the player has solid ground beneath her
+                staleJumpInput = true;
+                proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
+            } else if (overworldModel.isPlayerOnWallLeft()) {
+                staleJumpInput = true;
+                overworldModel.setPlayerOnWallLeft(false);
+                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
+                proposedPlayerDX = overworldModel.getInstantaneousWallJumpRightDX();
+            } else if (overworldModel.isPlayerCollisionRight()) {
+                staleJumpInput = true;
+                overworldModel.setPlayerOnWallRight(false);
+                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
+                proposedPlayerDX = overworldModel.getInstantaneousWallJumpLeftDX();
+            }
+        }
+        if (!container.getInput().isKeyDown(Input.KEY_W)) {
+            staleJumpInput = false;
         }
         //"move down"
         //will currently cause the player to let go of the wall and do nothing else
@@ -320,6 +330,18 @@ class OverworldState extends BasicGameState {
         //if the proposed player dx is non-zero, check for collisions and use the collision distance for setting dx
         if (proposedPlayerDX != 0) {
             float adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
+
+            //if the proposed player movement was left or right but she ends up on a wall
+            //(such as from faded movement or jump off of wall movement) set the playerOnWall
+            //flag - allows player to jump back and forth between walls by just pressing the
+            //jump key
+            if (adjustedDX == 0.0f) {
+                if (proposedPlayerDX < 0) {
+                    overworldModel.setPlayerOnWallLeft(true);
+                } else {
+                    overworldModel.setPlayerOnWallRight(true);
+                }
+            }
 
             overworldModel.setPlayerDX(adjustedDX);
         } else {
