@@ -155,19 +155,24 @@ class PlayerUpdater {
                 }
             }
 
-            overworldModel.setPlayerDX(adjustedDX);
-        } else {
-            overworldModel.setPlayerDX(proposedPlayerDX);
+            proposedPlayerDX = adjustedDX;
         }
 
         //if the proposed player dy is non-zero, check for collisions and use the collision distance for setting dy
         if (proposedPlayerDY != 0.0f) {
             float adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
 
-            overworldModel.setPlayerDY(adjustedDY);
-        } else {
-            overworldModel.setPlayerDY(proposedPlayerDY);
+            proposedPlayerDY = adjustedDY;
         }
+
+        if (proposedPlayerDX != 0.0f && proposedPlayerDY != 0.0f) {
+            float[] dXdY = overworldModel.getDiagonalCollisionDistanceByDXAndDY(proposedPlayerDX, proposedPlayerDY);
+            proposedPlayerDX = dXdY[0];
+            proposedPlayerDY = dXdY[1];
+        }
+
+        overworldModel.setPlayerDX(proposedPlayerDX);
+        overworldModel.setPlayerDY(proposedPlayerDY);
 
         overworldModel.setPlayerX(overworldModel.getPlayerX() + overworldModel.getPlayerDX());
         overworldModel.setPlayerY(overworldModel.getPlayerY() + overworldModel.getPlayerDY());

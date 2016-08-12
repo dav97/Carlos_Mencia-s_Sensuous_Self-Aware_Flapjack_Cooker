@@ -319,10 +319,15 @@ class OverworldModel {
 		
 		if (mapXTest != -1 && mapYTest != -1) {
 			if (!mapClip[mapXTest][mapYTest]) {
-				if (Math.abs(dX) >= Math.abs(dY)) {
+                System.out.println("Corner collision detected");
+                System.out.println("proposedDX:<" + dX + "> proposedDY:<" + dY + ">");
+                System.out.println("playerXTest:<" + playerXTest + "> playerYTest:<" + playerYTest + ">");
+                System.out.println("mapXTest:<" + mapXTest + "> mapYTest:<" + mapYTest + ">");
+                if (Math.abs(dX) >= Math.abs(dY)) {
 					//if the scalar change in X is greater or equal to the scalar change in Y,
 					//prioritize moving in the X direction - below or above the tile
 					//we are hitting the corner of
+                    System.out.println("Favoring dX");
                     dXdY[0] = dX;
                     if (dY < 0.0f) {
 						collisionDY = (((mapYTest + 1) * tileWidth)) - playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
@@ -335,7 +340,8 @@ class OverworldModel {
 					//if the scalar change in X is less than the scalar change in Y,
 					//prioritize moving in the Y direction - left or right of the tile
 					//we are hitting the corner of
-					if (dX < 0.0f) {
+                    System.out.println("Favoring dY");
+                    if (dX < 0.0f) {
 						collisionDX = (((mapXTest + 1) * tileWidth)) - playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
 					} else if (dX > 0.0f) {
 						collisionDX = ((mapXTest) * tileWidth) - ((playerX + playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
@@ -343,7 +349,8 @@ class OverworldModel {
                     dXdY[0] = collisionDX;
                     dXdY[1] = dY;
                 }
-			}
+                System.out.println("dXdY[0]:<" + dXdY[0] + "> dXdY[1]:<" + dXdY[1] + ">");
+            }
 			else {
                 dXdY[0] = dX;
                 dXdY[1] = dY;
