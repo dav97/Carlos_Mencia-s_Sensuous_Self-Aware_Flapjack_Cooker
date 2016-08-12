@@ -149,15 +149,15 @@ class OverworldState extends BasicGameState {
      * with the map transitioning from.
      *
      * @param newMapHook String: The name of the map to load.
-     * @param previousMapHook  String: The hook to use for spawning the player in the new map.
+     * @param spawnHook  String: The hook to use for spawning the player in the new map.
      *
      * @throws SlickException Slick library exception.
      */
-    void transitionMap(String newMapHook, String previousMapHook) throws SlickException {
+    void transitionMap(String newMapHook, String spawnHook) throws SlickException {
         loadMap(newMapHook);
 
-        overworldModel.spawnPlayer(previousMapHook);
-        overworldModel.setMapHookPrevious(previousMapHook);
+        overworldModel.spawnPlayer(spawnHook);
+        overworldModel.setMapHookSpawn(spawnHook);
     }
 
     /**

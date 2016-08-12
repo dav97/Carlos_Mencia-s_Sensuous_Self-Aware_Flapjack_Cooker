@@ -112,7 +112,7 @@ class PlayerUpdater {
                 !staleInputUse) {
             staleInputUse = true;
             String mapHookCurrent = overworldModel.getMapHookCurrent();
-            String mapHookPrevious = overworldModel.getMapHookPrevious();
+            String mapHookPrevious = overworldModel.getMapHookSpawn();
             String hooks[] = overworldModel.getIntersectingTileHooks();
             //String feedback = "Intersecting tile hooks:";
 

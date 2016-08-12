@@ -12,7 +12,7 @@ class OverworldModel {
     int tileWidth;
     Boolean[][] mapClip; //the grid of passable (clip true) and not passable (clip false)
     String mapHookCurrent;
-    String mapHookPrevious;
+    String mapHookSpawn;
     String[][] mapHooks;
 
     //TODO: move these to a separate class
@@ -71,20 +71,20 @@ class OverworldModel {
         this.mapHooks = mapHooks;
     }
 
-    public String getMapHookCurrent() {
+    String getMapHookCurrent() {
         return mapHookCurrent;
     }
 
-    public void setMapHookCurrent(String mapHookCurrent) {
+    void setMapHookCurrent(String mapHookCurrent) {
         this.mapHookCurrent = mapHookCurrent;
     }
 
-    public String getMapHookPrevious() {
-        return mapHookPrevious;
+    String getMapHookSpawn() {
+        return mapHookSpawn;
     }
 
-    public void setMapHookPrevious(String mapHookPrevious) {
-        this.mapHookPrevious = mapHookPrevious;
+    void setMapHookSpawn(String mapHookPrevious) {
+        this.mapHookSpawn = mapHookPrevious;
     }
 
     /**
@@ -123,7 +123,7 @@ class OverworldModel {
                     playerDY = 0;
                     playerOnWallLeft = false;
                     playerOnWallRight = false;
-                    mapHookPrevious = hook;
+                    mapHookSpawn = hook;
                     return;
                 }
             }
