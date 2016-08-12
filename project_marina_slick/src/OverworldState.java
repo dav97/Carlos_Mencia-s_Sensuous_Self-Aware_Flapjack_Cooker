@@ -1,4 +1,7 @@
-import org.newdawn.slick.*;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
@@ -22,6 +25,7 @@ class OverworldState extends BasicGameState {
     //private final ActionListener changeStateListener; //TODO: needs redoing
     private final int id;
     private OverworldModel overworldModel;
+    private PlayerUpdater playerUpdater;
     private OverworldView overworldView;
     private float scale = 6;
     
@@ -88,8 +92,8 @@ class OverworldState extends BasicGameState {
         overworldModel.setMaxDYDueToGravity(OverworldGlobals.STANDARD_MAX_DY_DUE_TO_GRAVITY);
         overworldModel.setMaxDYOnWall(OverworldGlobals.STANDARD_MAX_DY_ON_WALL);
         //end player setup
-        
-        PlayerUpdater playerUpdater = new PlayerUpdater();
+
+        playerUpdater = new PlayerUpdater(this);
     }
 
     /**
@@ -137,6 +141,7 @@ class OverworldState extends BasicGameState {
         overworldView.setMapImage(tiledMapImage);
 
         MAP_HOOK = loadMapName;
+        overworldModel.setMapHookCurrent(MAP_HOOK);
     }
 
     /**
@@ -144,14 +149,15 @@ class OverworldState extends BasicGameState {
      * with the map transitioning from.
      *
      * @param newMapHook String: The name of the map to load.
-     * @param spawnHook  String: The hook to use for spawning the player in the new map.
+     * @param previousMapHook  String: The hook to use for spawning the player in the new map.
      *
      * @throws SlickException Slick library exception.
      */
-    void transitionMap(String newMapHook, String spawnHook) throws SlickException {
+    void transitionMap(String newMapHook, String previousMapHook) throws SlickException {
         loadMap(newMapHook);
 
-        overworldModel.spawnPlayer(spawnHook);
+        overworldModel.spawnPlayer(previousMapHook);
+        overworldModel.setMapHookPrevious(previousMapHook);
     }
 
     /**

@@ -1,3 +1,6 @@
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+
 class PlayerUpdater {
 	private OverworldState overworldState;
 	private OverworldModel overworldModel;
@@ -11,9 +14,9 @@ class PlayerUpdater {
 		staleInputUp = false;
 		staleInputUse = false;
 	}
-	
-	void update(OverworldModel overworldModel, Input input) {
-		this.overworldModel = overworldModel;
+
+    void update(OverworldModel overworldModel, Input input) throws SlickException {
+        this.overworldModel = overworldModel;
 		this.input = input;
 	
 		float playerX = overworldModel.getPlayerX();
@@ -26,16 +29,16 @@ class PlayerUpdater {
 
 		boolean playerFloor = overworldModel.isPlayerCollisionDown();
 
-		boolean playerInputLeft = input.isKeyDown(input.KEY_A);
-        boolean playerInputRight = input.isKeyDown(input.KEY_D);
-        boolean playerInputUp = input.isKeyDown(input.KEY_W);
-        boolean playerInputDown = input.isKeyDown(input.KEY_S);
-        boolean playerInputUse = input.isKeyDown(input.KEY_E);
+        boolean playerInputLeft = input.isKeyDown(Input.KEY_A);
+        boolean playerInputRight = input.isKeyDown(Input.KEY_D);
+        boolean playerInputUp = input.isKeyDown(Input.KEY_W);
+        boolean playerInputDown = input.isKeyDown(Input.KEY_S);
+        boolean playerInputUse = input.isKeyDown(Input.KEY_E);
         
 		checkOffWall(playerFloor);
 
 		boolean playerOnWallLeft = overworldModel.isPlayerOnWallLeft();
-		boolean playerOnWallRight = overworldModel.isPLayerOnWallRight();
+        boolean playerOnWallRight = overworldModel.isPlayerOnWallRight();
 
 		//if the player is not on solid ground, we need to calculate the effects of gravity
 		if (!playerFloor) {	
@@ -45,8 +48,8 @@ class PlayerUpdater {
         
         //if the player is not trying to move left or right, fade her horizontal movement until stopped
 		if (!(playerInputLeft || playerInputRight) && playerDX != 0.0f) {
-			proposedDX = getProposedPlayerDXDueToFade();
-		}
+            proposedPlayerDX = getProposedPlayerDXDueToFade(playerDX, playerFloor);
+        }
 
         //player input
         //move left
@@ -108,6 +111,8 @@ class PlayerUpdater {
                 (playerDY == 0.0f) &&
                 !staleInputUse) {
             staleInputUse = true;
+            String mapHookCurrent = overworldModel.getMapHookCurrent();
+            String mapHookPrevious = overworldModel.getMapHookPrevious();
             String hooks[] = overworldModel.getIntersectingTileHooks();
             //String feedback = "Intersecting tile hooks:";
 
@@ -118,8 +123,8 @@ class PlayerUpdater {
                     for (int i_map_id = 0; i_map_id < OverworldGlobals.MAP_HOOK_LIST.length; ++i_map_id) {
                         if (hook.equals(OverworldGlobals.MAP_HOOK_LIST[i_map_id])) {
                             System.out.println("Valid map hook found: <" + hook + ">");
-                            System.out.println("Transitioning to <" + hook + "> from <" + MAP_HOOK + ">");
-                            overworldState.transitionMap(hook, MAP_HOOK);
+                            System.out.println("Transitioning to <" + hook + "> from <" + mapHookCurrent + ">");
+                            overworldState.transitionMap(hook, mapHookCurrent);
                             return; //if we're transitioning, don't want to handle any other player action
                         }
                     }
@@ -181,9 +186,9 @@ class PlayerUpdater {
             overworldModel.setPlayerOnWallRight(false);
         }
 	}
-	
-	float getProposedDYDueToGravity(float playerDY, boolean wall) {
-		float proposedPlayerDY = 0.0f;
+
+    float getProposedPlayerDYDueToGravity(float playerDY, boolean wall) {
+        float proposedPlayerDY = 0.0f;
 		float maxDYOnWall = 0.0f;
 		float maxDYDueToGravity = 0.0f;
 		
@@ -193,10 +198,10 @@ class PlayerUpdater {
             maxDYOnWall = overworldModel.getMaxDYOnWall();
             //if the player dy is less than the max due to gravity while on a wall, add to it
             if (playerDY < maxDYOnWall) {
-                proposedPlayerDY = playerDY() + overworldModel.getDDYDueToGravity();
+                proposedPlayerDY = playerDY + overworldModel.getDDYDueToGravity();
             }
             //else if the player dy is greater than the max due to gravity while on a wall, remove from it
-            else if (playerDY() > maxDYOnWall) {
+            else if (playerDY > maxDYOnWall) {
                 proposedPlayerDY = overworldModel.getPlayerDY() - overworldModel.getDDYDueToGravity();
             }
         }
@@ -205,7 +210,7 @@ class PlayerUpdater {
 			maxDYDueToGravity = overworldModel.getMaxDYDueToGravity();
             //if the player dy is less than the max dy due to gravity, add to it
             if (overworldModel.getPlayerDY() < maxDYDueToGravity) {
-                proposedPlayerDY = playerDY() + overworldModel.getDDYDueToGravity();
+                proposedPlayerDY = playerDY + overworldModel.getDDYDueToGravity();
             }
             //else, just propose the last player dy
             else {
@@ -216,9 +221,9 @@ class PlayerUpdater {
         
         return proposedPlayerDY;
 	}
-	
-	float getProposedDXDueToFade(float playerDX, boolean floor) {
-		float proposedPlayerDX = 0.0f;
+
+    float getProposedPlayerDXDueToFade(float playerDX, boolean floor) {
+        float proposedPlayerDX = 0.0f;
 	
 		//horizontal player movement fade
         //if it's close enough to 0, just make it 0 - was experiencing a floating point error otherwise
