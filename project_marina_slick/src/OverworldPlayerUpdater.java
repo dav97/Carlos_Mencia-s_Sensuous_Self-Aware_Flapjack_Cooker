@@ -1,6 +1,16 @@
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+/**
+ * PlayerUpdater is a class designed to handle processing
+ * player input and environmental effects on the player
+ * (i.e. gravity) and update the player's location and
+ * movement in the model accordingly.
+ * 
+ * @author scorple
+ * @version 1.0
+ * @since 2016.08.11
+ */
 class PlayerUpdater
 {
 	private OverworldState overworldState;
@@ -10,6 +20,13 @@ class PlayerUpdater
 	private boolean staleInputUp;
     private boolean staleInputUse;
 
+	/**
+	 * Constructor. Initializes stale input flags to false
+	 * and sets state callback reference.
+	 * 
+	 * @param overworldState OverworldState: Callback reference,
+	 * 		  needed for map transitions.
+	 */
 	PlayerUpdater(OverworldState overworldState)
 	{
 		this.overworldState = overworldState;
@@ -17,6 +34,16 @@ class PlayerUpdater
 		staleInputUse = false;
 	}
 
+	/**
+	 * Given the current model and input, process effects on
+	 * player location and update the model accordinly.
+	 * 
+	 * @param overworldModel OverworldModel: The model pre-update,
+	 * 		  needed for getting player location, previous movement
+	 * 		  vector, and checking collisions.
+	 * @param input Input: The player input object, needed for
+	 * 		  checking input from the player.
+	 */
     void update(OverworldModel overworldModel, Input input) throws SlickException
     {
         this.overworldModel = overworldModel;
@@ -219,6 +246,13 @@ class PlayerUpdater
         //end update player movement and location
 	}
 	
+	/**
+	 * Utility function for checking if the player is no longer
+	 * on a wall and updating the model with that information.
+	 * 
+	 * @param floor boolean: Expedites check, if floor is true
+	 * 		  the player is definitely not on a wall.
+	 */
 	void checkOffWall(boolean floor)
 	{
 		//if there is not collision to the left of the player or the player is on solid ground,
@@ -237,6 +271,16 @@ class PlayerUpdater
         }
 	}
 
+	/**
+	 * Utility function for getting the potential effects of
+	 * gravity on the player.
+	 * 
+	 * @param playerDY float: The previous player dY, needed for
+	 * 		  checking against the maximum/minimum player dY and
+	 * 		  calculating new dY.
+	 * @param wall boolean: Wether or not the player is on a wall,
+	 * 		  this will effect the ddY applied.
+	 */
     float getProposedPlayerDYDueToGravity(float playerDY, boolean wall)
     {
         float proposedPlayerDY = 0.0f;
@@ -279,6 +323,17 @@ class PlayerUpdater
         return proposedPlayerDY;
 	}
 
+	/**
+	 * Utility function for getting the potential horizontal
+	 * movement fade - applied when the player is not providing
+	 * a horizontal movement input, allows for a softer/gradual
+	 * stop when the player releases input.
+	 * 
+	 * @param playerDX float: The previous player dX, needed
+	 * 		  for calculating new dX.
+	 * @param floor boolean: Wether or not the player is on
+	 * 		  solid ground, this will affect the ddX applied.
+	 */
     float getProposedPlayerDXDueToFade(float playerDX, boolean floor)
     {
         float proposedPlayerDX = 0.0f;
