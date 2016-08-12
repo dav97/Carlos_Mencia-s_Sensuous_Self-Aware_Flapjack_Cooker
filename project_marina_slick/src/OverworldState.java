@@ -1,5 +1,9 @@
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.*;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
@@ -23,10 +27,9 @@ class OverworldState extends BasicGameState {
     //private final ActionListener changeStateListener; //TODO: needs redoing
     private final int id;
     private OverworldModel overworldModel;
+    private PlayerUpdater playerUpdater;
     private OverworldView overworldView;
     private float scale = 6;
-    private boolean staleJumpInput = false; //not sure about this one
-    private boolean staleUseInput = false; //TODO: move this, and player input update handling, to a class
 
     /**
      * State constructor. Stores reference parameters.
@@ -91,6 +94,8 @@ class OverworldState extends BasicGameState {
         overworldModel.setMaxDYDueToGravity(OverworldGlobals.STANDARD_MAX_DY_DUE_TO_GRAVITY);
         overworldModel.setMaxDYOnWall(OverworldGlobals.STANDARD_MAX_DY_ON_WALL);
         //end player setup
+
+        playerUpdater = new PlayerUpdater(this);
     }
 
     /**
@@ -138,6 +143,7 @@ class OverworldState extends BasicGameState {
         overworldView.setMapImage(tiledMapImage);
 
         MAP_HOOK = loadMapName;
+        overworldModel.setMapHookCurrent(MAP_HOOK);
     }
 
     /**
@@ -149,10 +155,11 @@ class OverworldState extends BasicGameState {
      *
      * @throws SlickException Slick library exception.
      */
-    private void transitionMap(String newMapHook, String spawnHook) throws SlickException {
+    void transitionMap(String newMapHook, String spawnHook) throws SlickException {
         loadMap(newMapHook);
 
         overworldModel.spawnPlayer(spawnHook);
+        overworldModel.setMapHookSpawn(spawnHook);
     }
 
     /**
@@ -170,7 +177,7 @@ class OverworldState extends BasicGameState {
             WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
         }
         //end check window size change and update logic
-        
+
         //view updating
         float playerX = overworldModel.getPlayerX();
         float playerY = overworldModel.getPlayerY();
@@ -187,7 +194,7 @@ class OverworldState extends BasicGameState {
 
         overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
         //end view updating
-        
+
         overworldView.draw(g);
     }
 
@@ -198,188 +205,31 @@ class OverworldState extends BasicGameState {
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         //TODO: split this method up
 
-        float playerX = overworldModel.getPlayerX();
-        float playerY = overworldModel.getPlayerY();
-        float playerDX = overworldModel.getPlayerDX();
-
-        float proposedPlayerDX = 0;
-        float proposedPlayerDY = 0;
-
-        //if there is not collision to the left of the player or the player is on solid ground,
-        //unset the playerOnWallLeft flag
-        if (!overworldModel.isPlayerCollisionLeft() || overworldModel.isPlayerCollisionDown()) {
-            overworldModel.setPlayerOnWallLeft(false);
-        }
-        //if there is not collision to the right of the player or the player is on solid ground,
-        //unset the playerOnWallRight flag
-        if (!overworldModel.isPlayerCollisionRight() || overworldModel.isPlayerCollisionDown()) {
-            overworldModel.setPlayerOnWallRight(false);
+        if (container.getWidth() != WINDOW_WIDTH || container.getHeight() != WINDOW_HEIGHT) {
+            WINDOW_WIDTH = container.getWidth();
+            WINDOW_HEIGHT = container.getHeight();
+            WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
+            WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
+            scale = Math.min((container.getWidth() / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (container.getHeight() / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+            overworldView.setScale(scale);
         }
 
-        //gravity
-        //if the player is on a wall,
-        if (overworldModel.isPlayerOnWallLeft() || overworldModel.isPlayerOnWallRight()) {
-            //if the player dy is less than the max due to gravity while on a wall, add to it
-            if (overworldModel.getPlayerDY() < overworldModel.getMaxDYOnWall()) {
-                proposedPlayerDY = overworldModel.getPlayerDY() + overworldModel.getDDYDueToGravity();
-            }
-            //else if the player dy is greater than the max due to gravity while on a wall, remove from it
-            else if (overworldModel.getPlayerDY() > overworldModel.getMaxDYOnWall()) {
-                proposedPlayerDY = overworldModel.getPlayerDY() - overworldModel.getDDYDueToGravity();
-            }
-        }
-        //else if the player is not on solid ground,
-        else if (!overworldModel.isPlayerCollisionDown()) {
-            //if the player dy is less than the max dy due to gravity, add to it
-            if (overworldModel.getPlayerDY() < overworldModel.getMaxDYDueToGravity()) {
-                proposedPlayerDY = overworldModel.getPlayerDY() + overworldModel.getDDYDueToGravity();
-            }
-            //else, just propose the last player dy
-            else {
-                proposedPlayerDY = overworldModel.getPlayerDY();
-            }
-        }
-        //end gravity
+        playerUpdater.update(overworldModel, container.getInput());
 
-        //horizontal player movement fade
-        //if it's close enough to 0, just make it 0 - was experiencing a floating point error otherwise
-        if ((playerDX < OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND) &&
-                (playerDX > -(OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND))) {
-            proposedPlayerDX = 0;
-        } else if (playerDX > 0) {
-            if (overworldModel.isPlayerCollisionDown()) {
-                proposedPlayerDX = playerDX - overworldModel.getDDXDueToInput();
-            } else {
-                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput() / 2);
-            }
-        } else if (playerDX < 0) {
-            if (overworldModel.isPlayerCollisionDown()) {
-                proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
-            } else {
-                proposedPlayerDX = playerDX + (overworldModel.getDDXDueToInput() / 2);
-            }
-        }
-        //end horizontal player movement fade
+        //view updating
+        float playerWidth = overworldModel.getPlayerWidth();
+        float playerHeight = overworldModel.getPlayerHeight();
 
-        //player input
-        //move right
-        if (container.getInput().isKeyDown(Input.KEY_A)) {
-            if (playerDX > -(overworldModel.getMaxDXDueToInput())) {
-                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput());
-            } else {
-                proposedPlayerDX = playerDX;
-            }
-            if (overworldModel.isPlayerCollisionLeft() &&
-                    !overworldModel.isPlayerCollisionDown()) {
-                overworldModel.setPlayerOnWallLeft(true);
-                System.out.println("Player is on left wall");
-            }
-        }
-        //move left
-        if (container.getInput().isKeyDown(Input.KEY_D)) {
-            if (playerDX < overworldModel.getMaxDXDueToInput()) {
-                proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
-            } else {
-                proposedPlayerDX = playerDX;
-            }
-            if (overworldModel.isPlayerCollisionRight() &&
-                    !overworldModel.isPlayerCollisionDown()) {
-                overworldModel.setPlayerOnWallRight(true);
-                System.out.println("Player is on right wall");
-            }
-        }
-        //jump
-        if (container.getInput().isKeyDown(Input.KEY_W)
-                && !staleJumpInput
-                ) {
-            if (overworldModel.isPlayerCollisionDown()) { //if the player has solid ground beneath her
-                staleJumpInput = true;
-                proposedPlayerDY = overworldModel.getInstantaneousJumpDY();
-            } else if (overworldModel.isPlayerOnWallLeft()) {
-                staleJumpInput = true;
-                overworldModel.setPlayerOnWallLeft(false);
-                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
-                proposedPlayerDX = overworldModel.getInstantaneousWallJumpRightDX();
-            } else if (overworldModel.isPlayerCollisionRight()) {
-                staleJumpInput = true;
-                overworldModel.setPlayerOnWallRight(false);
-                proposedPlayerDY = overworldModel.getInstantaneousWallJumpDY();
-                proposedPlayerDX = overworldModel.getInstantaneousWallJumpLeftDX();
-            }
-        }
-        if (!container.getInput().isKeyDown(Input.KEY_W)) {
-            staleJumpInput = false;
-        }
-        //"move down"
-        //will currently cause the player to let go of the wall and do nothing else
-        if (container.getInput().isKeyDown(Input.KEY_S)) {
-            overworldModel.setPlayerOnWallLeft(false);
-            overworldModel.setPlayerOnWallRight(false);
-        }
-        //"use", currently disallowed while jumping or falling
-        if ((container.getInput().isKeyDown(Input.KEY_E)) &&
-                (overworldModel.getPlayerDY() == 0) &&
-                !staleUseInput) {
-            staleUseInput = true;
-            String hooks[] = overworldModel.getIntersectingTileHooks();
-            //String feedback = "Intersecting tile hooks:";
+        float mapX = -(playerX + (playerWidth / 2) - WINDOW_CENTER_HORIZONTAL);
+        float mapY = -(playerY + (playerHeight / 2) - WINDOW_CENTER_VERTIAL);
 
-            outerLoop:
-            //TODO: naming loops to break multiple layers is discouraged, revisit
-            for (String hook : hooks) {
-                if (!hook.equals("")) {
-                    for (int i_map_id = 0; i_map_id < OverworldGlobals.MAP_HOOK_LIST.length; ++i_map_id) {
-                        if (hook.equals(OverworldGlobals.MAP_HOOK_LIST[i_map_id])) {
-                            System.out.println("Valid map hook found: <" + hook + ">");
-                            System.out.println("Transitioning to <" + hook + "> from <" + MAP_HOOK + ">");
-                            transitionMap(hook, MAP_HOOK);
-                            break outerLoop;
-                        }
-                    }
-                    //feedback += " " + hooks[i_hook];
-                }
-            }
-            //System.out.println(feedback);
-        }
-        if (!container.getInput().isKeyDown(Input.KEY_E)) {
-            staleUseInput = false;
-        }
-        //end player input
+        overworldView.setMapLocation(mapX, mapY);
 
-        //update player movement and location
-        //if the proposed player dx is non-zero, check for collisions and use the collision distance for setting dx
-        if (proposedPlayerDX != 0) {
-            float adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
+        float centeredPlayerX = WINDOW_CENTER_HORIZONTAL - (playerWidth / 2);
+        float centeredPlayerY = WINDOW_CENTER_VERTIAL - (playerHeight / 2);
 
-            //if the proposed player movement was left or right but she ends up on a wall
-            //(such as from faded movement or jump off of wall movement) set the playerOnWall
-            //flag - allows player to jump back and forth between walls by just pressing the
-            //jump key
-            if (adjustedDX == 0.0f) {
-                if (proposedPlayerDX < 0) {
-                    overworldModel.setPlayerOnWallLeft(true);
-                } else {
-                    overworldModel.setPlayerOnWallRight(true);
-                }
-            }
-
-            overworldModel.setPlayerDX(adjustedDX);
-        } else {
-            overworldModel.setPlayerDX(proposedPlayerDX);
-        }
-
-        //if the proposed player dy is non-zero, check for collisions and use the collision distance for setting dy
-        if (proposedPlayerDY != 0) {
-            float adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
-
-            overworldModel.setPlayerDY(adjustedDY);
-        } else {
-            overworldModel.setPlayerDY(proposedPlayerDY);
-        }
-
-        overworldModel.setPlayerX(overworldModel.getPlayerX() + overworldModel.getPlayerDX());
-        overworldModel.setPlayerY(overworldModel.getPlayerY() + overworldModel.getPlayerDY());
-        //end update player movement and location
+        overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
+        //end view updating
 
         //example of requesting game state change, i.e. to the main menu or fight state
         /*if (false) {

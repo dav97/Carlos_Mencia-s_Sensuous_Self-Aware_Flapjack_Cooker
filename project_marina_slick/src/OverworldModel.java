@@ -11,6 +11,8 @@ class OverworldModel {
     int mapHeight; //the map height in tiles
     int tileWidth;
     Boolean[][] mapClip; //the grid of passable (clip true) and not passable (clip false)
+    String mapHookCurrent;
+    String mapHookSpawn;
     String[][] mapHooks;
 
     //TODO: move these to a separate class
@@ -69,6 +71,22 @@ class OverworldModel {
         this.mapHooks = mapHooks;
     }
 
+    String getMapHookCurrent() {
+        return mapHookCurrent;
+    }
+
+    void setMapHookCurrent(String mapHookCurrent) {
+        this.mapHookCurrent = mapHookCurrent;
+    }
+
+    String getMapHookSpawn() {
+        return mapHookSpawn;
+    }
+
+    void setMapHookSpawn(String mapHookPrevious) {
+        this.mapHookSpawn = mapHookPrevious;
+    }
+
     /**
      * Create the player model and set default location and
      * movement values.
@@ -105,6 +123,7 @@ class OverworldModel {
                     playerDY = 0;
                     playerOnWallLeft = false;
                     playerOnWallRight = false;
+                    mapHookSpawn = hook;
                     return;
                 }
             }
