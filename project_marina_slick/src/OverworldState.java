@@ -1,3 +1,4 @@
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -169,12 +170,12 @@ class OverworldState extends BasicGameState {
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         //TODO: split this method up
 
-        if (container.getWidth() != WINDOW_WIDTH || container.getHeight() != WINDOW_HEIGHT) {
-            WINDOW_WIDTH = container.getWidth();
-            WINDOW_HEIGHT = container.getHeight();
+        if (Display.getWidth() != container.getWidth() || Display.getHeight() != container.getHeight()) {
+            WINDOW_WIDTH = Display.getWidth();
+            WINDOW_HEIGHT = Display.getHeight();
             WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
             WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
-            scale = Math.min((container.getWidth() / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (container.getHeight() / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+            scale = Math.min((WINDOW_WIDTH / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (WINDOW_HEIGHT / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
             overworldView.setScale(scale);
         }
 
@@ -242,6 +243,25 @@ class OverworldState extends BasicGameState {
         //end horizontal player movement fade
 
         //player input
+        //resize debug
+        if (container.getInput().isKeyDown(Input.KEY_LBRACKET)) {
+            ((AppGameContainer) container).setDisplayMode(800, 600, false);
+            WINDOW_WIDTH = container.getWidth();
+            WINDOW_HEIGHT = container.getHeight();
+            WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
+            WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
+            scale = Math.min((WINDOW_WIDTH / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (WINDOW_HEIGHT / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+            overworldView.setScale(scale);
+        }
+        if (container.getInput().isKeyDown(Input.KEY_RBRACKET)) {
+            ((AppGameContainer) container).setDisplayMode(1600, 900, false);
+            WINDOW_WIDTH = container.getWidth();
+            WINDOW_HEIGHT = container.getHeight();
+            WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
+            WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
+            scale = Math.min((WINDOW_WIDTH / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (WINDOW_HEIGHT / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+            overworldView.setScale(scale);
+        }
         //move right
         if (container.getInput().isKeyDown(Input.KEY_A)) {
             if (playerDX > -(overworldModel.getMaxDXDueToInput())) {
