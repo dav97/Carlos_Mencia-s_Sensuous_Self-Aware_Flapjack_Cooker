@@ -271,14 +271,14 @@ class OverworldModel {
     
     float[] getDiagonalCollisionDistanceByDXAndDY(float dX, float dY) {
 		float[] dXdY = new float[2];
-		float playerXTest = 0;
-		float playerYTest = 0;
-		int mapXTest = -1;
+        float playerXTest = 0.0f;
+        float playerYTest = 0.0f;
+        int mapXTest = -1;
 		int mapYTest = -1;
-		float collisionDX;
-		float collisionDY;
-		
-		if (dX < 0.0f) {
+        float collisionDX = 0.0f;
+        float collisionDY = 0.0f;
+
+        if (dX < 0.0f) {
             playerXTest = playerX + dX;
         } else if (dX > 0.0f) {
             playerXTest = playerX + playerWidth + dX;
@@ -304,14 +304,14 @@ class OverworldModel {
 					//if the scalar change in X is greater or equal to the scalar change in Y,
 					//prioritize moving in the X direction - below or above the tile
 					//we are hitting the corner of
-					float[0] = dX;
-					if (dY < 0.0f) {
+                    dXdY[0] = dX;
+                    if (dY < 0.0f) {
 						collisionDY = (((mapYTest + 1) * tileWidth)) - playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
 					} else if (dY > 0.0f) {
 						collisionDY = ((mapYTest) * tileWidth) - ((playerY + playerHeight)); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
 					}
-					float[1] = collisionDY;
-				}
+                    dXdY[1] = collisionDY;
+                }
 				else {
 					//if the scalar change in X is less than the scalar change in Y,
 					//prioritize moving in the Y direction - left or right of the tile
@@ -321,19 +321,19 @@ class OverworldModel {
 					} else if (dX > 0.0f) {
 						collisionDX = ((mapXTest) * tileWidth) - ((playerX + playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
 					}
-					float[0] = collisionDX;
-					float[1] = dY;
-				}
+                    dXdY[0] = collisionDX;
+                    dXdY[1] = dY;
+                }
 			}
 			else {
-				float[0] = dX;
-				float[1] = dY;
-			}
+                dXdY[0] = dX;
+                dXdY[1] = dY;
+            }
 		}
 		else {
-			float[0] = dX;
-			float[1] = dY;
-		}
+            dXdY[0] = dX;
+            dXdY[1] = dY;
+        }
 		
 		return dXdY;
 	}
