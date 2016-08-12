@@ -1,5 +1,4 @@
 import org.lwjgl.opengl.Display;
-import org.newdawn.slick.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -205,31 +204,7 @@ class OverworldState extends BasicGameState {
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         //TODO: split this method up
 
-        if (container.getWidth() != WINDOW_WIDTH || container.getHeight() != WINDOW_HEIGHT) {
-            WINDOW_WIDTH = container.getWidth();
-            WINDOW_HEIGHT = container.getHeight();
-            WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
-            WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
-            scale = Math.min((container.getWidth() / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (container.getHeight() / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
-            overworldView.setScale(scale);
-        }
-
         playerUpdater.update(overworldModel, container.getInput());
-
-        //view updating
-        float playerWidth = overworldModel.getPlayerWidth();
-        float playerHeight = overworldModel.getPlayerHeight();
-
-        float mapX = -(playerX + (playerWidth / 2) - WINDOW_CENTER_HORIZONTAL);
-        float mapY = -(playerY + (playerHeight / 2) - WINDOW_CENTER_VERTIAL);
-
-        overworldView.setMapLocation(mapX, mapY);
-
-        float centeredPlayerX = WINDOW_CENTER_HORIZONTAL - (playerWidth / 2);
-        float centeredPlayerY = WINDOW_CENTER_VERTIAL - (playerHeight / 2);
-
-        overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
-        //end view updating
 
         //example of requesting game state change, i.e. to the main menu or fight state
         /*if (false) {
