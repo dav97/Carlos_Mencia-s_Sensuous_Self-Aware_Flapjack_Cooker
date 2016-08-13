@@ -17,7 +17,8 @@ import java.awt.event.ActionListener;
  * @version 1.0
  * @since 2016.08.01
  */
-class OverworldState extends BasicGameState {
+class OverworldState extends BasicGameState
+{
     private static int WINDOW_WIDTH;
     private static int WINDOW_HEIGHT;
     private static float WINDOW_CENTER_HORIZONTAL;
@@ -33,10 +34,11 @@ class OverworldState extends BasicGameState {
     /**
      * State constructor. Stores reference parameters.
      *
-     * @param id int: The numeric id of this state.
+     * @param id                  int: The numeric id of this state.
      * @param changeStateListener ActionListener: Callback for change state requests.
      */
-    OverworldState(int id, ActionListener changeStateListener) {
+    OverworldState(int id, ActionListener changeStateListener)
+    {
         this.id = id;
         //this.changeStateListener = changeStateListener;
     }
@@ -45,7 +47,8 @@ class OverworldState extends BasicGameState {
      * {@inheritDoc}
      */
     @Override
-    public int getID() {
+    public int getID()
+    {
         return id;
     }
 
@@ -53,16 +56,18 @@ class OverworldState extends BasicGameState {
      * {@inheritDoc}
      */
     @Override
-    public void init(GameContainer container, StateBasedGame game) throws SlickException {
+    public void init(GameContainer container, StateBasedGame game) throws SlickException
+    {
         WINDOW_WIDTH = container.getWidth();
         WINDOW_HEIGHT = container.getHeight();
-        WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
-        WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
+        WINDOW_CENTER_HORIZONTAL = (((float) WINDOW_WIDTH / 2.0f) / scale);
+        WINDOW_CENTER_VERTIAL = (((float) WINDOW_HEIGHT / 2.0f) / scale);
 
         //component setup
         overworldModel = new OverworldModel();
         overworldView = new OverworldView();
-        scale = Math.min((container.getWidth() / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (container.getHeight() / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+        scale = Math.min((container.getWidth() / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
+                         (container.getHeight() / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
         overworldView.setScale(scale);
         //end component setup
 
@@ -75,8 +80,10 @@ class OverworldState extends BasicGameState {
         //player setup
         Image playerBasic = new Image(OverworldGlobals.DEFAULT_CHARACTER_IMAGE_PATH, false, Image.FILTER_NEAREST);
 
-        long playerWidth = playerBasic.getWidth() * 100; //the logical player width is the raw graphic width
-        long playerHeight = playerBasic.getHeight() * 100; //the logical player height is the raw graphic height
+        long playerWidth = playerBasic.getWidth() *
+            OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION; //the logical player width is the raw graphic width
+        long playerHeight = playerBasic.getHeight() *
+            OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION; //the logical player height is the raw graphic height
 
         overworldModel.setupPlayerModel(playerWidth, playerHeight);
         overworldView.setupPlayerViewModel(playerBasic);
@@ -108,26 +115,36 @@ class OverworldState extends BasicGameState {
      *
      * @throws SlickException Slick library exception.
      */
-    private void loadMap(String loadMapName) throws SlickException {
-        TiledMap tiledMap = new TiledMap(OverworldGlobals.MAP_RESOURCE_PATH +
-                loadMapName + OverworldGlobals.TILED_MAP_EXTENSION);
+    private void loadMap(String loadMapName) throws SlickException
+    {
+        TiledMap tiledMap =
+            new TiledMap(OverworldGlobals.MAP_RESOURCE_PATH + loadMapName + OverworldGlobals.TILED_MAP_EXTENSION);
         int tiledForegroundLayerId = tiledMap.getLayerIndex(OverworldGlobals.TILED_FOREGROUND_LAYER_NAME);
         int tiledReferenceLayerId = tiledMap.getLayerIndex(OverworldGlobals.TILED_REFERENCE_LAYER_NAME);
 
-        Boolean mapClip[][] = new Boolean[tiledMap.getWidth()][tiledMap.getHeight()]; //true means passable, false means not passable
+        Boolean mapClip[][] =
+            new Boolean[tiledMap.getWidth()][tiledMap.getHeight()]; //true means passable, false means not passable
         String mapHooks[][] = new String[tiledMap.getWidth()][tiledMap.getHeight()];
 
         int tileId;
         int refTileId;
         String refTileHook;
-        for (int x = 0; x < tiledMap.getWidth(); ++x) {
-            for (int y = 0; y < tiledMap.getHeight(); ++y) {
+        for (int x = 0; x < tiledMap.getWidth(); ++x)
+        {
+            for (int y = 0; y < tiledMap.getHeight(); ++y)
+            {
                 tileId = tiledMap.getTileId(x, y, tiledForegroundLayerId);
-                mapClip[x][y] = tiledMap.getTileProperty(tileId, OverworldGlobals.TILED_CLIP_PROPERTY_NAME, OverworldGlobals.TILED_CLIP_PROPERTY_ENABLED).equals(OverworldGlobals.TILED_CLIP_PROPERTY_ENABLED);
+                mapClip[x][y] = tiledMap.getTileProperty(tileId,
+                                                         OverworldGlobals.TILED_CLIP_PROPERTY_NAME,
+                                                         OverworldGlobals.TILED_CLIP_PROPERTY_ENABLED)
+                                        .equals(OverworldGlobals.TILED_CLIP_PROPERTY_ENABLED);
                 refTileId = tiledMap.getTileId(x, y, tiledReferenceLayerId);
-                refTileHook = tiledMap.getTileProperty(refTileId, OverworldGlobals.TILED_HOOK_PROPERTY_NAME, OverworldGlobals.TILED_HOOK_PROPERTY_DEFAULT);
+                refTileHook = tiledMap.getTileProperty(refTileId,
+                                                       OverworldGlobals.TILED_HOOK_PROPERTY_NAME,
+                                                       OverworldGlobals.TILED_HOOK_PROPERTY_DEFAULT);
                 mapHooks[x][y] = refTileHook;
-                if (!refTileHook.equals(OverworldGlobals.TILED_HOOK_PROPERTY_DEFAULT)) {
+                if (!refTileHook.equals(OverworldGlobals.TILED_HOOK_PROPERTY_DEFAULT))
+                {
                     System.out.println("Tile at <" + x + ", " + y + "> has reference hook <" + refTileHook + ">");
                 }
             }
@@ -135,13 +152,14 @@ class OverworldState extends BasicGameState {
 
         overworldModel.setupMapModel(tiledMap.getWidth(),
                                      tiledMap.getHeight(),
-                                     tiledMap.getTileWidth() * 100,
+                                     tiledMap.getTileWidth() * OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION,
                                      mapClip,
                                      mapHooks);
 
-        Image tiledMapImage = new Image(OverworldGlobals.MAP_RESOURCE_PATH +
-                loadMapName + OverworldGlobals.GRAPHICS_EXTENSION,
-                false, Image.FILTER_NEAREST);
+        Image tiledMapImage =
+            new Image(OverworldGlobals.MAP_RESOURCE_PATH + loadMapName + OverworldGlobals.GRAPHICS_EXTENSION,
+                      false,
+                      Image.FILTER_NEAREST);
 
         overworldView.setMapImage(tiledMapImage);
 
@@ -158,7 +176,8 @@ class OverworldState extends BasicGameState {
      *
      * @throws SlickException Slick library exception.
      */
-    void transitionMap(String newMapHook, String spawnHook) throws SlickException {
+    void transitionMap(String newMapHook, String spawnHook) throws SlickException
+    {
         loadMap(newMapHook);
 
         overworldModel.spawnPlayer(spawnHook);
@@ -169,15 +188,18 @@ class OverworldState extends BasicGameState {
      * {@inheritDoc}
      */
     @Override
-    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException
+    {
         //check window size change and update logic
-        if (WINDOW_WIDTH != Display.getWidth() || WINDOW_HEIGHT != Display.getHeight()) {
+        if (WINDOW_WIDTH != Display.getWidth() || WINDOW_HEIGHT != Display.getHeight())
+        {
             WINDOW_WIDTH = Display.getWidth();
             WINDOW_HEIGHT = Display.getHeight();
-            scale = Math.min((WINDOW_WIDTH / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR), (WINDOW_HEIGHT / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+            scale = Math.min((WINDOW_WIDTH / Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
+                             (WINDOW_HEIGHT / Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
             overworldView.setScale(scale);
-            WINDOW_CENTER_HORIZONTAL = ((WINDOW_WIDTH / 2) / scale);
-            WINDOW_CENTER_VERTIAL = ((WINDOW_HEIGHT / 2) / scale);
+            WINDOW_CENTER_HORIZONTAL = (((float) WINDOW_WIDTH / 2.0f) / scale);
+            WINDOW_CENTER_VERTIAL = (((float) WINDOW_HEIGHT / 2.0f) / scale);
         }
         //end check window size change and update logic
 
@@ -187,13 +209,19 @@ class OverworldState extends BasicGameState {
         long playerWidth = overworldModel.getPlayerWidth();
         long playerHeight = overworldModel.getPlayerHeight();
 
-        float mapX = -((playerX / 100) + ((playerWidth / 100) / 2) - WINDOW_CENTER_HORIZONTAL);
-        float mapY = -((playerY / 100) + ((playerHeight / 100) / 2) - WINDOW_CENTER_VERTIAL);
+        float mapX = -(((float) playerX / OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION) +
+            (((float) playerWidth / OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_HORIZONTAL);
+        float mapY = -(((float) playerY / OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION) +
+            (((float) playerHeight / OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_VERTIAL);
+
+        System.out.println(mapX + " " + mapY);
 
         overworldView.setMapLocation(mapX, mapY);
 
-        float centeredPlayerX = WINDOW_CENTER_HORIZONTAL - ((playerWidth / 100) / 2);
-        float centeredPlayerY = WINDOW_CENTER_VERTIAL - ((playerHeight / 100) / 2);
+        float centeredPlayerX =
+            WINDOW_CENTER_HORIZONTAL - (((float) playerWidth / OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
+        float centeredPlayerY =
+            WINDOW_CENTER_VERTIAL - (((float) playerHeight / OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
 
         overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
         //end view updating
@@ -205,7 +233,8 @@ class OverworldState extends BasicGameState {
      * {@inheritDoc}
      */
     @Override
-    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
+    {
         //TODO: split this method up
 
         playerUpdater.update(overworldModel, container.getInput());
