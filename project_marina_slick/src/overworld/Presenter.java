@@ -244,8 +244,6 @@ public class Presenter extends BasicGameState
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
     {
-        //TODO: split this method up
-
         playerUpdater.update(model, container.getInput());
 
         //example of requesting game state change, i.e. to the main menu or fight state
