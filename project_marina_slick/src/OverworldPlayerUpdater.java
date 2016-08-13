@@ -6,7 +6,7 @@ import org.newdawn.slick.SlickException;
  * player input and environmental effects on the player
  * (i.e. gravity) and update the player's location and
  * movement in the model accordingly.
- * 
+ *
  * @author scorple
  * @version 1.0
  * @since 2016.08.11
@@ -23,8 +23,8 @@ class PlayerUpdater
 	/**
 	 * Constructor. Initializes stale input flags to false
 	 * and sets state callback reference.
-	 * 
-	 * @param overworldState OverworldState: Callback reference,
+     *
+     * @param overworldState OverworldState: Callback reference,
 	 * 		  needed for map transitions.
 	 */
 	PlayerUpdater(OverworldState overworldState)
@@ -37,8 +37,8 @@ class PlayerUpdater
 	/**
 	 * Given the current model and input, process effects on
 	 * player location and update the model accordinly.
-	 * 
-	 * @param overworldModel OverworldModel: The model pre-update,
+     *
+     * @param overworldModel OverworldModel: The model pre-update,
 	 * 		  needed for getting player location, previous movement
 	 * 		  vector, and checking collisions.
 	 * @param input Input: The player input object, needed for
@@ -74,8 +74,8 @@ class PlayerUpdater
 
 		//if the player is not on solid ground, we need to calculate the effects of gravity
 		if (!playerFloor)
-		{	
-			proposedPlayerDY = getProposedPlayerDYDueToGravity(playerDY,
+        {
+            proposedPlayerDY = getProposedPlayerDYDueToGravity(playerDY,
 															   playerOnWallLeft || playerOnWallRight);
         }
         
@@ -236,6 +236,10 @@ class PlayerUpdater
             }
         }
 
+        //            if (Math.abs(adjustedDX) > 0.1f) {
+        //                System.out.println("adjustedDX:<" + adjustedDX + ">");
+        //            }
+
         proposedPlayerDX = adjustedPlayerDX;
         proposedPlayerDY = adjustedPlayerDY;
 
@@ -250,8 +254,8 @@ class PlayerUpdater
 	/**
 	 * Utility function for checking if the player is no longer
 	 * on a wall and updating the model with that information.
-	 * 
-	 * @param floor boolean: Expedites check, if floor is true
+     *
+     * @param floor boolean: Expedites check, if floor is true
 	 * 		  the player is definitely not on a wall.
 	 */
 	void checkOffWall(boolean floor)
@@ -275,8 +279,8 @@ class PlayerUpdater
 	/**
 	 * Utility function for getting the potential effects of
 	 * gravity on the player.
-	 * 
-	 * @param playerDY float: The previous player dY, needed for
+     *
+     * @param playerDY float: The previous player dY, needed for
 	 * 		  checking against the maximum/minimum player dY and
 	 * 		  calculating new dY.
 	 * @param wall boolean: Wether or not the player is on a wall,
@@ -329,8 +333,8 @@ class PlayerUpdater
 	 * movement fade - applied when the player is not providing
 	 * a horizontal movement input, allows for a softer/gradual
 	 * stop when the player releases input.
-	 * 
-	 * @param playerDX float: The previous player dX, needed
+     *
+     * @param playerDX float: The previous player dX, needed
 	 * 		  for calculating new dX.
 	 * @param floor boolean: Wether or not the player is on
 	 * 		  solid ground, this will affect the ddX applied.

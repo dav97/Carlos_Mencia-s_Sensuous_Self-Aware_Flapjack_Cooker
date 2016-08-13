@@ -186,6 +186,14 @@ class OverworldModel {
                     //System.out.println("playerX is " + playerX + ", playerY " + playerY);
                     //System.out.println("mapXTest is " + mapXTest + ", " + mapXTest * tileWidth + ", mapYTest " + mapYTest[i] + ", " + mapYTest[i] * tileWidth);
                 }
+                if (Math.abs(collisionDX) > Math.abs(dX))
+                {
+                    System.out.println("dX:<" + dX + ">");
+                    System.out.println("playerX:<" + playerX + ">");
+                    System.out.println("playerXTest:<" + playerXTest + ">");
+                    System.out.println("mapXTest:<" + mapXTest + ">");
+                    System.out.println("adjustedDX:<" + collisionDX + ">");
+                }
                 return collisionDX;
             }
         }
