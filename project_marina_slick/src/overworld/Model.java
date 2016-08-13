@@ -174,7 +174,7 @@ class Model
         {
             return -(playerX);
         }
-        if (playerXTest > (((mapWidth) * tileWidth)))
+        if (playerXTest >= (((mapWidth) * tileWidth)))
         {
             return (((mapWidth) * tileWidth) - (playerX + playerWidth));
         }
