@@ -20,8 +20,8 @@ import java.awt.event.ActionListener;
 class OverworldState extends BasicGameState {
     private static int WINDOW_WIDTH;
     private static int WINDOW_HEIGHT;
-    private static long WINDOW_CENTER_HORIZONTAL;
-    private static long WINDOW_CENTER_VERTIAL;
+    private static float WINDOW_CENTER_HORIZONTAL;
+    private static float WINDOW_CENTER_VERTIAL;
     private static String MAP_HOOK;
     //private final ActionListener changeStateListener; //TODO: needs redoing
     private final int id;
@@ -187,13 +187,13 @@ class OverworldState extends BasicGameState {
         long playerWidth = overworldModel.getPlayerWidth();
         long playerHeight = overworldModel.getPlayerHeight();
 
-        long mapX = -(playerX + (playerWidth / 2) - WINDOW_CENTER_HORIZONTAL);
-        long mapY = -(playerY + (playerHeight / 2) - WINDOW_CENTER_VERTIAL);
+        float mapX = -((playerX / 100) + ((playerWidth / 100) / 2) - WINDOW_CENTER_HORIZONTAL);
+        float mapY = -((playerY / 100) + ((playerHeight / 100) / 2) - WINDOW_CENTER_VERTIAL);
 
         overworldView.setMapLocation(mapX, mapY);
 
-        long centeredPlayerX = WINDOW_CENTER_HORIZONTAL - (playerWidth / 2);
-        long centeredPlayerY = WINDOW_CENTER_VERTIAL - (playerHeight / 2);
+        float centeredPlayerX = WINDOW_CENTER_HORIZONTAL - ((playerWidth / 100) / 2);
+        float centeredPlayerY = WINDOW_CENTER_VERTIAL - ((playerHeight / 100) / 2);
 
         overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
         //end view updating

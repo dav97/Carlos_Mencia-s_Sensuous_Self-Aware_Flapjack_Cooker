@@ -18,14 +18,14 @@ class PlayerUpdater {
     void update(OverworldModel overworldModel, Input input) throws SlickException {
         this.overworldModel = overworldModel;
 		this.input = input;
-	
-		float playerX = overworldModel.getPlayerX();
-        float playerY = overworldModel.getPlayerY();
-        float playerDX = overworldModel.getPlayerDX();
-		float playerDY = overworldModel.getPlayerDY();
 
-        float proposedPlayerDX = 0;
-        float proposedPlayerDY = 0;
+        long playerX = overworldModel.getPlayerX();
+        long playerY = overworldModel.getPlayerY();
+        long playerDX = overworldModel.getPlayerDX();
+        long playerDY = overworldModel.getPlayerDY();
+
+        long proposedPlayerDX = 0;
+        long proposedPlayerDY = 0;
 
 		boolean playerFloor = overworldModel.isPlayerCollisionDown();
 
@@ -140,15 +140,18 @@ class PlayerUpdater {
 
         //update player movement and location
         //if the proposed player dx is non-zero, check for collisions and use the collision distance for setting dx
-        if (proposedPlayerDX != 0.0f) {
-            float adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
+        if (proposedPlayerDX != 0)
+        {
+            long adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
 
             //if the proposed player movement was left or right but she ends up on a wall
             //(such as from faded movement or jump off of wall movement) set the playerOnWall
             //flag - allows player to jump back and forth between walls by just pressing the
             //jump key
-            if (adjustedDX == 0.0f) {
-                if (proposedPlayerDX < 0.0f) {
+            if (adjustedDX == 0)
+            {
+                if (proposedPlayerDX < 0)
+                {
                     overworldModel.setPlayerOnWallLeft(true);
                 } else {
                     overworldModel.setPlayerOnWallRight(true);
@@ -161,8 +164,9 @@ class PlayerUpdater {
         }
 
         //if the proposed player dy is non-zero, check for collisions and use the collision distance for setting dy
-        if (proposedPlayerDY != 0.0f) {
-            float adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
+        if (proposedPlayerDY != 0)
+        {
+            long adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
 
             overworldModel.setPlayerDY(adjustedDY);
         } else {
@@ -187,12 +191,13 @@ class PlayerUpdater {
         }
 	}
 
-    float getProposedPlayerDYDueToGravity(float playerDY, boolean wall) {
-        float proposedPlayerDY = 0.0f;
-		float maxDYOnWall = 0.0f;
-		float maxDYDueToGravity = 0.0f;
-		
-		//gravity
+    long getProposedPlayerDYDueToGravity(long playerDY, boolean wall)
+    {
+        long proposedPlayerDY = 0;
+        long maxDYOnWall = 0;
+        long maxDYDueToGravity = 0;
+
+        //gravity
         //if the player is on a wall,
         if (wall) {
             maxDYOnWall = overworldModel.getMaxDYOnWall();
@@ -222,25 +227,28 @@ class PlayerUpdater {
         return proposedPlayerDY;
 	}
 
-    float getProposedPlayerDXDueToFade(float playerDX, boolean floor) {
-        float proposedPlayerDX = 0.0f;
-	
-		//horizontal player movement fade
+    long getProposedPlayerDXDueToFade(long playerDX, boolean floor)
+    {
+        long proposedPlayerDX = 0;
+
+        //horizontal player movement fade
         //if it's close enough to 0, just make it 0 - was experiencing a floating point error otherwise
         if ((playerDX < OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND) &&
                 (playerDX > -(OverworldGlobals.STANDARD_DX_FADE_SANITY_BOUND))) {
-            proposedPlayerDX = 0.0f;
-        } else if (playerDX > 0.0f) {
+            proposedPlayerDX = 0;
+        }
+        else if (playerDX > 0)
+        {
             if (floor) {
                 proposedPlayerDX = playerDX - overworldModel.getDDXDueToInput();
             } else {
-                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput() / 2.0f);
+                proposedPlayerDX = playerDX - (overworldModel.getDDXDueToInput() / 2);
             }
         } else if (playerDX < 0.0f) {
             if (floor) {
                 proposedPlayerDX = playerDX + overworldModel.getDDXDueToInput();
             } else {
-                proposedPlayerDX = playerDX + (overworldModel.getDDXDueToInput() / 2.0f);
+                proposedPlayerDX = playerDX + (overworldModel.getDDXDueToInput() / 2);
             }
         }
         //end horizontal player movement fade

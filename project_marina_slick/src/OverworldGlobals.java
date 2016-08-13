@@ -40,7 +40,7 @@ public class OverworldGlobals {
     public static final long STANDARD_DDX_DUE_TO_INPUT = 1;
     public static final long STANDARD_MAX_DX_DUE_TO_INPUT = 10;
 
-    //public static final long STANDARD_DX_FADE_SANITY_BOUND = 0.01f;
+    public static final long STANDARD_DX_FADE_SANITY_BOUND = 1;
 
     public static final long STANDARD_INSTANTANEOUS_JUMP_DY = -35;
     public static final long STANDARD_INSTANTANEOUS_WALL_JUMP_DY = -20;
