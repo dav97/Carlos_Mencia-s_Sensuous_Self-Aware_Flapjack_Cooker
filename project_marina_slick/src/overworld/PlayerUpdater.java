@@ -67,7 +67,7 @@ class PlayerUpdater
             }
             else if (playerDX < -(model.getMaxDXDueToInput()))
             {
-                proposedPlayerDX = playerDX + (model.getDDXDueToInput());
+                proposedPlayerDX = (playerDX + (model.getDDXDueToInput() / 2));
             }
             else
             {
@@ -88,7 +88,7 @@ class PlayerUpdater
             }
             else if (playerDX > model.getMaxDXDueToInput())
             {
-                proposedPlayerDX = playerDX - model.getDDXDueToInput();
+                proposedPlayerDX = (playerDX - (model.getDDXDueToInput() / 2));
             }
             else
             {
@@ -293,7 +293,7 @@ class PlayerUpdater
             }
             else
             {
-                proposedPlayerDX = (long) (playerDX - ((float) model.getDDXDueToInput() / 2.0f));
+                proposedPlayerDX = (playerDX - (model.getDDXDueToInput() / 2));
             }
         }
         else if (playerDX < 0)
@@ -304,7 +304,7 @@ class PlayerUpdater
             }
             else
             {
-                proposedPlayerDX = (long) (playerDX + ((float) model.getDDXDueToInput() / 2.0f));
+                proposedPlayerDX = (playerDX + (model.getDDXDueToInput() / 2));
             }
         }
         //end horizontal player movement fade
