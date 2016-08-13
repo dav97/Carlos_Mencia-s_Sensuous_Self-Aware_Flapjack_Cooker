@@ -5,7 +5,8 @@
  * @version 1.0
  * @since 2016.08.01
  */
-class OverworldModel {
+class OverworldModel
+{
     //TODO: move these to a separate class
     int mapWidth; //the map width in tiles
     int mapHeight; //the map height in tiles
@@ -43,7 +44,8 @@ class OverworldModel {
     /**
      * Default constructor for this model.
      */
-    OverworldModel() {
+    OverworldModel()
+    {
 
     }
 
@@ -72,19 +74,23 @@ class OverworldModel {
         this.mapHooks = mapHooks;
     }
 
-    String getMapHookCurrent() {
+    String getMapHookCurrent()
+    {
         return mapHookCurrent;
     }
 
-    void setMapHookCurrent(String mapHookCurrent) {
+    void setMapHookCurrent(String mapHookCurrent)
+    {
         this.mapHookCurrent = mapHookCurrent;
     }
 
-    String getMapHookSpawn() {
+    String getMapHookSpawn()
+    {
         return mapHookSpawn;
     }
 
-    void setMapHookSpawn(String mapHookPrevious) {
+    void setMapHookSpawn(String mapHookPrevious)
+    {
         this.mapHookSpawn = mapHookPrevious;
     }
 
@@ -112,12 +118,16 @@ class OverworldModel {
      *
      * @param hook String: A reference point in the map.
      */
-    void spawnPlayer(String hook) {
+    void spawnPlayer(String hook)
+    {
         System.out.println("Spawning player at hook <" + hook + ">");
 
-        for (int x = 0; x < mapWidth; ++x) {
-            for (int y = 0; y < mapHeight; ++y) {
-                if (mapHooks[x][y].equals(hook)) {
+        for (int x = 0; x < mapWidth; ++x)
+        {
+            for (int y = 0; y < mapHeight; ++y)
+            {
+                if (mapHooks[x][y].equals(hook))
+                {
                     System.out.println("Hook <" + hook + "> found at <" + x + ", " + y + ">");
                     playerX = x * tileWidth;
                     playerY = y * tileWidth;
@@ -149,17 +159,22 @@ class OverworldModel {
     {
         long playerXTest = playerX;
 
-        if (dX < 0) {
+        if (dX < 0)
+        {
             playerXTest = playerX + dX;
-        } else if (dX > 0) {
+        }
+        else if (dX > 0)
+        {
             playerXTest = playerX + playerWidth + dX;
         }
 
         //map bounds checking
-        if (playerXTest < 0) {
+        if (playerXTest < 0)
+        {
             return -(playerX);
         }
-        if (playerXTest > (((mapWidth) * tileWidth))) {
+        if (playerXTest > (((mapWidth) * tileWidth)))
+        {
             return (((mapWidth) * tileWidth) - (playerX + playerWidth));
         }
         //end map bounds checking
@@ -170,19 +185,30 @@ class OverworldModel {
         int mapXTest = (int) (playerXTest / tileWidth);
         int[] mapYTest = new int[maxMapXCollisionTiles];
 
-        mapYTest[0] = (int) (playerY / tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
-        for (int i = 1; i < (maxMapXCollisionTiles - 1); ++i) {
-            mapYTest[i] = mapYTest[i - 1] + 1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
+        mapYTest[0] = (int) (playerY /
+            tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
+        for (int i = 1; i < (maxMapXCollisionTiles - 1); ++i)
+        {
+            mapYTest[i] = mapYTest[i - 1] +
+                1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
-        mapYTest[maxMapXCollisionTiles - 1] = (int) (((playerY + playerHeight) - 1) / tileWidth); //the last mapY to test is the grid coordinate level with the bottom of the player
+        mapYTest[maxMapXCollisionTiles - 1] = (int) (((playerY + playerHeight) - 1) /
+            tileWidth); //the last mapY to test is the grid coordinate level with the bottom of the player
 
-        for (int i = 0; i < maxMapXCollisionTiles; ++i) { //check collision on every tile to the left or right of the player within a distance of dX
-            if (!mapClip[mapXTest][mapYTest[i]]) {
+        for (int i = 0; i < maxMapXCollisionTiles; ++i)
+        { //check collision on every tile to the left or right of the player within a distance of dX
+            if (!mapClip[mapXTest][mapYTest[i]])
+            {
                 long collisionDX = 0;
-                if (dX < 0) {
-                    collisionDX = (((mapXTest + 1) * tileWidth)) - playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
-                } else if (dX > 0) {
-                    collisionDX = ((mapXTest) * tileWidth) - ((playerX + playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
+                if (dX < 0)
+                {
+                    collisionDX = (((mapXTest + 1) * tileWidth)) -
+                        playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
+                }
+                else if (dX > 0)
+                {
+                    collisionDX = ((mapXTest) * tileWidth) - ((playerX +
+                        playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
                 }
                 return collisionDX;
             }
@@ -197,7 +223,8 @@ class OverworldModel {
      *
      * @return boolean: True if there is collision immediately left of the player.
      */
-    boolean isPlayerCollisionLeft() {
+    boolean isPlayerCollisionLeft()
+    {
         return (getHorizontalCollisionDistanceByDX(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_LEFT) == 0.0f);
     }
 
@@ -207,7 +234,8 @@ class OverworldModel {
      *
      * @return boolean: True if there is collision immediately right of the player.
      */
-    boolean isPlayerCollisionRight() {
+    boolean isPlayerCollisionRight()
+    {
         return (getHorizontalCollisionDistanceByDX(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_RIGHT) == 0.0f);
     }
 
@@ -220,23 +248,28 @@ class OverworldModel {
      * @param dY long: The proposed amount of player movement.
      *
      * @return long: The player distance from the tile she will
-     *         collide with if she moved the proposed amount.
+     * collide with if she moved the proposed amount.
      */
     long getVerticalCollisionDistanceByDY(long dY)
     {
         long playerYTest = playerY;
 
-        if (dY < 0) {
+        if (dY < 0)
+        {
             playerYTest = playerY + dY;
-        } else if (dY > 0) {
+        }
+        else if (dY > 0)
+        {
             playerYTest = playerY + playerHeight + dY;
         }
 
         //map bounds checking
-        if (playerYTest < 0) {
+        if (playerYTest < 0)
+        {
             return -(playerY);
         }
-        if (playerYTest > (((mapHeight) * tileWidth))) {
+        if (playerYTest > (((mapHeight) * tileWidth)))
+        {
             return (((mapHeight) * tileWidth) - (playerY + playerHeight));
         }
         //end map bounds checking
@@ -247,19 +280,30 @@ class OverworldModel {
         int[] mapXTest = new int[maxMapYCollisionTiles];
         int mapYTest = (int) (playerYTest / tileWidth);
 
-        mapXTest[0] = (int) (playerX / tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
-        for (int i = 1; i < (maxMapYCollisionTiles - 1); ++i) {
-            mapXTest[i] = mapXTest[i - 1] + 1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
+        mapXTest[0] = (int) (playerX /
+            tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
+        for (int i = 1; i < (maxMapYCollisionTiles - 1); ++i)
+        {
+            mapXTest[i] = mapXTest[i - 1] +
+                1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
-        mapXTest[maxMapYCollisionTiles - 1] = (int) (((playerX + playerWidth) - 1) / tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+        mapXTest[maxMapYCollisionTiles - 1] = (int) (((playerX + playerWidth) - 1) /
+            tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
-        for (int i = 0; i < maxMapYCollisionTiles; ++i) { //check collision on every tile to the left or right of the player within a distance of dX
-            if (!mapClip[mapXTest[i]][mapYTest]) {
+        for (int i = 0; i < maxMapYCollisionTiles; ++i)
+        { //check collision on every tile to the left or right of the player within a distance of dX
+            if (!mapClip[mapXTest[i]][mapYTest])
+            {
                 long collisionDY = 0;
-                if (dY < 0) {
-                    collisionDY = (((mapYTest + 1) * tileWidth)) - playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
-                } else if (dY > 0) {
-                    collisionDY = ((mapYTest) * tileWidth) - ((playerY + playerHeight)); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
+                if (dY < 0)
+                {
+                    collisionDY = (((mapYTest + 1) * tileWidth)) -
+                        playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
+                }
+                else if (dY > 0)
+                {
+                    collisionDY = ((mapYTest) * tileWidth) - ((playerY +
+                        playerHeight)); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
                 }
                 return collisionDY;
             }
@@ -274,7 +318,8 @@ class OverworldModel {
      *
      * @return boolean: True if there is collision immediately above the player.
      */
-    boolean isPlayerCollisionUp() {
+    boolean isPlayerCollisionUp()
+    {
         return (getVerticalCollisionDistanceByDY(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_UP) == 0.0f);
     }
 
@@ -284,7 +329,8 @@ class OverworldModel {
      *
      * @return boolean: True if there is collision immediately below the player.
      */
-    boolean isPlayerCollisionDown() {
+    boolean isPlayerCollisionDown()
+    {
         return (getVerticalCollisionDistanceByDY(OverworldGlobals.STANDARD_COLLISION_CHECK_DISTANCE_DOWN) == 0.0f);
     }
 
@@ -295,7 +341,8 @@ class OverworldModel {
      * is intersecting with. WARNING: MAY CONTAIN DUPLICATES, ESPECIALLY IF CHECKED
      * DURING JUMP.
      */
-    String[] getIntersectingTileHooks() {
+    String[] getIntersectingTileHooks()
+    {
         int maxPlayerIntersectionTilesTopToBottom =
             (int) (1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) +
                 1); //check the mapY, at minimum, level with the top and bottom of the player
@@ -307,26 +354,36 @@ class OverworldModel {
         int[] mapXTest = new int[maxPlayerIntersectionTilesLeftToRight];
 
         //get every mapX grid coordinate we will need to check for hooks
-        mapXTest[0] = (int) (playerX / tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
-        for (int i = 1; i < (maxPlayerIntersectionTilesLeftToRight - 1); ++i) {
-            mapXTest[i] = mapXTest[i - 1] + 1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
+        mapXTest[0] = (int) (playerX /
+            tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
+        for (int i = 1; i < (maxPlayerIntersectionTilesLeftToRight - 1); ++i)
+        {
+            mapXTest[i] = mapXTest[i - 1] +
+                1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
-        mapXTest[maxPlayerIntersectionTilesLeftToRight - 1] = (int) (((playerX + playerWidth) - 1) / tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+        mapXTest[maxPlayerIntersectionTilesLeftToRight - 1] = (int) (((playerX + playerWidth) - 1) /
+            tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         int[] mapYTest = new int[maxPlayerIntersectionTilesTopToBottom];
 
         //get every mapY grid coordinate we will need to check for hooks
-        mapYTest[0] = (int) (playerY / tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
-        for (int i = 1; i < (maxPlayerIntersectionTilesTopToBottom - 1); ++i) {
-            mapYTest[i] = mapYTest[i - 1] + 1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
+        mapYTest[0] = (int) (playerY /
+            tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
+        for (int i = 1; i < (maxPlayerIntersectionTilesTopToBottom - 1); ++i)
+        {
+            mapYTest[i] = mapYTest[i - 1] +
+                1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
-        mapYTest[maxPlayerIntersectionTilesTopToBottom - 1] = (int) (((playerY + playerHeight) - 1) / tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+        mapYTest[maxPlayerIntersectionTilesTopToBottom - 1] = (int) (((playerY + playerHeight) - 1) /
+            tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         String[] hooks = new String[maxIntersectingTiles];
 
         //fill the String array with the hooks of every tile intersecting with the player
-        for (int x = 0; x < maxPlayerIntersectionTilesLeftToRight; ++x) {
-            for (int y = 0; y < maxPlayerIntersectionTilesTopToBottom; ++y) {
+        for (int x = 0; x < maxPlayerIntersectionTilesLeftToRight; ++x)
+        {
+            for (int y = 0; y < maxPlayerIntersectionTilesTopToBottom; ++y)
+            {
                 hooks[y + x * maxPlayerIntersectionTilesTopToBottom] = mapHooks[mapXTest[x]][mapYTest[y]];
             }
         }
@@ -446,19 +503,23 @@ class OverworldModel {
         this.playerDY = playerDY;
     }
 
-    boolean isPlayerOnWallLeft() {
+    boolean isPlayerOnWallLeft()
+    {
         return playerOnWallLeft;
     }
 
-    void setPlayerOnWallLeft(boolean playerOnWallLeft) {
+    void setPlayerOnWallLeft(boolean playerOnWallLeft)
+    {
         this.playerOnWallLeft = playerOnWallLeft;
     }
 
-    boolean isPlayerOnWallRight() {
+    boolean isPlayerOnWallRight()
+    {
         return playerOnWallRight;
     }
 
-    void setPlayerOnWallRight(boolean playerOnWallRight) {
+    void setPlayerOnWallRight(boolean playerOnWallRight)
+    {
         this.playerOnWallRight = playerOnWallRight;
     }
 

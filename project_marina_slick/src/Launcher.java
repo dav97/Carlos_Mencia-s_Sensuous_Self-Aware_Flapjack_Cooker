@@ -11,7 +11,8 @@ import java.io.File;
  * @version 1.0
  * @since 2016.08.01
  */
-class Launcher {
+class Launcher
+{
     public static final int WIDTH = Globals.WINDOW_WIDTH;
     public static final int HEIGHT = Globals.WINDOW_HEIGHT;
 
@@ -22,7 +23,8 @@ class Launcher {
      *
      * @throws SlickException
      */
-    public static void main(String[] args) throws SlickException {
+    public static void main(String[] args) throws SlickException
+    {
         System.setProperty("org.lwjgl.librarypath", new File("lib/slick").getAbsolutePath());
 
         AppGameContainer app = new AppGameContainer(new Game("Project Marina"));

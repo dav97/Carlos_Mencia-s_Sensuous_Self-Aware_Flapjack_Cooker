@@ -9,7 +9,8 @@ import org.newdawn.slick.tiled.TiledMap;
  * @version 1.0
  * @since 2016.08.01
  */
-class OverworldView {
+class OverworldView
+{
     private float scale;
 
     //TODO: move these to a separate class
@@ -26,15 +27,18 @@ class OverworldView {
     /**
      * Default constructor for this view.
      */
-    OverworldView() {
+    OverworldView()
+    {
 
     }
+
     /**
      * Render the overworld view.
      *
      * @param g Graphics: The graphics context.
      */
-    void draw(Graphics g) {
+    void draw(Graphics g)
+    {
         g.setAntiAlias(false); //this is a pixel-art game, no anti-aliasing here
 
         g.scale(scale, scale); //TODO: this should be based on window size
@@ -55,7 +59,8 @@ class OverworldView {
      *
      * @param scale float: The scale to use for drawing.
      */
-    void setScale(float scale) {
+    void setScale(float scale)
+    {
         this.scale = scale;
     }
 
@@ -66,7 +71,8 @@ class OverworldView {
      *
      * @deprecated
      */
-    void setupMapViewModel(TiledMap tiledMap) {
+    void setupMapViewModel(TiledMap tiledMap)
+    {
         this.tiledMap = tiledMap;
         this.mapX = 0;
         this.mapY = 0;
@@ -77,7 +83,8 @@ class OverworldView {
      *
      * @param mapImage Image: The map to draw.
      */
-    void setMapImage(Image mapImage) {
+    void setMapImage(Image mapImage)
+    {
         this.mapImage = mapImage;
     }
 
@@ -85,10 +92,12 @@ class OverworldView {
      * Sets the coordinate to use for drawing the map.
      * This pair is the upper left corner of the map,
      * it is drawn right and down from this pair.
+     *
      * @param mapX int: The X coordinate to draw the map.
      * @param mapY int: The Y coordinate to draw the map.
      */
-    void setMapLocation(float mapX, float mapY) {
+    void setMapLocation(float mapX, float mapY)
+    {
         this.mapX = mapX;
         this.mapY = mapY;
     }
@@ -99,7 +108,8 @@ class OverworldView {
      *
      * @param playerImage Image: The still player character graphic.
      */
-    void setupPlayerViewModel(Image playerImage) {
+    void setupPlayerViewModel(Image playerImage)
+    {
         this.playerImage = playerImage;
         this.playerX = 0;
         this.playerY = 0;
@@ -111,7 +121,8 @@ class OverworldView {
      * @param playerX int: The X coordinate to draw the player.
      * @param playerY int: The Y coordinate to draw the player.
      */
-    void setPlayerLocation(float playerX, float playerY) {
+    void setPlayerLocation(float playerX, float playerY)
+    {
         this.playerX = playerX;
         this.playerY = playerY;
     }

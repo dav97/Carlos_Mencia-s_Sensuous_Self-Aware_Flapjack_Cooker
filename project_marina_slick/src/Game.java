@@ -12,7 +12,8 @@ import java.awt.event.ActionListener;
  * @version 1.0
  * @since 2016.08.01
  */
-class Game extends StateBasedGame {
+class Game extends StateBasedGame
+{
     private OverworldState overworldState;
 
     private ChangeStateListener changeStateListener;
@@ -22,7 +23,8 @@ class Game extends StateBasedGame {
      *
      * @param name String: The name of the game.
      */
-    public Game(String name) {
+    public Game(String name)
+    {
         super(name);
     }
 
@@ -30,7 +32,8 @@ class Game extends StateBasedGame {
      * {@inheritDoc}
      */
     @Override
-    public void initStatesList(GameContainer container) throws SlickException {
+    public void initStatesList(GameContainer container) throws SlickException
+    {
         int stateId = 0; //id should be passed to each game state and post-fix iterated
         changeStateListener = new ChangeStateListener(); //passed into each game state
 
@@ -45,12 +48,14 @@ class Game extends StateBasedGame {
     /**
      * Private listener class for a state requests to change state.
      */
-    private class ChangeStateListener implements ActionListener {
+    private class ChangeStateListener implements ActionListener
+    {
         /**
          * {@inheritDoc}
          */
         @Override
-        public void actionPerformed(ActionEvent changeStateRequest) {
+        public void actionPerformed(ActionEvent changeStateRequest)
+        {
             int newStateId = Integer.parseInt(changeStateRequest.getActionCommand());
 
             enterState(newStateId);
