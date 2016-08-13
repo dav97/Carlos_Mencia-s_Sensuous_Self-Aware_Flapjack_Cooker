@@ -21,8 +21,6 @@ class Model
     //TODO: move these to a separate class
     long playerWidth;
     long playerHeight;
-    //storing floats for this makes movement and drawing easier,
-    //may make collision handling much harder...
     long playerX;
     long playerY;
     long playerDX;
