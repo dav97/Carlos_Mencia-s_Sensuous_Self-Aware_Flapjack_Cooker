@@ -264,11 +264,6 @@ class Model
             playerYTest = playerY + playerHeight + dY;
         }
 
-        System.out.println("mapWidth:<" + mapWidth + "> mapHeight:<" + mapHeight + ">");
-        System.out.println("mapHeight * tileWidth:<" + mapHeight * tileWidth + ">");
-        System.out.println(
-            "playerY:<" + playerY + "> playerHeight:<" + playerHeight + "> playerYTest:<" + playerYTest + ">");
-
         //map bounds checking
         if (playerYTest < 0)
         {
