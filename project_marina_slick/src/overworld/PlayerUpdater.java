@@ -65,6 +65,10 @@ class PlayerUpdater
             {
                 proposedPlayerDX = playerDX - (model.getDDXDueToInput());
             }
+            else if (playerDX < -(model.getMaxDXDueToInput()))
+            {
+                proposedPlayerDX = playerDX + (model.getDDXDueToInput());
+            }
             else
             {
                 proposedPlayerDX = playerDX;
@@ -81,6 +85,10 @@ class PlayerUpdater
             if (playerDX < model.getMaxDXDueToInput())
             {
                 proposedPlayerDX = playerDX + model.getDDXDueToInput();
+            }
+            else if (playerDX > model.getMaxDXDueToInput())
+            {
+                proposedPlayerDX = playerDX - model.getDDXDueToInput();
             }
             else
             {
