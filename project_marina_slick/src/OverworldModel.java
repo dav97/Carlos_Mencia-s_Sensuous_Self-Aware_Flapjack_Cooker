@@ -181,14 +181,8 @@ class OverworldModel {
                 long collisionDX = 0;
                 if (dX < 0) {
                     collisionDX = (((mapXTest + 1) * tileWidth)) - playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
-                    //System.out.println("Collision detected left, distance (dx) to left tile is: " + collisionDX);
-                    //System.out.println("playerX is " + playerX + ", playerY " + playerY);
-                    //System.out.println("mapXTest is " + mapXTest + ", " + mapXTest * tileWidth + ", mapYTest " + mapYTest[i] + ", " + mapYTest[i] * tileWidth);
                 } else if (dX > 0) {
                     collisionDX = ((mapXTest) * tileWidth) - ((playerX + playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
-                    //System.out.println("Collision detected right, distance (dx) to right tile is: " + collisionDX);
-                    //System.out.println("playerX is " + playerX + ", playerY " + playerY);
-                    //System.out.println("mapXTest is " + mapXTest + ", " + mapXTest * tileWidth + ", mapYTest " + mapYTest[i] + ", " + mapYTest[i] * tileWidth);
                 }
                 return collisionDX;
             }

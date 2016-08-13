@@ -214,8 +214,6 @@ class OverworldState extends BasicGameState
         float mapY = -(((float) playerY / OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION) +
             (((float) playerHeight / OverworldGlobals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_VERTIAL);
 
-        System.out.println(mapX + " " + mapY);
-
         overworldView.setMapLocation(mapX, mapY);
 
         float centeredPlayerX =
