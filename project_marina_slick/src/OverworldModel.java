@@ -321,6 +321,8 @@ class OverworldModel {
 			if (!mapClip[mapXTest][mapYTest]) {
                 System.out.println("Corner collision detected");
                 System.out.println("proposedDX:<" + dX + "> proposedDY:<" + dY + ">");
+                System.out.println("playerX:<" + playerX + "> playerY:<" + playerY + ">");
+                System.out.println("playerWidth:<" + playerWidth + "> playerHeight:<" + playerHeight + ">");
                 System.out.println("playerXTest:<" + playerXTest + "> playerYTest:<" + playerYTest + ">");
                 System.out.println("mapXTest:<" + mapXTest + "> mapYTest:<" + mapYTest + ">");
                 if (Math.abs(dX) >= Math.abs(dY)) {
@@ -334,7 +336,8 @@ class OverworldModel {
 					} else if (dY > 0.0f) {
 						collisionDY = ((mapYTest) * tileWidth) - ((playerY + playerHeight)); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
 					}
-                    dXdY[1] = collisionDY;
+                    //dXdY[1] = collisionDY;
+                    dXdY[1] = 0.0f;
                 }
 				else {
 					//if the scalar change in X is less than the scalar change in Y,
@@ -349,7 +352,8 @@ class OverworldModel {
                         collisionDX = ((mapXTest) * tileWidth) - ((playerX + playerWidth -
                             1)); //subtract the X location of the right side of the player from the X location of the left side of the tile
                     }
-                    dXdY[0] = collisionDX;
+                    //dXdY[0] = collisionDX;
+                    dXdY[0] = 0.0f;
                     dXdY[1] = dY;
                 }
                 System.out.println("dXdY[0]:<" + dXdY[0] + "> dXdY[1]:<" + dXdY[1] + ">");
