@@ -111,7 +111,6 @@ class Model
         playerY = 0;
         playerDX = 0;
         playerDY = 0;
-        System.out.println("playerWidth is " + playerWidth + ", playerHeight is " + playerHeight);
     }
 
     /**
@@ -265,12 +264,17 @@ class Model
             playerYTest = playerY + playerHeight + dY;
         }
 
+        System.out.println("mapWidth:<" + mapWidth + "> mapHeight:<" + mapHeight + ">");
+        System.out.println("mapHeight * tileWidth:<" + mapHeight * tileWidth + ">");
+        System.out.println(
+            "playerY:<" + playerY + "> playerHeight:<" + playerHeight + "> playerYTest:<" + playerYTest + ">");
+
         //map bounds checking
         if (playerYTest < 0)
         {
             return -(playerY);
         }
-        if (playerYTest > (((mapHeight) * tileWidth)))
+        if (playerYTest >= (((mapHeight) * tileWidth)))
         {
             return (((mapHeight) * tileWidth) - (playerY + playerHeight));
         }
