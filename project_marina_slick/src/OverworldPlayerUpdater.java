@@ -200,13 +200,13 @@ class PlayerUpdater
         //if the proposed player dx is non-zero, check for collisions and use the collision distance for setting dx
         if (proposedPlayerDX != 0.0f)
         {
-            adjustedDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
+            adjustedPlayerDX = overworldModel.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
 
             //if the proposed player movement was left or right but she ends up on a wall
             //(such as from faded movement or jump off of wall movement) set the playerOnWall
             //flag - allows player to jump back and forth between walls by just pressing the
             //jump key
-            if (adjustedDX == 0.0f)
+            if (adjustedPlayerDX == 0.0f)
             {
                 if (proposedPlayerDX < 0.0f)
                 {
@@ -222,7 +222,7 @@ class PlayerUpdater
         //if the proposed player dy is non-zero, check for collisions and use the collision distance for setting dy
         if (proposedPlayerDY != 0.0f)
         {
-            adjustedDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
+            adjustedPlayerDY = overworldModel.getVerticalCollisionDistanceByDY(proposedPlayerDY);
         }
 
         if (proposedPlayerDX != 0.0f &&

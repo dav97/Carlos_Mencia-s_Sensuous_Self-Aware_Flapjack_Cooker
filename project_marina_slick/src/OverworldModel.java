@@ -342,10 +342,13 @@ class OverworldModel {
 					//we are hitting the corner of
                     System.out.println("Favoring dY");
                     if (dX < 0.0f) {
-						collisionDX = (((mapXTest + 1) * tileWidth)) - playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
+                        System.out.println((mapXTest + 1) * tileWidth + " - " + (playerX));
+                        collisionDX = (((mapXTest + 1) * tileWidth)) - playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
 					} else if (dX > 0.0f) {
-						collisionDX = ((mapXTest) * tileWidth) - ((playerX + playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
-					}
+                        System.out.println(mapXTest * tileWidth + " - " + (playerX + playerWidth - 1));
+                        collisionDX = ((mapXTest) * tileWidth) - ((playerX + playerWidth -
+                            1)); //subtract the X location of the right side of the player from the X location of the left side of the tile
+                    }
                     dXdY[0] = collisionDX;
                     dXdY[1] = dY;
                 }
