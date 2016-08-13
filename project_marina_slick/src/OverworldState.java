@@ -20,8 +20,8 @@ import java.awt.event.ActionListener;
 class OverworldState extends BasicGameState {
     private static int WINDOW_WIDTH;
     private static int WINDOW_HEIGHT;
-    private static float WINDOW_CENTER_HORIZONTAL;
-    private static float WINDOW_CENTER_VERTIAL;
+    private static long WINDOW_CENTER_HORIZONTAL;
+    private static long WINDOW_CENTER_VERTIAL;
     private static String MAP_HOOK;
     //private final ActionListener changeStateListener; //TODO: needs redoing
     private final int id;
@@ -75,8 +75,8 @@ class OverworldState extends BasicGameState {
         //player setup
         Image playerBasic = new Image(OverworldGlobals.DEFAULT_CHARACTER_IMAGE_PATH, false, Image.FILTER_NEAREST);
 
-        int playerWidth = playerBasic.getWidth(); //the logical player width is the raw graphic width
-        int playerHeight = playerBasic.getHeight(); //the logical player height is the raw graphic height
+        long playerWidth = playerBasic.getWidth() * 100; //the logical player width is the raw graphic width
+        long playerHeight = playerBasic.getHeight() * 100; //the logical player height is the raw graphic height
 
         overworldModel.setupPlayerModel(playerWidth, playerHeight);
         overworldView.setupPlayerViewModel(playerBasic);
@@ -133,7 +133,11 @@ class OverworldState extends BasicGameState {
             }
         }
 
-        overworldModel.setupMapModel(tiledMap.getWidth(), tiledMap.getHeight(), tiledMap.getTileWidth(), mapClip, mapHooks);
+        overworldModel.setupMapModel(tiledMap.getWidth(),
+                                     tiledMap.getHeight(),
+                                     tiledMap.getTileWidth() * 100,
+                                     mapClip,
+                                     mapHooks);
 
         Image tiledMapImage = new Image(OverworldGlobals.MAP_RESOURCE_PATH +
                 loadMapName + OverworldGlobals.GRAPHICS_EXTENSION,
@@ -178,18 +182,18 @@ class OverworldState extends BasicGameState {
         //end check window size change and update logic
 
         //view updating
-        float playerX = overworldModel.getPlayerX();
-        float playerY = overworldModel.getPlayerY();
-        float playerWidth = overworldModel.getPlayerWidth();
-        float playerHeight = overworldModel.getPlayerHeight();
+        long playerX = overworldModel.getPlayerX();
+        long playerY = overworldModel.getPlayerY();
+        long playerWidth = overworldModel.getPlayerWidth();
+        long playerHeight = overworldModel.getPlayerHeight();
 
-        float mapX = -(playerX + (playerWidth / 2) - WINDOW_CENTER_HORIZONTAL);
-        float mapY = -(playerY + (playerHeight / 2) - WINDOW_CENTER_VERTIAL);
+        long mapX = -(playerX + (playerWidth / 2) - WINDOW_CENTER_HORIZONTAL);
+        long mapY = -(playerY + (playerHeight / 2) - WINDOW_CENTER_VERTIAL);
 
         overworldView.setMapLocation(mapX, mapY);
 
-        float centeredPlayerX = WINDOW_CENTER_HORIZONTAL - (playerWidth / 2);
-        float centeredPlayerY = WINDOW_CENTER_VERTIAL - (playerHeight / 2);
+        long centeredPlayerX = WINDOW_CENTER_HORIZONTAL - (playerWidth / 2);
+        long centeredPlayerY = WINDOW_CENTER_VERTIAL - (playerHeight / 2);
 
         overworldView.setPlayerLocation(centeredPlayerX, centeredPlayerY);
         //end view updating

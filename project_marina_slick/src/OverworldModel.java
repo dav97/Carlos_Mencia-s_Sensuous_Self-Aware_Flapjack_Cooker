@@ -9,36 +9,36 @@ class OverworldModel {
     //TODO: move these to a separate class
     int mapWidth; //the map width in tiles
     int mapHeight; //the map height in tiles
-    int tileWidth;
+    long tileWidth;
     Boolean[][] mapClip; //the grid of passable (clip true) and not passable (clip false)
     String mapHookCurrent;
     String mapHookSpawn;
     String[][] mapHooks;
 
     //TODO: move these to a separate class
-    int playerWidth;
-    int playerHeight;
+    long playerWidth;
+    long playerHeight;
     //storing floats for this makes movement and drawing easier,
     //may make collision handling much harder...
-    float playerX;
-    float playerY;
-    float playerDX;
-    float playerDY;
+    long playerX;
+    long playerY;
+    long playerDX;
+    long playerDY;
 
     boolean playerOnWallLeft;
     boolean playerOnWallRight;
 
-    float dDXDueToInput;
-    float maxDXDueToInput;
+    long dDXDueToInput;
+    long maxDXDueToInput;
 
-    float instantaneousJumpDY;
-    float instantaneousWallJumpDY;
-    float instantaneousWallJumpLeftDX;
-    float instantaneousWallJumpRightDX;
+    long instantaneousJumpDY;
+    long instantaneousWallJumpDY;
+    long instantaneousWallJumpLeftDX;
+    long instantaneousWallJumpRightDX;
 
-    float dDYDueToGravity;
-    float maxDYDueToGravity;
-    float maxDYOnWall;
+    long dDYDueToGravity;
+    long maxDYDueToGravity;
+    long maxDYOnWall;
 
     /**
      * Default constructor for this model.
@@ -52,7 +52,7 @@ class OverworldModel {
      *
      * @param mapWidth  int: The width in tiles of the map.
      * @param mapHeight int: The height in tiles of the map.
-     * @param tileWidth int: The raw width of a tile graphic
+     * @param tileWidth long: The raw width of a tile graphic
      *                  (should never differ from its height).
      * @param mapClip   Boolean[][]: A grid used for collision
      *                  detection, maps one-to-one with the map
@@ -63,7 +63,8 @@ class OverworldModel {
      *                  such as spawn and transition points.
      *                  0
      */
-    void setupMapModel(int mapWidth, int mapHeight, int tileWidth, Boolean[][] mapClip, String[][] mapHooks) {
+    void setupMapModel(int mapWidth, int mapHeight, long tileWidth, Boolean[][] mapClip, String[][] mapHooks)
+    {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         this.tileWidth = tileWidth;
@@ -94,7 +95,8 @@ class OverworldModel {
      * @param playerWidth  int: The raw width of the player graphic.
      * @param playerHeight int: The raw height of the player graphic.
      */
-    void setupPlayerModel(int playerWidth, int playerHeight) {
+    void setupPlayerModel(long playerWidth, long playerHeight)
+    {
         this.playerWidth = playerWidth;
         this.playerHeight = playerHeight;
         playerX = 0;
@@ -138,13 +140,14 @@ class OverworldModel {
      * of the player. If there are any, return that distance.
      * Applies to movement left or right.
      *
-     * @param dX float: The proposed amount of player movement.
+     * @param dX long: The proposed amount of player movement.
      *
-     * @return float: The player distance from the tile she will
+     * @return long: The player distance from the tile she will
      * collide with if she moved the proposed amount.
      */
-    float getHorizontalCollisionDistanceByDX(float dX) {
-        float playerXTest = playerX;
+    long getHorizontalCollisionDistanceByDX(long dX)
+    {
+        long playerXTest = playerX;
 
         if (dX < 0) {
             playerXTest = playerX + dX;
@@ -161,7 +164,8 @@ class OverworldModel {
         }
         //end map bounds checking
 
-        int maxMapXCollisionTiles = 1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) + 1; //check the mapY, at minimum, level with the top and bottom of the player
+        int maxMapXCollisionTiles = (int) (1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) +
+            1); //check the mapY, at minimum, level with the top and bottom of the player
 
         int mapXTest = (int) (playerXTest / tileWidth);
         int[] mapYTest = new int[maxMapXCollisionTiles];
@@ -174,7 +178,7 @@ class OverworldModel {
 
         for (int i = 0; i < maxMapXCollisionTiles; ++i) { //check collision on every tile to the left or right of the player within a distance of dX
             if (!mapClip[mapXTest][mapYTest[i]]) {
-                float collisionDX = 0;
+                long collisionDX = 0;
                 if (dX < 0) {
                     collisionDX = (((mapXTest + 1) * tileWidth)) - playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
                     //System.out.println("Collision detected left, distance (dx) to left tile is: " + collisionDX);
@@ -219,13 +223,14 @@ class OverworldModel {
      * of the player. If there are any, return that distance.
      * Applies to movement up or down.
      *
-     * @param dY float: The proposed amount of player movement.
+     * @param dY long: The proposed amount of player movement.
      *
-     * @return float: The player distance from the tile she will
+     * @return long: The player distance from the tile she will
      *         collide with if she moved the proposed amount.
      */
-    float getVerticalCollisionDistanceByDY(float dY) {
-        float playerYTest = playerY;
+    long getVerticalCollisionDistanceByDY(long dY)
+    {
+        long playerYTest = playerY;
 
         if (dY < 0) {
             playerYTest = playerY + dY;
@@ -242,7 +247,8 @@ class OverworldModel {
         }
         //end map bounds checking
 
-        int maxMapYCollisionTiles = 1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) + 1; //check the mapX, at minimum, level with the left and right side of the player
+        int maxMapYCollisionTiles = (int) (1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) +
+            1); //check the mapX, at minimum, level with the left and right side of the player
 
         int[] mapXTest = new int[maxMapYCollisionTiles];
         int mapYTest = (int) (playerYTest / tileWidth);
@@ -255,7 +261,7 @@ class OverworldModel {
 
         for (int i = 0; i < maxMapYCollisionTiles; ++i) { //check collision on every tile to the left or right of the player within a distance of dX
             if (!mapClip[mapXTest[i]][mapYTest]) {
-                float collisionDY = 0;
+                long collisionDY = 0;
                 if (dY < 0) {
                     collisionDY = (((mapYTest + 1) * tileWidth)) - playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
                 } else if (dY > 0) {
@@ -296,8 +302,12 @@ class OverworldModel {
      * DURING JUMP.
      */
     String[] getIntersectingTileHooks() {
-        int maxPlayerIntersectionTilesTopToBottom = 1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) + 1; //check the mapY, at minimum, level with the top and bottom of the player
-        int maxPlayerIntersectionTilesLeftToRight = 1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) + 1; //check the mapX, at minimum, level with the left and right side of the player
+        int maxPlayerIntersectionTilesTopToBottom =
+            (int) (1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) +
+                1); //check the mapY, at minimum, level with the top and bottom of the player
+        int maxPlayerIntersectionTilesLeftToRight =
+            (int) (1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) +
+                1); //check the mapX, at minimum, level with the left and right side of the player
         int maxIntersectingTiles = maxPlayerIntersectionTilesTopToBottom * maxPlayerIntersectionTilesLeftToRight;
 
         int[] mapXTest = new int[maxPlayerIntersectionTilesLeftToRight];
@@ -335,7 +345,8 @@ class OverworldModel {
      *
      * @return int: The raw player width in pixels.
      */
-    int getPlayerWidth() {
+    long getPlayerWidth()
+    {
         return playerWidth;
     }
 
@@ -344,53 +355,59 @@ class OverworldModel {
      *
      * @return int: The raw player width in pixels.
      */
-    int getPlayerHeight() {
+    long getPlayerHeight()
+    {
         return playerHeight;
     }
 
     /**
      * Get the logical X coordinate of the player.
      *
-     * @return float: The logical X coordinate of the player.
+     * @return long: The logical X coordinate of the player.
      */
-    float getPlayerX() {
+    long getPlayerX()
+    {
         return playerX;
     }
 
     /**
      * Set the logical player X coordinate.
      *
-     * @param playerX float: The logical X coordinate of the player.
+     * @param playerX long: The logical X coordinate of the player.
      */
-    void setPlayerX(float playerX) {
+    void setPlayerX(long playerX)
+    {
         this.playerX = playerX;
     }
 
     /**
      * Get the logical Y coordinate of the player.
      *
-     * @return float: The logical Y coordinate of the player.
+     * @return long: The logical Y coordinate of the player.
      */
-    float getPlayerY() {
+    long getPlayerY()
+    {
         return playerY;
     }
 
     /**
      * Set the logical player Y coordinate.
      *
-     * @param playerY float: The logical Y coordinate of the player.
+     * @param playerY long: The logical Y coordinate of the player.
      */
-    void setPlayerY(float playerY) {
+    void setPlayerY(long playerY)
+    {
         this.playerY = playerY;
     }
 
     /**
      * Set the logical player X and Y coordinate.
      *
-     * @param playerX float: The logical X coordinate of the player.
-     * @param playerY float: The logical Y coordinate of the player.
+     * @param playerX long: The logical X coordinate of the player.
+     * @param playerY long: The logical Y coordinate of the player.
      */
-    void setPlayerLocation(float playerX, float playerY) {
+    void setPlayerLocation(long playerX, long playerY)
+    {
         this.playerX = playerX;
         this.playerY = playerY;
     }
@@ -398,36 +415,40 @@ class OverworldModel {
     /**
      * Get current player dx.
      *
-     * @return float: Current player dx.
+     * @return long: Current player dx.
      */
-    float getPlayerDX() {
+    long getPlayerDX()
+    {
         return playerDX;
     }
 
     /**
      * Set player dx.
      *
-     * @param playerDX float: New player dx.
+     * @param playerDX long: New player dx.
      */
-    void setPlayerDX(float playerDX) {
+    void setPlayerDX(long playerDX)
+    {
         this.playerDX = playerDX;
     }
 
     /**
      * Get current player dy.
      *
-     * @return float: Current player dy.
+     * @return long: Current player dy.
      */
-    float getPlayerDY() {
+    long getPlayerDY()
+    {
         return playerDY;
     }
 
     /**
      * Set player dy.
      *
-     * @param playerDY float: New player dy.
+     * @param playerDY long: New player dy.
      */
-    void setPlayerDY(float playerDY) {
+    void setPlayerDY(long playerDY)
+    {
         this.playerDY = playerDY;
     }
 
@@ -447,75 +468,93 @@ class OverworldModel {
         this.playerOnWallRight = playerOnWallRight;
     }
 
-    float getDDXDueToInput() {
+    long getDDXDueToInput()
+    {
         return dDXDueToInput;
     }
 
-    void setDDXDueToInput(float dDXDueToInput) {
+    void setDDXDueToInput(long dDXDueToInput)
+    {
         this.dDXDueToInput = dDXDueToInput;
     }
 
-    float getMaxDXDueToInput() {
+    long getMaxDXDueToInput()
+    {
         return maxDXDueToInput;
     }
 
-    void setMaxDXDueToInput(float maxDXDueToInput) {
+    void setMaxDXDueToInput(long maxDXDueToInput)
+    {
         this.maxDXDueToInput = maxDXDueToInput;
     }
 
-    float getInstantaneousJumpDY() {
+    long getInstantaneousJumpDY()
+    {
         return instantaneousJumpDY;
     }
 
-    void setInstantaneousJumpDY(float instantaneousJumpDY) {
+    void setInstantaneousJumpDY(long instantaneousJumpDY)
+    {
         this.instantaneousJumpDY = instantaneousJumpDY;
     }
 
-    float getInstantaneousWallJumpDY() {
+    long getInstantaneousWallJumpDY()
+    {
         return instantaneousWallJumpDY;
     }
 
-    void setInstantaneousWallJumpDY(float instantaneousWallJumpDY) {
+    void setInstantaneousWallJumpDY(long instantaneousWallJumpDY)
+    {
         this.instantaneousWallJumpDY = instantaneousWallJumpDY;
     }
 
-    float getInstantaneousWallJumpLeftDX() {
+    long getInstantaneousWallJumpLeftDX()
+    {
         return instantaneousWallJumpLeftDX;
     }
 
-    void setInstantaneousWallJumpLeftDX(float instantaneousWallJumpLeftDX) {
+    void setInstantaneousWallJumpLeftDX(long instantaneousWallJumpLeftDX)
+    {
         this.instantaneousWallJumpLeftDX = instantaneousWallJumpLeftDX;
     }
 
-    float getInstantaneousWallJumpRightDX() {
+    long getInstantaneousWallJumpRightDX()
+    {
         return instantaneousWallJumpRightDX;
     }
 
-    void setInstantaneousWallJumpRightDX(float instantaneousWallJumpRightDX) {
+    void setInstantaneousWallJumpRightDX(long instantaneousWallJumpRightDX)
+    {
         this.instantaneousWallJumpRightDX = instantaneousWallJumpRightDX;
     }
 
-    float getDDYDueToGravity() {
+    long getDDYDueToGravity()
+    {
         return dDYDueToGravity;
     }
 
-    void setDDYDueToGravity(float dDYDueToGravity) {
+    void setDDYDueToGravity(long dDYDueToGravity)
+    {
         this.dDYDueToGravity = dDYDueToGravity;
     }
 
-    float getMaxDYDueToGravity() {
+    long getMaxDYDueToGravity()
+    {
         return maxDYDueToGravity;
     }
 
-    void setMaxDYDueToGravity(float maxDYDueToGravity) {
+    void setMaxDYDueToGravity(long maxDYDueToGravity)
+    {
         this.maxDYDueToGravity = maxDYDueToGravity;
     }
 
-    float getMaxDYOnWall() {
+    long getMaxDYOnWall()
+    {
         return maxDYOnWall;
     }
 
-    void setMaxDYOnWall(float maxDYOnWall) {
+    void setMaxDYOnWall(long maxDYOnWall)
+    {
         this.maxDYOnWall = maxDYOnWall;
     }
 }
