@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="600" height="13" tilewidth="16" tileheight="16" nextobjectid="9">
+ <tileset firstgid="1" name="maptile1" tilewidth="16" tileheight="16" spacing="1" tilecount="413" columns="7">
+  <image source="maptile1.png" width="118" height="1002"/>
+  <tile id="0">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="54">
+   <properties>
+    <property name="hook" value="debug_house"/>
+   </properties>
+  </tile>
+  <tile id="143">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="144">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="145">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="146">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="150">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="151">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="152">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="157">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="158">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="159">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="160">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="162">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="165">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="177">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="203">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="204">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="205">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="206">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="207">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="208">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="210">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="211">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="212">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="213">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="214">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="215">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="217">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="218">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="219">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="222">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="299">
+   <properties>
+    <property name="hook" value="spawn"/>
+   </properties>
+  </tile>
+  <tile id="347">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="348">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="362">
+   <properties>
+    <property name="clip" value="1"/>
+   </properties>
+  </tile>
+  <tile id="381">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="382">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="386">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="387">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="392">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="393">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="394">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="399">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="400">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="401">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="reflayer" width="600" height="13">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3WsQlCUQAEwWc/5vb0+y/AwMToQBDPgxnYHva6nXPpowAAkvarLAYAkLRfZTEAgKT9KosBACTtV1kMACBpv8piAABJ+1UWAwBI3r/h/gfv8qse55W/AgC+rf05iwEAJO1XWQwAIGm/ymIAAEn7VRYDAEjar7IYAEDyBCZiueTgeQAA
+  </data>
+ </layer>
+ <layer name="foreground" width="600" height="13">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3cS07DMBSF4RtUXqKwgW4NVsAeygAmhUlTBoVJKUJiAayDp3gKkLoVbBorUXDiuG5DW/2fdIRdqyFidOSYxCLSk+V1q3LnmfuCa+1GInvRrO8YAAAsujOV84K1/SXoEqZfPUnan1xj+hUAAAhh61exjPe0LlVuar8jt7bqOAfR3582pl99SNqjXGP6FQAACGHrV/3ksyuV6+Sz9oL2CtOvRpL2KNeYfgUAAEKU9asyRftF84bzVwAAoG6T9qtZ66gec5zkJKDTZPtV9qxVPtk1+hUAAAgxrX41reeHplcdqcRJeoH9alXS81V63JC0SzWS6LV1lTWhXwEAgDC2fjVQGdZ/K7+6mV41rX5l+tQoGeuO9aDyKGm/0mu6W+mORb8CAAAhyt7PUNWO59zIvv/Btm9lchjwjPBZ5cWSN5X3grXXgmvRrwAAQBWT9qtmJtue866M3wFxKum7IGz7Vvk9LPM9n3yqfHnm23IdfY/0KwAAUIXpV01Hys5XbXnO+8nvNRlKtX6V/16d0X8j+hUAAKjCdIfIkVbJ2orn3PSkCxl3q07Bc8F8vxoI/QoAAMw/0x02HGmVrG16zs3/J5aduSo6g/Vfe1j0KwAAUNUPkh746uB5AAA=
+  </data>
+ </layer>
+</map>
