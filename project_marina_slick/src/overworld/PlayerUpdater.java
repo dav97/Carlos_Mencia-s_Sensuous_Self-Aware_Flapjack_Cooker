@@ -52,7 +52,7 @@ class PlayerUpdater
         }
 
         //if the player is not trying to move left or right, fade her horizontal movement until stopped
-        if (!(playerInputLeft || playerInputRight) && playerDX != 0)
+        if (playerDX != 0)
         {
             proposedPlayerDX = getProposedPlayerDXDueToFade(playerDX, playerFloor);
         }
@@ -63,11 +63,11 @@ class PlayerUpdater
         {
             if (playerDX > -(model.getMaxDXDueToInput()))
             {
-                proposedPlayerDX = playerDX - (model.getDDXDueToInput());
+                proposedPlayerDX = Math.max((playerDX - (model.getDDXDueToInput())), -model.getMaxDXDueToInput());
             }
             else if (playerDX < -(model.getMaxDXDueToInput()))
             {
-                proposedPlayerDX = (playerDX + (model.getDDXDueToInput() / 2));
+                proposedPlayerDX = Math.min((playerDX + (model.getDDXDueToInput() / 2)), -model.getMaxDXDueToInput());
             }
             else
             {
@@ -84,11 +84,11 @@ class PlayerUpdater
         {
             if (playerDX < model.getMaxDXDueToInput())
             {
-                proposedPlayerDX = playerDX + model.getDDXDueToInput();
+                proposedPlayerDX = Math.min((playerDX + model.getDDXDueToInput()), model.getMaxDXDueToInput());
             }
             else if (playerDX > model.getMaxDXDueToInput())
             {
-                proposedPlayerDX = (playerDX - (model.getDDXDueToInput() / 2));
+                proposedPlayerDX = Math.max((playerDX - (model.getDDXDueToInput() / 2)), model.getMaxDXDueToInput());
             }
             else
             {
@@ -246,12 +246,12 @@ class PlayerUpdater
             //if the player dy is less than the max due to gravity while on a wall, add to it
             if (playerDY < maxDYOnWall)
             {
-                proposedPlayerDY = playerDY + model.getDDYDueToGravity();
+                proposedPlayerDY = Math.min(playerDY + model.getDDYDueToGravity(), maxDYOnWall);
             }
             //else if the player dy is greater than the max due to gravity while on a wall, remove from it
             else if (playerDY > maxDYOnWall)
             {
-                proposedPlayerDY = model.getPlayerDY() - model.getDDYDueToGravity();
+                proposedPlayerDY = Math.min(model.getPlayerDY() - model.getDDYDueToGravity(), maxDYOnWall);
             }
         }
         //else if the player is not on solid ground,
@@ -261,12 +261,12 @@ class PlayerUpdater
             //if the player dy is less than the max dy due to gravity, add to it
             if (model.getPlayerDY() < maxDYDueToGravity)
             {
-                proposedPlayerDY = playerDY + model.getDDYDueToGravity();
+                proposedPlayerDY = Math.min(playerDY + model.getDDYDueToGravity(), maxDYDueToGravity);
             }
             //else, just propose the last player dy
             else
             {
-                proposedPlayerDY = playerDY;
+                proposedPlayerDY = Math.min(playerDY, maxDYDueToGravity);
             }
         }
         //end gravity
@@ -279,32 +279,26 @@ class PlayerUpdater
         long proposedPlayerDX = 0;
 
         //horizontal player movement fade
-        //if it's close enough to 0, just make it 0 - was experiencing a floating point error otherwise
-        if ((playerDX < Globals.STANDARD_DX_FADE_SANITY_BOUND) &&
-            (playerDX > -(Globals.STANDARD_DX_FADE_SANITY_BOUND)))
-        {
-            proposedPlayerDX = 0;
-        }
-        else if (playerDX > 0)
+        if (playerDX > 0)
         {
             if (floor)
             {
-                proposedPlayerDX = playerDX - model.getDDXDueToInput();
+                proposedPlayerDX = Math.max(playerDX - model.getDDXDueToInput(), 0);
             }
             else
             {
-                proposedPlayerDX = (playerDX - (model.getDDXDueToInput() / 2));
+                proposedPlayerDX = Math.max((playerDX - (model.getDDXDueToInput() / 2)), 0);
             }
         }
         else if (playerDX < 0)
         {
             if (floor)
             {
-                proposedPlayerDX = playerDX + model.getDDXDueToInput();
+                proposedPlayerDX = Math.min(playerDX + model.getDDXDueToInput(), 0);
             }
             else
             {
-                proposedPlayerDX = (playerDX + (model.getDDXDueToInput() / 2));
+                proposedPlayerDX = Math.min((playerDX + (model.getDDXDueToInput() / 2)), 0);
             }
         }
         //end horizontal player movement fade

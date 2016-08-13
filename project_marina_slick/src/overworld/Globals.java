@@ -42,10 +42,8 @@ class Globals
     public static final long STANDARD_COLLISION_CHECK_DISTANCE_LEFT = -1000;
     public static final long STANDARD_COLLISION_CHECK_DISTANCE_RIGHT = 1000;
 
-    public static final long STANDARD_DDX_DUE_TO_INPUT = 10;
+    public static final long STANDARD_DDX_DUE_TO_INPUT = 8;
     public static final long STANDARD_MAX_DX_DUE_TO_INPUT = 1000;
-
-    public static final long STANDARD_DX_FADE_SANITY_BOUND = 100;
 
     public static final long STANDARD_INSTANTANEOUS_JUMP_DY = -3500;
     public static final long STANDARD_INSTANTANEOUS_WALL_JUMP_DY = -2000;
