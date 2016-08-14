@@ -432,28 +432,13 @@ public class Presenter extends BasicGameState
             {
                 view.setPlayerGraphicIndex(jumpLeft);
             }
-            else
+            else if (playerDX > 0)
             {
                 view.setPlayerGraphicIndex(jumpRight);
             }
-            //            if ((playerDX < 0) || (view.getPlayerGraphicIndex() == runLeft) ||
-            //                (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
-            //                (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
-            //            {
-            //                view.setPlayerGraphicIndex(jumpLeft);
-            //            }
-            //            else
-            //            {
-            //                view.setPlayerGraphicIndex(jumpRight);
-            //            }
-        }
-        else if (playerDY > 0 || !model.isPlayerCollisionDown())
-        {
-            if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
-            {
-                view.setFall();
-            }
-            if (playerDX < 0)
+            else if ((view.getPlayerGraphicIndex() == runLeft) ||
+                     (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
+                     (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
             {
                 view.setPlayerGraphicIndex(jumpLeft);
             }
@@ -461,16 +446,33 @@ public class Presenter extends BasicGameState
             {
                 view.setPlayerGraphicIndex(jumpRight);
             }
-            //            if ((playerDX < 0) || (view.getPlayerGraphicIndex() == runLeft) ||
-            //                (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
-            //                (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
-            //            {
-            //                view.setPlayerGraphicIndex(jumpLeft);
-            //            }
-            //            else
-            //            {
-            //                view.setPlayerGraphicIndex(jumpRight);
-            //            }
+        }
+        else if (playerDY > 0 || !model.isPlayerCollisionDown())
+        {
+            if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
+            {
+                view.setFall();
+            }
+            if ((playerDX < 0) || (view.getPlayerGraphicIndex() == runLeft) ||
+                (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
+                (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
+            {
+                view.setPlayerGraphicIndex(jumpLeft);
+            }
+            else if (playerDX > 0)
+            {
+                view.setPlayerGraphicIndex(jumpRight);
+            }
+            else if ((view.getPlayerGraphicIndex() == runLeft) ||
+                     (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
+                     (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
+            {
+                view.setPlayerGraphicIndex(jumpLeft);
+            }
+            else
+            {
+                view.setPlayerGraphicIndex(jumpRight);
+            }
         }
         else if (playerDX > 0)
         {
