@@ -1,10 +1,7 @@
 package overworld;
 
 import org.lwjgl.opengl.Display;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
@@ -12,6 +9,11 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import java.awt.event.ActionListener;
 import java.io.InputStream;
+
+import static main.Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR;
+import static org.newdawn.slick.Image.FILTER_NEAREST;
+import static overworld.Globals.*;
+import static overworld.Globals.PlayerGraphicIndex.*;
 
 /**
  * overworld.Presenter will act as the presenter for the overworld game state, mediating between the model and view.
@@ -23,16 +25,16 @@ import java.io.InputStream;
  */
 public class Presenter extends BasicGameState
 {
-    private static int WINDOW_WIDTH;
-    private static int WINDOW_HEIGHT;
-    private static float WINDOW_CENTER_HORIZONTAL;
-    private static float WINDOW_CENTER_VERTIAL;
-    private static String MAP_HOOK;
+    private static int           WINDOW_WIDTH;
+    private static int           WINDOW_HEIGHT;
+    private static float         WINDOW_CENTER_HORIZONTAL;
+    private static float         WINDOW_CENTER_VERTIAL;
+    private static String        MAP_HOOK;
     //private final ActionListener changeStateListener; //TODO: needs redoing
-    private final int id;
-    private Model model;
-    private PlayerUpdater playerUpdater;
-    private View view;
+    private final  int           id;
+    private        Model         model;
+    private        PlayerUpdater playerUpdater;
+    private        View          view;
     private float scale = 6;
 
     /**
@@ -70,41 +72,43 @@ public class Presenter extends BasicGameState
         //component setup
         model = new Model();
         view = new View();
-        scale = Math.min((container.getWidth() / main.Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
+        scale = Math.min((container.getWidth() / DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
                          (container.getHeight() / main.Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
         view.setScale(scale);
         //end component setup
 
         //map setup
-        String defaultMapName = Globals.MAP_HOOK_LIST[Globals.DEFAULT_MAP_ID];
+        String defaultMapName = MAP_HOOK_LIST[DEFAULT_MAP_ID];
 
         loadMap(defaultMapName);
         //end map setup
 
         //player setup
-        InputStream inputStream = ResourceLoader.getResourceAsStream(Globals.DEFAULT_CHARACTER_IMAGE_PATH);
+        InputStream inputStream = ResourceLoader.getResourceAsStream(DEFAULT_CHARACTER_IMAGE_PATH);
         Image playerBasic =
-            new Image(inputStream, Globals.DEFAULT_CHARACTER_IMAGE_PATH, false, Image.FILTER_NEAREST);
+            new Image(inputStream, DEFAULT_CHARACTER_IMAGE_PATH, false, FILTER_NEAREST);
 
         long playerWidth = playerBasic.getWidth() *
-            Globals.GRAPHIC_TO_LOGIC_CONVERSION; //the logical player width is the raw graphic width
+                           GRAPHIC_TO_LOGIC_CONVERSION; //the logical player width is the raw graphic width
         long playerHeight = playerBasic.getHeight() *
-            Globals.GRAPHIC_TO_LOGIC_CONVERSION; //the logical player height is the raw graphic height
+                            GRAPHIC_TO_LOGIC_CONVERSION; //the logical player height is the raw graphic height
 
         model.setupPlayerModel(playerWidth, playerHeight);
         view.setupPlayerViewModel(playerBasic);
 
-        model.spawnPlayer(Globals.TILED_HOOK_PROPERTY_SPAWN);
+        loadPlayerGraphics();
 
-        model.setDDXDueToInput(Globals.STANDARD_DDX_DUE_TO_INPUT);
-        model.setMaxDXDueToInput(Globals.STANDARD_MAX_DX_DUE_TO_INPUT);
-        model.setInstantaneousJumpDY(Globals.STANDARD_INSTANTANEOUS_JUMP_DY);
-        model.setInstantaneousWallJumpDY(Globals.STANDARD_INSTANTANEOUS_WALL_JUMP_DY);
-        model.setInstantaneousWallJumpLeftDX(Globals.STANDARD_INSTANTANEOUS_WALL_JUMP_LEFT_DX);
-        model.setInstantaneousWallJumpRightDX(Globals.STANDARD_INSTANTANEOUS_WALL_JUMP_RIGHT_DX);
-        model.setDDYDueToGravity(Globals.STANDARD_DDY_DUE_TO_GRAVITY);
-        model.setMaxDYDueToGravity(Globals.STANDARD_MAX_DY_DUE_TO_GRAVITY);
-        model.setMaxDYOnWall(Globals.STANDARD_MAX_DY_ON_WALL);
+        model.spawnPlayer(TILED_HOOK_PROPERTY_SPAWN);
+
+        model.setDDXDueToInput(STANDARD_DDX_DUE_TO_INPUT);
+        model.setMaxDXDueToInput(STANDARD_MAX_DX_DUE_TO_INPUT);
+        model.setInstantaneousJumpDY(STANDARD_INSTANTANEOUS_JUMP_DY);
+        model.setInstantaneousWallJumpDY(STANDARD_INSTANTANEOUS_WALL_JUMP_DY);
+        model.setInstantaneousWallJumpLeftDX(STANDARD_INSTANTANEOUS_WALL_JUMP_LEFT_DX);
+        model.setInstantaneousWallJumpRightDX(STANDARD_INSTANTANEOUS_WALL_JUMP_RIGHT_DX);
+        model.setDDYDueToGravity(STANDARD_DDY_DUE_TO_GRAVITY);
+        model.setMaxDYDueToGravity(STANDARD_MAX_DY_DUE_TO_GRAVITY);
+        model.setMaxDYOnWall(STANDARD_MAX_DY_ON_WALL);
         //end player setup
 
         playerUpdater = new PlayerUpdater(this);
@@ -123,19 +127,19 @@ public class Presenter extends BasicGameState
      */
     private void loadMap(String loadMapName) throws SlickException
     {
-        System.out.println(Globals.MAP_RESOURCE_PATH + loadMapName + Globals.TILED_MAP_EXTENSION);
+        System.out.println(MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
         InputStream inputStream = ResourceLoader.getResourceAsStream(
-            Globals.MAP_RESOURCE_PATH + loadMapName + Globals.TILED_MAP_EXTENSION);
-        TiledMap tiledMap = new TiledMap(inputStream, Globals.MAP_TILESET_PATH);
-        int tiledForegroundLayerId = tiledMap.getLayerIndex(Globals.TILED_FOREGROUND_LAYER_NAME);
-        int tiledReferenceLayerId = tiledMap.getLayerIndex(Globals.TILED_REFERENCE_LAYER_NAME);
+            MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
+        TiledMap tiledMap               = new TiledMap(inputStream, MAP_TILESET_PATH);
+        int      tiledForegroundLayerId = tiledMap.getLayerIndex(TILED_FOREGROUND_LAYER_NAME);
+        int      tiledReferenceLayerId  = tiledMap.getLayerIndex(TILED_REFERENCE_LAYER_NAME);
 
         Boolean mapClip[][] =
             new Boolean[tiledMap.getWidth()][tiledMap.getHeight()]; //true means passable, false means not passable
         String mapHooks[][] = new String[tiledMap.getWidth()][tiledMap.getHeight()];
 
-        int tileId;
-        int refTileId;
+        int    tileId;
+        int    refTileId;
         String refTileHook;
         for (int x = 0; x < tiledMap.getWidth(); ++x)
         {
@@ -143,15 +147,15 @@ public class Presenter extends BasicGameState
             {
                 tileId = tiledMap.getTileId(x, y, tiledForegroundLayerId);
                 mapClip[x][y] = tiledMap.getTileProperty(tileId,
-                                                         Globals.TILED_CLIP_PROPERTY_NAME,
-                                                         Globals.TILED_CLIP_PROPERTY_ENABLED)
-                                        .equals(Globals.TILED_CLIP_PROPERTY_ENABLED);
+                                                         TILED_CLIP_PROPERTY_NAME,
+                                                         TILED_CLIP_PROPERTY_ENABLED)
+                                        .equals(TILED_CLIP_PROPERTY_ENABLED);
                 refTileId = tiledMap.getTileId(x, y, tiledReferenceLayerId);
                 refTileHook = tiledMap.getTileProperty(refTileId,
-                                                       Globals.TILED_HOOK_PROPERTY_NAME,
-                                                       Globals.TILED_HOOK_PROPERTY_DEFAULT);
+                                                       TILED_HOOK_PROPERTY_NAME,
+                                                       TILED_HOOK_PROPERTY_DEFAULT);
                 mapHooks[x][y] = refTileHook;
-                if (!refTileHook.equals(Globals.TILED_HOOK_PROPERTY_DEFAULT))
+                if (!refTileHook.equals(TILED_HOOK_PROPERTY_DEFAULT))
                 {
                     System.out.println("Tile at <" + x + ", " + y + "> has reference hook <" + refTileHook + ">");
                 }
@@ -160,22 +164,191 @@ public class Presenter extends BasicGameState
 
         model.setupMapModel(tiledMap.getWidth(),
                             tiledMap.getHeight(),
-                            tiledMap.getTileWidth() * Globals.GRAPHIC_TO_LOGIC_CONVERSION,
+                            tiledMap.getTileWidth() * GRAPHIC_TO_LOGIC_CONVERSION,
                             mapClip,
                             mapHooks);
 
         inputStream = ResourceLoader.getResourceAsStream(
-            Globals.MAP_RESOURCE_PATH + loadMapName + Globals.GRAPHICS_EXTENSION);
+            MAP_RESOURCE_PATH + loadMapName + GRAPHICS_EXTENSION);
         Image tiledMapImage =
             new Image(inputStream,
-                      Globals.MAP_RESOURCE_PATH + loadMapName + Globals.GRAPHICS_EXTENSION,
+                      MAP_RESOURCE_PATH + loadMapName + GRAPHICS_EXTENSION,
                       false,
-                      Image.FILTER_NEAREST);
+                      FILTER_NEAREST);
 
         view.setMapImage(tiledMapImage);
 
         MAP_HOOK = loadMapName;
         model.setMapHookCurrent(MAP_HOOK);
+    }
+
+    void loadPlayerGraphics() throws SlickException
+    {
+        InputStream inputStream;
+
+        inputStream = ResourceLoader.getResourceAsStream(
+            PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
+            PLAYER_GRAPHICS_WALK_POSTFIX + "1" + GRAPHICS_EXTENSION);
+        Image playerImageFaceLeft = new Image(inputStream,
+                                              PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
+                                              PLAYER_GRAPHICS_WALK_POSTFIX + "1" +
+                                              GRAPHICS_EXTENSION,
+                                              false,
+                                              FILTER_NEAREST);
+
+        inputStream = ResourceLoader.getResourceAsStream(
+            PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
+            PLAYER_GRAPHICS_WALK_POSTFIX + "1" + GRAPHICS_EXTENSION);
+        Image playerImageFaceRight = new Image(inputStream,
+                                               PLAYER_GRAPHICS_WALK_PATH +
+                                               PLAYER_GRAPHICS_RIGHT_PREFIX +
+                                               PLAYER_GRAPHICS_WALK_POSTFIX + "1" +
+                                               GRAPHICS_EXTENSION,
+                                               false,
+                                               FILTER_NEAREST);
+
+        Image[] playerFramesWalkLeft = new Image[PLAYER_GRAPHICS_WALK_FRAME_COUNT];
+        for (int i = 0; i < PLAYER_GRAPHICS_WALK_FRAME_COUNT; ++i)
+        {
+            inputStream = ResourceLoader.getResourceAsStream(
+                PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
+                PLAYER_GRAPHICS_WALK_POSTFIX + (i + 1) + GRAPHICS_EXTENSION);
+            playerFramesWalkLeft[i] = new Image(inputStream,
+                                                PLAYER_GRAPHICS_WALK_PATH +
+                                                PLAYER_GRAPHICS_LEFT_PREFIX +
+                                                PLAYER_GRAPHICS_WALK_POSTFIX + (i + 1) +
+                                                GRAPHICS_EXTENSION,
+                                                false,
+                                                FILTER_NEAREST);
+        }
+        Animation playerAnimationWalkLeft =
+            new Animation(playerFramesWalkLeft, PLAYER_GRAPHICS_WALK_FRAME_DURATION, true);
+        playerAnimationWalkLeft.setLooping(true);
+        playerAnimationWalkLeft.setPingPong(true);
+
+        Image[] playerFramesWalkRight = new Image[PLAYER_GRAPHICS_WALK_FRAME_COUNT];
+        for (int i = 0; i < PLAYER_GRAPHICS_WALK_FRAME_COUNT; ++i)
+        {
+            inputStream = ResourceLoader.getResourceAsStream(
+                PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
+                PLAYER_GRAPHICS_WALK_POSTFIX + (i + 1) + GRAPHICS_EXTENSION);
+            playerFramesWalkRight[i] = new Image(inputStream,
+                                                 PLAYER_GRAPHICS_WALK_PATH +
+                                                 PLAYER_GRAPHICS_RIGHT_PREFIX +
+                                                 PLAYER_GRAPHICS_WALK_POSTFIX + (i + 1) +
+                                                 GRAPHICS_EXTENSION,
+                                                 false,
+                                                 FILTER_NEAREST);
+        }
+        Animation playerAnimationWalkRight =
+            new Animation(playerFramesWalkRight, PLAYER_GRAPHICS_WALK_FRAME_DURATION, true);
+        playerAnimationWalkRight.setLooping(true);
+        playerAnimationWalkRight.setPingPong(true);
+
+        Image[] playerFramesRunLeft = new Image[PLAYER_GRAPHICS_RUN_FRAME_COUNT];
+        for (int i = 0; i < PLAYER_GRAPHICS_RUN_FRAME_COUNT; ++i)
+        {
+            inputStream = ResourceLoader.getResourceAsStream(
+                PLAYER_GRAPHICS_RUN_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
+                PLAYER_GRAPHICS_RUN_POSTFIX + (i + 1) + GRAPHICS_EXTENSION);
+            playerFramesRunLeft[i] = new Image(inputStream,
+                                               PLAYER_GRAPHICS_RUN_PATH +
+                                               PLAYER_GRAPHICS_LEFT_PREFIX +
+                                               PLAYER_GRAPHICS_RUN_POSTFIX + (i + 1) +
+                                               GRAPHICS_EXTENSION,
+                                               false,
+                                               FILTER_NEAREST);
+        }
+        Animation playerAnimationRunLeft =
+            new Animation(playerFramesRunLeft, PLAYER_GRAPHICS_RUN_FRAME_DURATION, true);
+        playerAnimationRunLeft.setLooping(true);
+        playerAnimationRunLeft.setPingPong(true);
+
+        Image[] playerFramesRunRight = new Image[PLAYER_GRAPHICS_RUN_FRAME_COUNT];
+        for (int i = 0; i < PLAYER_GRAPHICS_RUN_FRAME_COUNT; ++i)
+        {
+            inputStream = ResourceLoader.getResourceAsStream(
+                PLAYER_GRAPHICS_RUN_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
+                PLAYER_GRAPHICS_RUN_POSTFIX + (i + 1) + GRAPHICS_EXTENSION);
+            playerFramesRunRight[i] = new Image(inputStream,
+                                                PLAYER_GRAPHICS_RUN_PATH +
+                                                PLAYER_GRAPHICS_RIGHT_PREFIX +
+                                                PLAYER_GRAPHICS_RUN_POSTFIX + (i + 1) +
+                                                GRAPHICS_EXTENSION,
+                                                false,
+                                                FILTER_NEAREST);
+        }
+        Animation playerAnimationRunRight =
+            new Animation(playerFramesRunRight, PLAYER_GRAPHICS_RUN_FRAME_DURATION, true);
+        playerAnimationRunRight.setLooping(true);
+        playerAnimationRunRight.setPingPong(true);
+
+        Image[] playerFramesJumpLeft = new Image[PLAYER_GRAPHICS_JUMP_FRAME_COUNT];
+        for (int i = 0; i < PLAYER_GRAPHICS_JUMP_FRAME_COUNT; ++i)
+        {
+            inputStream = ResourceLoader.getResourceAsStream(
+                PLAYER_GRAPHICS_JUMP_PATH + PLAYER_GRAPHICS_LEFT_PREFIX + PLAYER_GRAPHICS_JUMP_POSTFIX + (i + 1) +
+                GRAPHICS_EXTENSION);
+            playerFramesJumpLeft[i] = new Image(inputStream,
+                                                PLAYER_GRAPHICS_JUMP_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
+                                                PLAYER_GRAPHICS_JUMP_POSTFIX + (i + 1) +
+                                                GRAPHICS_EXTENSION,
+                                                false,
+                                                FILTER_NEAREST);
+        }
+        Animation playerAnimationJumpLeft =
+            new Animation(playerFramesJumpLeft, PLAYER_GRAPHICS_JUMP_FRAME_DURATION, true);
+        playerAnimationJumpLeft.setLooping(false);
+
+        Image[] playerFramesJumpRight = new Image[PLAYER_GRAPHICS_JUMP_FRAME_COUNT];
+        for (int i = 0; i < PLAYER_GRAPHICS_JUMP_FRAME_COUNT; ++i)
+        {
+            inputStream = ResourceLoader.getResourceAsStream(
+                PLAYER_GRAPHICS_JUMP_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX + PLAYER_GRAPHICS_JUMP_POSTFIX + (i + 1) +
+                GRAPHICS_EXTENSION);
+            playerFramesJumpRight[i] = new Image(inputStream,
+                                                 PLAYER_GRAPHICS_JUMP_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
+                                                 PLAYER_GRAPHICS_JUMP_POSTFIX + (i + 1) +
+                                                 GRAPHICS_EXTENSION,
+                                                 false,
+                                                 FILTER_NEAREST);
+        }
+        Animation playerAnimationJumpRight =
+            new Animation(playerFramesJumpRight, PLAYER_GRAPHICS_JUMP_FRAME_DURATION, true);
+        playerAnimationJumpRight.setLooping(false);
+
+        inputStream = ResourceLoader.getResourceAsStream(
+            PLAYER_GRAPHICS_WALL_PATH + PLAYER_GRAPHICS_WALL_PRE_PREFIX +
+            PLAYER_GRAPHICS_LEFT_PREFIX + GRAPHICS_EXTENSION);
+        Image playerImageWallLeft = new Image(inputStream,
+                                              PLAYER_GRAPHICS_WALL_PATH +
+                                              PLAYER_GRAPHICS_WALL_PRE_PREFIX +
+                                              PLAYER_GRAPHICS_LEFT_PREFIX +
+                                              GRAPHICS_EXTENSION,
+                                              false,
+                                              FILTER_NEAREST);
+
+        inputStream = ResourceLoader.getResourceAsStream(
+            PLAYER_GRAPHICS_WALL_PATH + PLAYER_GRAPHICS_WALL_PRE_PREFIX +
+            PLAYER_GRAPHICS_RIGHT_PREFIX + GRAPHICS_EXTENSION);
+        Image playerImageWallRight = new Image(inputStream,
+                                               PLAYER_GRAPHICS_WALL_PATH +
+                                               PLAYER_GRAPHICS_WALL_PRE_PREFIX +
+                                               PLAYER_GRAPHICS_RIGHT_PREFIX +
+                                               GRAPHICS_EXTENSION,
+                                               false,
+                                               FILTER_NEAREST);
+
+        view.setPlayerImageFaceLeft(playerImageFaceLeft);
+        view.setPlayerImageFaceRight(playerImageFaceRight);
+        view.setPlayerAnimationWalkLeft(playerAnimationWalkLeft);
+        view.setPlayerAnimationWalkRight(playerAnimationWalkRight);
+        view.setPlayerAnimationRunLeft(playerAnimationRunLeft);
+        view.setPlayerAnimationRunRight(playerAnimationRunRight);
+        view.setPlayerAnimationJumpLeft(playerAnimationJumpLeft);
+        view.setPlayerAnimationJumpRight(playerAnimationJumpRight);
+        view.setPlayerImageWallLeft(playerImageWallLeft);
+        view.setPlayerImageWallRight(playerImageWallRight);
     }
 
     /**
@@ -206,7 +379,7 @@ public class Presenter extends BasicGameState
         {
             WINDOW_WIDTH = Display.getWidth();
             WINDOW_HEIGHT = Display.getHeight();
-            scale = Math.min((WINDOW_WIDTH / main.Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
+            scale = Math.min((WINDOW_WIDTH / DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
                              (WINDOW_HEIGHT / main.Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
             view.setScale(scale);
             WINDOW_CENTER_HORIZONTAL = (((float) WINDOW_WIDTH / 2.0f) / scale);
@@ -215,24 +388,114 @@ public class Presenter extends BasicGameState
         //end check window size change and update logic
 
         //view updating
-        long playerX = model.getPlayerX();
-        long playerY = model.getPlayerY();
-        long playerWidth = model.getPlayerWidth();
+        long playerX      = model.getPlayerX();
+        long playerY      = model.getPlayerY();
+        long playerDX     = model.getPlayerDX();
+        long playerDY     = model.getPlayerDY();
+        long playerWidth  = model.getPlayerWidth();
         long playerHeight = model.getPlayerHeight();
 
-        float mapX = -(((float) playerX / Globals.GRAPHIC_TO_LOGIC_CONVERSION) +
-            (((float) playerWidth / Globals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_HORIZONTAL);
-        float mapY = -(((float) playerY / Globals.GRAPHIC_TO_LOGIC_CONVERSION) +
-            (((float) playerHeight / Globals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_VERTIAL);
+        //map draw position updating
+        float mapX = -(((float) playerX / GRAPHIC_TO_LOGIC_CONVERSION) +
+                       (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_HORIZONTAL);
+        float mapY = -(((float) playerY / GRAPHIC_TO_LOGIC_CONVERSION) +
+                       (((float) playerHeight / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_VERTIAL);
 
         view.setMapLocation(mapX, mapY);
+        //end map draw position updating
 
+        //player draw position updating
         float centeredPlayerX =
-            WINDOW_CENTER_HORIZONTAL - (((float) playerWidth / Globals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
+            WINDOW_CENTER_HORIZONTAL - (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
         float centeredPlayerY =
-            WINDOW_CENTER_VERTIAL - (((float) playerHeight / Globals.GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
+            WINDOW_CENTER_VERTIAL - (((float) playerHeight / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
 
         view.setPlayerLocation(centeredPlayerX, centeredPlayerY);
+        //end player draw position updating
+
+        //player graphic/animation updating
+        if (model.isPlayerOnWallLeft())
+        {
+            view.setPlayerGraphicIndex(wallLeft);
+        }
+        else if (model.isPlayerOnWallRight())
+        {
+            view.setPlayerGraphicIndex(wallRight);
+        }
+        else if (playerDY < 0)
+        {
+            if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
+            {
+                System.out.println("reset jump");
+                view.resetJump();
+            }
+            if (playerDX < 0)
+            {
+                view.setPlayerGraphicIndex(jumpLeft);
+            }
+            else
+            {
+                view.setPlayerGraphicIndex(jumpRight);
+            }
+            //            if ((playerDX < 0) || (view.getPlayerGraphicIndex() == runLeft) ||
+            //                (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
+            //                (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
+            //            {
+            //                view.setPlayerGraphicIndex(jumpLeft);
+            //            }
+            //            else
+            //            {
+            //                view.setPlayerGraphicIndex(jumpRight);
+            //            }
+        }
+        else if (playerDY > 0 || !model.isPlayerCollisionDown())
+        {
+            if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
+            {
+                System.out.println("set fall");
+                view.setFall();
+            }
+            if (playerDX < 0)
+            {
+                view.setPlayerGraphicIndex(jumpLeft);
+            }
+            else
+            {
+                view.setPlayerGraphicIndex(jumpRight);
+            }
+            //            if ((playerDX < 0) || (view.getPlayerGraphicIndex() == runLeft) ||
+            //                (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
+            //                (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
+            //            {
+            //                view.setPlayerGraphicIndex(jumpLeft);
+            //            }
+            //            else
+            //            {
+            //                view.setPlayerGraphicIndex(jumpRight);
+            //            }
+        }
+        else if (playerDX > 0)
+        {
+            view.setPlayerGraphicIndex(runRight);
+        }
+        else if (playerDX < 0)
+        {
+            view.setPlayerGraphicIndex(runLeft);
+        }
+        else
+        {
+            if ((view.getPlayerGraphicIndex() == runLeft) || (view.getPlayerGraphicIndex() == walkLeft) ||
+                (view.getPlayerGraphicIndex() == wallLeft) || (view.getPlayerGraphicIndex() == jumpLeft))
+            {
+                view.setPlayerGraphicIndex(faceLeft);
+            }
+            else if ((view.getPlayerGraphicIndex() == runRight) || (view.getPlayerGraphicIndex() == walkRight) ||
+                     (view.getPlayerGraphicIndex() == wallRight) || (view.getPlayerGraphicIndex() == jumpRight))
+            {
+                view.setPlayerGraphicIndex(faceRight);
+            }
+        }
+        //end player graphic/animation updating
         //end view updating
 
         view.draw(g);

@@ -180,7 +180,7 @@ class PlayerUpdater
             //(such as from faded movement or jump off of wall movement) set the playerOnWall
             //flag - allows player to jump back and forth between walls by just pressing the
             //jump key
-            if (adjustedDX == 0)
+            if (adjustedDX == 0 && !playerFloor)
             {
                 if (proposedPlayerDX < 0)
                 {

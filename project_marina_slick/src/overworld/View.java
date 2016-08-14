@@ -1,8 +1,12 @@
 package overworld;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.tiled.TiledMap;
+
+import static overworld.Globals.PlayerGraphicIndex;
+import static overworld.Globals.PlayerGraphicIndex.faceFront;
 
 /**
  * overworld.View acts as the view for the overworld game state.
@@ -17,14 +21,27 @@ class View
 
     //TODO: move these to a separate class
     private TiledMap tiledMap;
-    private Image mapImage;
-    private float mapX;
-    private float mapY;
+    private Image    mapImage;
+    private float    mapX;
+    private float    mapY;
+
+    private PlayerGraphicIndex playerGraphicIndex;
 
     //TODO: move these to a separate class
-    private Image playerImage;
-    private float playerX;
-    private float playerY;
+    //private int playerGraphicIndex;
+    private Image     playerImage;
+    private Image     playerImageFaceLeft;
+    private Image     playerImageFaceRight;
+    private Animation playerAnimationWalkLeft;
+    private Animation playerAnimationWalkRight;
+    private Animation playerAnimationRunLeft;
+    private Animation playerAnimationRunRight;
+    private Animation playerAnimationJumpLeft;
+    private Animation playerAnimationJumpRight;
+    private Image     playerImageWallLeft;
+    private Image     playerImageWallRight;
+    private float     playerX;
+    private float     playerY;
 
     /**
      * Default constructor for this view.
@@ -53,7 +70,43 @@ class View
         //TODO: performance, only draw the part of the map on screen
         mapImage.draw(mapX, mapY);
 
-        playerImage.draw(playerX, playerY);
+        //playerImage.draw(playerX, playerY);
+        switch (playerGraphicIndex)
+        {
+            case faceFront:
+                playerImage.draw(playerX, playerY);
+                break;
+            case faceLeft:
+                playerImageFaceLeft.draw(playerX, playerY);
+                break;
+            case faceRight:
+                playerImageFaceRight.draw(playerX, playerY);
+                break;
+            case walkLeft:
+                playerAnimationWalkLeft.draw(playerX, playerY);
+                break;
+            case walkRight:
+                playerAnimationWalkRight.draw(playerX, playerY);
+                break;
+            case runLeft:
+                playerAnimationRunLeft.draw(playerX, playerY);
+                break;
+            case runRight:
+                playerAnimationRunRight.draw(playerX, playerY);
+                break;
+            case jumpLeft:
+                playerAnimationJumpLeft.draw(playerX, playerY);
+                break;
+            case jumpRight:
+                playerAnimationJumpRight.draw(playerX, playerY);
+                break;
+            case wallLeft:
+                playerImageWallLeft.draw(playerX, playerY);
+                break;
+            case wallRight:
+                playerImageWallRight.draw(playerX, playerY);
+                break;
+        }
     }
 
     /**
@@ -115,6 +168,69 @@ class View
         this.playerImage = playerImage;
         this.playerX = 0;
         this.playerY = 0;
+        this.playerGraphicIndex = faceFront;
+    }
+
+    void setPlayerImageFaceLeft(Image playerImageFaceLeft)
+    {
+        this.playerImageFaceLeft = playerImageFaceLeft;
+    }
+
+    void setPlayerImageFaceRight(Image playerImageFaceRight)
+    {
+        this.playerImageFaceRight = playerImageFaceRight;
+    }
+
+    void setPlayerAnimationWalkLeft(Animation playerAnimationWalkLeft)
+    {
+        this.playerAnimationWalkLeft = playerAnimationWalkLeft;
+    }
+
+    void setPlayerAnimationWalkRight(Animation playerAnimationWalkRight)
+    {
+        this.playerAnimationWalkRight = playerAnimationWalkRight;
+    }
+
+    void setPlayerAnimationRunLeft(Animation playerAnimationRunLeft)
+    {
+        this.playerAnimationRunLeft = playerAnimationRunLeft;
+    }
+
+    void setPlayerAnimationRunRight(Animation playerAnimationRunRight)
+    {
+        this.playerAnimationRunRight = playerAnimationRunRight;
+    }
+
+    void setPlayerAnimationJumpLeft(Animation playerAnimationJumpLeft)
+    {
+        this.playerAnimationJumpLeft = playerAnimationJumpLeft;
+    }
+
+    void resetJump()
+    {
+        playerAnimationJumpLeft.restart();
+        playerAnimationJumpRight.restart();
+    }
+
+    void setFall()
+    {
+        playerAnimationJumpLeft.setCurrentFrame(playerAnimationJumpLeft.getFrameCount() - 1);
+        playerAnimationJumpRight.setCurrentFrame(playerAnimationJumpLeft.getFrameCount() - 1);
+    }
+
+    void setPlayerAnimationJumpRight(Animation playerAnimationJumpRight)
+    {
+        this.playerAnimationJumpRight = playerAnimationJumpRight;
+    }
+
+    void setPlayerImageWallLeft(Image playerImageWallLeft)
+    {
+        this.playerImageWallLeft = playerImageWallLeft;
+    }
+
+    void setPlayerImageWallRight(Image playerImageWallRight)
+    {
+        this.playerImageWallRight = playerImageWallRight;
     }
 
     /**
@@ -127,5 +243,15 @@ class View
     {
         this.playerX = playerX;
         this.playerY = playerY;
+    }
+
+    PlayerGraphicIndex getPlayerGraphicIndex()
+    {
+        return playerGraphicIndex;
+    }
+
+    void setPlayerGraphicIndex(PlayerGraphicIndex playerGraphicIndex)
+    {
+        this.playerGraphicIndex = playerGraphicIndex;
     }
 }
