@@ -426,7 +426,6 @@ public class Presenter extends BasicGameState
         {
             if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
             {
-                System.out.println("reset jump");
                 view.resetJump();
             }
             if (playerDX < 0)
@@ -452,7 +451,6 @@ public class Presenter extends BasicGameState
         {
             if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
             {
-                System.out.println("set fall");
                 view.setFall();
             }
             if (playerDX < 0)
