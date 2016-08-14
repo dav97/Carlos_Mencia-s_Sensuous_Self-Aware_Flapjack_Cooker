@@ -10,13 +10,13 @@ package overworld;
 class Model
 {
     //TODO: move these to a separate class
-    int mapWidth; //the map width in tiles
-    int mapHeight; //the map height in tiles
-    long tileWidth;
+    int         mapWidth; //the map width in tiles
+    int         mapHeight; //the map height in tiles
+    long        tileWidth;
     Boolean[][] mapClip; //the grid of passable (clip true) and not passable (clip false)
-    String mapHookCurrent;
-    String mapHookSpawn;
-    String[][] mapHooks;
+    String      mapHookCurrent;
+    String      mapHookSpawn;
+    String[][]  mapHooks;
 
     //TODO: move these to a separate class
     long playerWidth;
@@ -40,6 +40,8 @@ class Model
     long dDYDueToGravity;
     long maxDYDueToGravity;
     long maxDYOnWall;
+
+    boolean resetJump;
 
     /**
      * Default constructor for this model.
@@ -179,20 +181,20 @@ class Model
         //end map bounds checking
 
         int maxMapXCollisionTiles = (int) (1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) +
-            1); //check the mapY, at minimum, level with the top and bottom of the player
+                                           1); //check the mapY, at minimum, level with the top and bottom of the player
 
-        int mapXTest = (int) (playerXTest / tileWidth);
+        int   mapXTest = (int) (playerXTest / tileWidth);
         int[] mapYTest = new int[maxMapXCollisionTiles];
 
         mapYTest[0] = (int) (playerY /
-            tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
+                             tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxMapXCollisionTiles - 1); ++i)
         {
             mapYTest[i] = mapYTest[i - 1] +
-                1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
+                          1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
         mapYTest[maxMapXCollisionTiles - 1] = (int) (((playerY + playerHeight) - 1) /
-            tileWidth); //the last mapY to test is the grid coordinate level with the bottom of the player
+                                                     tileWidth); //the last mapY to test is the grid coordinate level with the bottom of the player
 
         for (int i = 0; i < maxMapXCollisionTiles; ++i)
         { //check collision on every tile to the left or right of the player within a distance of dX
@@ -202,12 +204,12 @@ class Model
                 if (dX < 0)
                 {
                     collisionDX = (((mapXTest + 1) * tileWidth)) -
-                        playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
+                                  playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
                 }
                 else if (dX > 0)
                 {
                     collisionDX = ((mapXTest) * tileWidth) - ((playerX +
-                        playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
+                                                               playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
                 }
                 return collisionDX;
             }
@@ -274,20 +276,20 @@ class Model
         //end map bounds checking
 
         int maxMapYCollisionTiles = (int) (1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) +
-            1); //check the mapX, at minimum, level with the left and right side of the player
+                                           1); //check the mapX, at minimum, level with the left and right side of the player
 
         int[] mapXTest = new int[maxMapYCollisionTiles];
-        int mapYTest = (int) (playerYTest / tileWidth);
+        int   mapYTest = (int) (playerYTest / tileWidth);
 
         mapXTest[0] = (int) (playerX /
-            tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
+                             tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxMapYCollisionTiles - 1); ++i)
         {
             mapXTest[i] = mapXTest[i - 1] +
-                1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
+                          1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
         mapXTest[maxMapYCollisionTiles - 1] = (int) (((playerX + playerWidth) - 1) /
-            tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+                                                     tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         for (int i = 0; i < maxMapYCollisionTiles; ++i)
         { //check collision on every tile to the left or right of the player within a distance of dX
@@ -297,12 +299,12 @@ class Model
                 if (dY < 0)
                 {
                     collisionDY = (((mapYTest + 1) * tileWidth)) -
-                        playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
+                                  playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
                 }
                 else if (dY > 0)
                 {
                     collisionDY = ((mapYTest) * tileWidth) - ((playerY +
-                        playerHeight)); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
+                                                               playerHeight)); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
                 }
                 return collisionDY;
             }
@@ -344,37 +346,37 @@ class Model
     {
         int maxPlayerIntersectionTilesTopToBottom =
             (int) (1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) +
-                1); //check the mapY, at minimum, level with the top and bottom of the player
+                   1); //check the mapY, at minimum, level with the top and bottom of the player
         int maxPlayerIntersectionTilesLeftToRight =
             (int) (1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) +
-                1); //check the mapX, at minimum, level with the left and right side of the player
+                   1); //check the mapX, at minimum, level with the left and right side of the player
         int maxIntersectingTiles = maxPlayerIntersectionTilesTopToBottom * maxPlayerIntersectionTilesLeftToRight;
 
         int[] mapXTest = new int[maxPlayerIntersectionTilesLeftToRight];
 
         //get every mapX grid coordinate we will need to check for hooks
         mapXTest[0] = (int) (playerX /
-            tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
+                             tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxPlayerIntersectionTilesLeftToRight - 1); ++i)
         {
             mapXTest[i] = mapXTest[i - 1] +
-                1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
+                          1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
         mapXTest[maxPlayerIntersectionTilesLeftToRight - 1] = (int) (((playerX + playerWidth) - 1) /
-            tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+                                                                     tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         int[] mapYTest = new int[maxPlayerIntersectionTilesTopToBottom];
 
         //get every mapY grid coordinate we will need to check for hooks
         mapYTest[0] = (int) (playerY /
-            tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
+                             tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxPlayerIntersectionTilesTopToBottom - 1); ++i)
         {
             mapYTest[i] = mapYTest[i - 1] +
-                1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
+                          1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
         mapYTest[maxPlayerIntersectionTilesTopToBottom - 1] = (int) (((playerY + playerHeight) - 1) /
-            tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+                                                                     tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         String[] hooks = new String[maxIntersectingTiles];
 
@@ -610,5 +612,15 @@ class Model
     void setMaxDYOnWall(long maxDYOnWall)
     {
         this.maxDYOnWall = maxDYOnWall;
+    }
+
+    boolean isResetJump()
+    {
+        return resetJump;
+    }
+
+    void setResetJump(boolean resetJump)
+    {
+        this.resetJump = resetJump;
     }
 }

@@ -6,8 +6,7 @@ import org.newdawn.slick.SlickException;
 class PlayerUpdater
 {
     private Presenter presenter;
-    private Model model;
-    private Input input;
+    private Model     model;
 
     private boolean staleInputUp;
     private boolean staleInputUse;
@@ -22,10 +21,7 @@ class PlayerUpdater
     void update(Model model, Input input) throws SlickException
     {
         this.model = model;
-        this.input = input;
 
-        long playerX = model.getPlayerX();
-        long playerY = model.getPlayerY();
         long playerDX = model.getPlayerDX();
         long playerDY = model.getPlayerDY();
 
@@ -34,15 +30,16 @@ class PlayerUpdater
 
         boolean playerFloor = model.isPlayerCollisionDown();
 
-        boolean playerInputLeft = input.isKeyDown(Input.KEY_A);
-        boolean playerInputRight = input.isKeyDown(Input.KEY_D);
-        boolean playerInputUp = input.isKeyDown(Input.KEY_W);
-        boolean playerInputDown = input.isKeyDown(Input.KEY_S);
-        boolean playerInputUse = input.isKeyDown(Input.KEY_E);
-
         checkOffWall(playerFloor);
+        model.setResetJump(playerFloor);
 
-        boolean playerOnWallLeft = model.isPlayerOnWallLeft();
+        boolean playerInputLeft  = input.isKeyDown(Input.KEY_A);
+        boolean playerInputRight = input.isKeyDown(Input.KEY_D);
+        boolean playerInputUp    = input.isKeyDown(Input.KEY_W);
+        boolean playerInputDown  = input.isKeyDown(Input.KEY_S);
+        boolean playerInputUse   = input.isKeyDown(Input.KEY_E);
+
+        boolean playerOnWallLeft  = model.isPlayerOnWallLeft();
         boolean playerOnWallRight = model.isPlayerOnWallRight();
 
         //if the player is not on solid ground, we need to calculate the effects of gravity
@@ -139,12 +136,10 @@ class PlayerUpdater
         {
             staleInputUse = true;
             String mapHookCurrent = model.getMapHookCurrent();
-            String mapHookPrevious = model.getMapHookSpawn();
+            //String mapHookPrevious = model.getMapHookSpawn();
             String hooks[] = model.getIntersectingTileHooks();
             //String feedback = "Intersecting tile hooks:";
 
-            outerLoop:
-            //TODO: naming loops to break multiple layers is discouraged, revisit
             for (String hook : hooks)
             {
                 if (!hook.equals(""))
@@ -216,7 +211,7 @@ class PlayerUpdater
         //end update player movement and location
     }
 
-    void checkOffWall(boolean floor)
+    private void checkOffWall(boolean floor)
     {
         //if there is not collision to the left of the player or the player is on solid ground,
         //unset the playerOnWallLeft flag
@@ -232,11 +227,11 @@ class PlayerUpdater
         }
     }
 
-    long getProposedPlayerDYDueToGravity(long playerDY, boolean wall)
+    private long getProposedPlayerDYDueToGravity(long playerDY, boolean wall)
     {
         long proposedPlayerDY = 0;
-        long maxDYOnWall = 0;
-        long maxDYDueToGravity = 0;
+        long maxDYOnWall;
+        long maxDYDueToGravity;
 
         //gravity
         //if the player is on a wall,
@@ -274,7 +269,7 @@ class PlayerUpdater
         return proposedPlayerDY;
     }
 
-    long getProposedPlayerDXDueToFade(long playerDX, boolean floor)
+    private long getProposedPlayerDXDueToFade(long playerDX, boolean floor)
     {
         long proposedPlayerDX = 0;
 

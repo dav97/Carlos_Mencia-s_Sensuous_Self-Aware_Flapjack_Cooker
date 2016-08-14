@@ -424,8 +424,11 @@ public class Presenter extends BasicGameState
         }
         else if (playerDY < 0)
         {
-            if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
+            if ((model.isResetJump()) ||
+                ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight)))
             {
+                //System.out.println("reset jump");
+                model.setResetJump(false);
                 view.resetJump();
             }
             if (playerDX < 0)
