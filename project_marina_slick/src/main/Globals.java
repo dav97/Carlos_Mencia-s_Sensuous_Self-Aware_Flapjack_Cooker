@@ -1,7 +1,11 @@
 package main;
 
 /**
- * Created by Scorple on 8/5/2016.
+ * main.Globals contains constants global to the entire app.
+ *
+ * @author scorple
+ * @version dev01
+ * @since 2016_0805
  */
 public class Globals
 {

@@ -1,11 +1,13 @@
 package overworld;
 
 /**
- * overworld.Model acts as a general model for the overworld game state.
+ * overworld.Model holds all the logical data for the overworld game state and acts as
+ * an interface to that data, regularly queried and updated by the overworld presenter
+ * and its members.
  *
  * @author Scorple
- * @version 1.0
- * @since 2016.08.01
+ * @version dev01
+ * @since 2016_0801
  */
 class Model
 {
@@ -76,21 +78,41 @@ class Model
         this.mapHooks = mapHooks;
     }
 
+    /**
+     * Get the reference hook for the currently loaded map.
+     *
+     * @return String: The reference hook for the currently loaded map.
+     */
     String getMapHookCurrent()
     {
         return mapHookCurrent;
     }
 
+    /**
+     * Set the reference hook for the currently loaded map.
+     *
+     * @param mapHookCurrent String: The reference hook for the currently loaded map.
+     */
     void setMapHookCurrent(String mapHookCurrent)
     {
         this.mapHookCurrent = mapHookCurrent;
     }
 
+    /**
+     * Get the reference hook for the player spawn location.
+     *
+     * @return String: The reference hook for the player spawn location.
+     */
     String getMapHookSpawn()
     {
         return mapHookSpawn;
     }
 
+    /**
+     * Set the reference hook for the player spawn location.
+     *
+     * @param mapHookPrevious String: The reference hook for the player spawn location.
+     */
     void setMapHookSpawn(String mapHookPrevious)
     {
         this.mapHookSpawn = mapHookPrevious;
@@ -146,10 +168,13 @@ class Model
     //TODO: consider splitting, generalizing
 
     /**
-     * Collision checking method. Given a proposed amount of
-     * player movement, check for map tiles within that distance
-     * of the player. If there are any, return that distance.
-     * Applies to movement left or right.
+     * Collision checking method, given a proposed amount of player movement,
+     * check for map tiles within that distance of the player, if there are any,
+     * return the distance the player may travel until colliding with the tile(s),
+     * otherwise return the proposed amount of movement. May return zero, will treat
+     * movement which would cause the player to leave me map as colliding with the
+     * edge of the map.
+     * Only applies to movement left or right.
      *
      * @param dX long: The proposed amount of player movement.
      *
@@ -241,10 +266,13 @@ class Model
     }
 
     /**
-     * Collision checking method. Given a proposed amount of
-     * player movement, check for map tiles within that distance
-     * of the player. If there are any, return that distance.
-     * Applies to movement up or down.
+     * Collision checking method, given a proposed amount of player movement,
+     * check for map tiles within that distance of the player, if there are any,
+     * return the distance the player may travel until colliding with the tile(s),
+     * otherwise return the proposed amount of movement. May return zero, will treat
+     * movement which would cause the player to leave me map as colliding with the
+     * edge of the map.
+     * Only applies to movement up or down.
      *
      * @param dY long: The proposed amount of player movement.
      *
@@ -336,7 +364,7 @@ class Model
     }
 
     /**
-     * Get a list of the hooks attached to all tiles with player is intersecting with.
+     * Get a list of reference hooks attached to all tiles with player is intersecting with.
      *
      * @return String[]: A list containing the hook property of every tile the player
      * is intersecting with. WARNING: MAY CONTAIN DUPLICATES, ESPECIALLY IF CHECKED
@@ -465,9 +493,9 @@ class Model
     }
 
     /**
-     * Get current player dx.
+     * Get current player dX.
      *
-     * @return long: Current player dx.
+     * @return long: Current player dX.
      */
     long getPlayerDX()
     {
@@ -475,9 +503,9 @@ class Model
     }
 
     /**
-     * Set player dx.
+     * Set player dX.
      *
-     * @param playerDX long: New player dx.
+     * @param playerDX long: New player dX.
      */
     void setPlayerDX(long playerDX)
     {
@@ -485,9 +513,9 @@ class Model
     }
 
     /**
-     * Get current player dy.
+     * Get current player dY.
      *
-     * @return long: Current player dy.
+     * @return long: Current player dY.
      */
     long getPlayerDY()
     {
@@ -495,130 +523,250 @@ class Model
     }
 
     /**
-     * Set player dy.
+     * Set player dY.
      *
-     * @param playerDY long: New player dy.
+     * @param playerDY long: New player dY.
      */
     void setPlayerDY(long playerDY)
     {
         this.playerDY = playerDY;
     }
 
+    /**
+     * Check whether the player is on a left wall.
+     *
+     * @return boolean: True if the player is on a left wall, otherwise false.
+     */
     boolean isPlayerOnWallLeft()
     {
         return playerOnWallLeft;
     }
 
+    /**
+     * Update whether the player is on a left wall.
+     *
+     * @param playerOnWallLeft boolean: True if the player is on a left wall, otherwise false.
+     */
     void setPlayerOnWallLeft(boolean playerOnWallLeft)
     {
         this.playerOnWallLeft = playerOnWallLeft;
     }
 
+    /**
+     * Check whether the player is on a right wall.
+     *
+     * @return boolean: True if the player is on a right wall, otherwise false
+     */
     boolean isPlayerOnWallRight()
     {
         return playerOnWallRight;
     }
 
+    /**
+     * Update whether the player is on a right wall.
+     *
+     * @param playerOnWallRight boolean: True if the player is on a right wall, otherwise false
+     */
     void setPlayerOnWallRight(boolean playerOnWallRight)
     {
         this.playerOnWallRight = playerOnWallRight;
     }
 
+    /**
+     * Get the standard player ddX due to input.
+     *
+     * @return long: The standard player ddX due to input.
+     */
     long getDDXDueToInput()
     {
         return dDXDueToInput;
     }
 
+    /**
+     * Set the standard player ddX due to input.
+     *
+     * @param dDXDueToInput long: The new standard player ddX due to input.
+     */
     void setDDXDueToInput(long dDXDueToInput)
     {
         this.dDXDueToInput = dDXDueToInput;
     }
 
+    /**
+     * Get the maximum player dX due to horizontal input.
+     *
+     * @return long: The maximum player dX due to horizontal input.
+     */
     long getMaxDXDueToInput()
     {
         return maxDXDueToInput;
     }
 
+    /**
+     * Set the maximum player dX due to horizontal input.
+     *
+     * @param maxDXDueToInput long: The new maximum player dX due to horizontal input.
+     */
     void setMaxDXDueToInput(long maxDXDueToInput)
     {
         this.maxDXDueToInput = maxDXDueToInput;
     }
 
+    /**
+     * Get the dY to assert at the instant the player jumps (not wall jumps).
+     *
+     * @return long: The dY to assert at the instant the player jumps.
+     */
     long getInstantaneousJumpDY()
     {
         return instantaneousJumpDY;
     }
 
+    /**
+     * Set the dY to assert at the instant the player jumps (not wall jumps).
+     *
+     * @param instantaneousJumpDY long: The new dY to assert at the instant the player jumps.
+     */
     void setInstantaneousJumpDY(long instantaneousJumpDY)
     {
         this.instantaneousJumpDY = instantaneousJumpDY;
     }
 
+    /**
+     * Get the dY to assert at the instant the player jumps from a wall.
+     *
+     * @return long: The dY to assert at the instant the player jumps from a wall.
+     */
     long getInstantaneousWallJumpDY()
     {
         return instantaneousWallJumpDY;
     }
 
+    /**
+     * Set the dY to assert at the instant the player jumps from a wall.
+     *
+     * @param instantaneousWallJumpDY long: The new dY to assert at the instant the player jumps from a wall.
+     */
     void setInstantaneousWallJumpDY(long instantaneousWallJumpDY)
     {
         this.instantaneousWallJumpDY = instantaneousWallJumpDY;
     }
 
+    /**
+     * Get the dX to assert at the instant the player jumps from a left wall.
+     *
+     * @return long: The dX to assert at the instant the player jumps from a left wall.
+     */
     long getInstantaneousWallJumpLeftDX()
     {
         return instantaneousWallJumpLeftDX;
     }
 
+    /**
+     * Set the dX to assert at the instant the player jumps from a left wall.
+     *
+     * @param instantaneousWallJumpLeftDX long: The new dX to assert at the instant the player jumps from a left wall.
+     */
     void setInstantaneousWallJumpLeftDX(long instantaneousWallJumpLeftDX)
     {
         this.instantaneousWallJumpLeftDX = instantaneousWallJumpLeftDX;
     }
 
+    /**
+     * Get the dX to assert at the instant the player jumps from a right wall.
+     *
+     * @return long: The dX to assert at the instant the player jumps from a right wall.
+     */
     long getInstantaneousWallJumpRightDX()
     {
         return instantaneousWallJumpRightDX;
     }
 
+    /**
+     * Set the dX to assert at the instant the player jumps from a right wall.
+     *
+     * @param instantaneousWallJumpRightDX long: The new dX to assert at the instant the player jumps from a right wall.
+     */
     void setInstantaneousWallJumpRightDX(long instantaneousWallJumpRightDX)
     {
         this.instantaneousWallJumpRightDX = instantaneousWallJumpRightDX;
     }
 
+    /**
+     * Get the standard player ddY due to gravity.
+     *
+     * @return long: The standard player ddY due to gravity.
+     */
     long getDDYDueToGravity()
     {
         return dDYDueToGravity;
     }
 
+    /**
+     * Set the standard player ddY due to gravity.
+     *
+     * @param dDYDueToGravity long: The new standard player ddY due to gravity.
+     */
     void setDDYDueToGravity(long dDYDueToGravity)
     {
         this.dDYDueToGravity = dDYDueToGravity;
     }
 
+    /**
+     * Get the maximum player dY due to gravity.
+     *
+     * @return long: The maximum player dY due to gravity.
+     */
     long getMaxDYDueToGravity()
     {
         return maxDYDueToGravity;
     }
 
+    /**
+     * Set the maximum player dY due to gravity.
+     *
+     * @param maxDYDueToGravity long: The new maximum player dY due to gravity.
+     */
     void setMaxDYDueToGravity(long maxDYDueToGravity)
     {
         this.maxDYDueToGravity = maxDYDueToGravity;
     }
 
+    /**
+     * Get the maximum player dY due to gravity while on a wall.
+     *
+     * @return long: The maximum player dY due to gravity while on a wall.
+     */
     long getMaxDYOnWall()
     {
         return maxDYOnWall;
     }
 
+    /**
+     * Set the maximum player dY due to gravity while on a wall.
+     *
+     * @param maxDYOnWall long: The new maximum player dY due to gravity while on a wall.
+     */
     void setMaxDYOnWall(long maxDYOnWall)
     {
         this.maxDYOnWall = maxDYOnWall;
     }
 
+    /**
+     * Check whether or not we should reset the jump animation.
+     *
+     * @return boolean: True if we should reset the jump animation, false otherwise.
+     */
     boolean isResetJump()
     {
         return resetJump;
     }
 
+    /**
+     * Update whether or not we should reset the jump animation.
+     *
+     * @param resetJump boolean: True if we should reset the jump animation, false otherwise.
+     */
     void setResetJump(boolean resetJump)
     {
         this.resetJump = resetJump;

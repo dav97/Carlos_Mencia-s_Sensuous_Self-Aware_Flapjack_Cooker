@@ -9,11 +9,12 @@ import static overworld.Globals.PlayerGraphicIndex;
 import static overworld.Globals.PlayerGraphicIndex.faceFront;
 
 /**
- * overworld.View acts as the view for the overworld game state.
+ * overworld.View holds and renders all the graphical elements for the overworld game state,
+ * updated regularly by the overworld presenter.
  *
  * @author Scorple
- * @version 1.0
- * @since 2016.08.01
+ * @version dev01
+ * @since 2016_0801
  */
 class View
 {
@@ -158,7 +159,7 @@ class View
     }
 
     /**
-     * Sets the player image to use for drawing,
+     * Set the default player image to use for drawing,
      * and default draw location.
      *
      * @param playerImage Image: The still player character graphic.
@@ -171,63 +172,131 @@ class View
         this.playerGraphicIndex = faceFront;
     }
 
+    /**
+     * Set the image to use when the player is standing still and facing left.
+     * (i.e. the faceLeft case)
+     *
+     * @param playerImageFaceLeft Image: The image to use when the player is standing still and facing left.
+     */
     void setPlayerImageFaceLeft(Image playerImageFaceLeft)
     {
         this.playerImageFaceLeft = playerImageFaceLeft;
     }
 
+    /**
+     * Set the image to use when the player is standing still and facing right.
+     * (i.e. the faceRight case)
+     *
+     * @param playerImageFaceRight Image: The image to use when the player is standing still and facing right.
+     */
     void setPlayerImageFaceRight(Image playerImageFaceRight)
     {
         this.playerImageFaceRight = playerImageFaceRight;
     }
 
+    /**
+     * Set the animation to use when the player is walking left.
+     * (i.e. the walkLeft case)
+     * Not currently used.
+     *
+     * @param playerAnimationWalkLeft Animation: The animation to use when the player is walking left.
+     */
     void setPlayerAnimationWalkLeft(Animation playerAnimationWalkLeft)
     {
         this.playerAnimationWalkLeft = playerAnimationWalkLeft;
     }
 
+    /**
+     * Set the animation to use when the player is walking right.
+     * (i.e. the walkRight case)
+     * Not currently used.
+     *
+     * @param playerAnimationWalkRight Animation: The animation to use when the player is walking right.
+     */
     void setPlayerAnimationWalkRight(Animation playerAnimationWalkRight)
     {
         this.playerAnimationWalkRight = playerAnimationWalkRight;
     }
 
+    /**
+     * Set the animation to use when the player is running left.
+     * (i.e. the runLeft case)
+     *
+     * @param playerAnimationRunLeft Animation: The animation to use when the player is running left.
+     */
     void setPlayerAnimationRunLeft(Animation playerAnimationRunLeft)
     {
         this.playerAnimationRunLeft = playerAnimationRunLeft;
     }
 
+    /**
+     * Set the animation to use when the player is running right.
+     * (i.e. the runRight case)
+     *
+     * @param playerAnimationRunRight Animation: The animation to use when the player is running right.
+     */
     void setPlayerAnimationRunRight(Animation playerAnimationRunRight)
     {
         this.playerAnimationRunRight = playerAnimationRunRight;
     }
 
+    /**
+     * Set the animation to use when the player is jumping (or falling) left.
+     * (i.e. the jumpLeft case)
+     *
+     * @param playerAnimationJumpLeft Animation: The animation to use when the player is jumping (or falling) left.
+     */
     void setPlayerAnimationJumpLeft(Animation playerAnimationJumpLeft)
     {
         this.playerAnimationJumpLeft = playerAnimationJumpLeft;
     }
 
+    /**
+     * Set the animation to use when the player is jumping (or falling) right.
+     * (i.e. the jumpRight case)
+     *
+     * @param playerAnimationJumpRight Animation: The animation to use when the player is jumping (or falling) right.
+     */
+    void setPlayerAnimationJumpRight(Animation playerAnimationJumpRight)
+    {
+        this.playerAnimationJumpRight = playerAnimationJumpRight;
+    }
+
+    /**
+     * Restart the player jump animation since that animation does not loop.
+     */
     void resetJump()
     {
         playerAnimationJumpLeft.restart();
         playerAnimationJumpRight.restart();
     }
 
+    /**
+     * Set the jump animation to its final frame since that frame is used for falls.
+     */
     void setFall()
     {
         playerAnimationJumpLeft.setCurrentFrame(playerAnimationJumpLeft.getFrameCount() - 1);
         playerAnimationJumpRight.setCurrentFrame(playerAnimationJumpLeft.getFrameCount() - 1);
     }
 
-    void setPlayerAnimationJumpRight(Animation playerAnimationJumpRight)
-    {
-        this.playerAnimationJumpRight = playerAnimationJumpRight;
-    }
-
+    /**
+     * Set the image to use when the player is on the left wall.
+     * (i.e. the wallLeft case)
+     *
+     * @param playerImageWallLeft Image: The image to use when the player is on the left wall.
+     */
     void setPlayerImageWallLeft(Image playerImageWallLeft)
     {
         this.playerImageWallLeft = playerImageWallLeft;
     }
 
+    /**
+     * Set the image to use when the player is on the right wall.
+     * (i.e. the wallRight case)
+     *
+     * @param playerImageWallRight Image: The image to use when the player is on the right wall.
+     */
     void setPlayerImageWallRight(Image playerImageWallRight)
     {
         this.playerImageWallRight = playerImageWallRight;
@@ -245,11 +314,22 @@ class View
         this.playerY = playerY;
     }
 
+    /**
+     * Get the current player graphic identifier, sometimes needed to decide which animation
+     * to use next.
+     *
+     * @return PlayerGraphicIndex: The current player graphic identifier.
+     */
     PlayerGraphicIndex getPlayerGraphicIndex()
     {
         return playerGraphicIndex;
     }
 
+    /**
+     * Set the current player graphic identifier.
+     *
+     * @param playerGraphicIndex PlayerGraphicIndex: The new current player graphic identifier.
+     */
     void setPlayerGraphicIndex(PlayerGraphicIndex playerGraphicIndex)
     {
         this.playerGraphicIndex = playerGraphicIndex;

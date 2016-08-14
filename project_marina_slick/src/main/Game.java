@@ -12,8 +12,8 @@ import java.awt.event.ActionListener;
  * main.Game will act as the parent for the rest of the app.
  *
  * @author Scorple
- * @version 1.0
- * @since 2016.08.01
+ * @version dev01
+ * @since 2016_0801
  */
 class Game extends StateBasedGame
 {

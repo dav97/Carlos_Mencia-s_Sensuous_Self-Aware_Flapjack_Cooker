@@ -19,9 +19,9 @@ import static overworld.Globals.PlayerGraphicIndex.*;
  * overworld.Presenter will act as the presenter for the overworld game state, mediating between the model and view.
  * Post updates to the view. Post updates to and request data from the model.
  *
- * @author Scorple
- * @version 1.0
- * @since 2016.08.01
+ * @author scorple
+ * @version dev01
+ * @since 2016_0801
  */
 public class Presenter extends BasicGameState
 {
@@ -182,7 +182,13 @@ public class Presenter extends BasicGameState
         model.setMapHookCurrent(MAP_HOOK);
     }
 
-    void loadPlayerGraphics() throws SlickException
+    /**
+     * Load in all the raw graphics and construct image and animation objects to be used in
+     * rendering the player, and pass them all to the view which will actually use them.
+     *
+     * @throws SlickException Slick library exception.
+     */
+    private void loadPlayerGraphics() throws SlickException
     {
         InputStream inputStream;
 

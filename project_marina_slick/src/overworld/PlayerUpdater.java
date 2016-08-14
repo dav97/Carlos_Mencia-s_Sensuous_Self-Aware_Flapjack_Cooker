@@ -3,6 +3,13 @@ package overworld;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+/**
+ * overworld.PlayerUpdater is used by the presenter to handle player logic and update the model.
+ *
+ * @author scorple
+ * @version dev02
+ * @since 2016_0810
+ */
 class PlayerUpdater
 {
     private Presenter presenter;
@@ -11,6 +18,11 @@ class PlayerUpdater
     private boolean staleInputUp;
     private boolean staleInputUse;
 
+    /**
+     * Constructor, sets a callback to the presenter using this updater.
+     *
+     * @param presenter Presenter: The presenter to call back to where applicable.
+     */
     PlayerUpdater(Presenter presenter)
     {
         this.presenter = presenter;
@@ -18,6 +30,18 @@ class PlayerUpdater
         staleInputUse = false;
     }
 
+    /**
+     * Given the current model and the player input, apply game logic to check the player
+     * position and update it with environmental effects (i.e. gravity, horizontal movement
+     * fade) and player input, including strafing, jumping, wall-jumping, etc. Also check
+     * for player interactions with the world and call back to the presenter as needed
+     * (i.e. map transition).
+     *
+     * @param model Model: The current overworld game state model.
+     * @param input Input: The current player input object.
+     *
+     * @throws SlickException Slick library exception.
+     */
     void update(Model model, Input input) throws SlickException
     {
         this.model = model;
@@ -211,6 +235,12 @@ class PlayerUpdater
         //end update player movement and location
     }
 
+    /**
+     * Utility function for quickly checking and updating if the player is no longer on a wall.
+     *
+     * @param floor boolean: True if the player is standing on solid ground, false otherwise,
+     *              expedites check.
+     */
     private void checkOffWall(boolean floor)
     {
         //if there is not collision to the left of the player or the player is on solid ground,
@@ -227,6 +257,17 @@ class PlayerUpdater
         }
     }
 
+    /**
+     * Get the suggested player dY after applying the effects of gravity, not accounting for
+     * collisions but accounting for whether the player is on a wall and preventing us from
+     * exceeding the max dY.
+     *
+     * @param playerDY long: The current player dY, modified to produce return.
+     * @param wall     boolean: True if the player is on a wall, false otherwise,
+     *                 passed in because it will effect the ddY to apply.
+     *
+     * @return long: The suggested player dY after applying the effects of gravity.
+     */
     private long getProposedPlayerDYDueToGravity(long playerDY, boolean wall)
     {
         long proposedPlayerDY = 0;
@@ -269,6 +310,17 @@ class PlayerUpdater
         return proposedPlayerDY;
     }
 
+    /**
+     * Get the suggested player dX after applying the effects of horizontal movement fade,
+     * accounting for whether or not the player is on solid ground and will not over or
+     * under shoot 0 when applying ddX.
+     *
+     * @param playerDX long: The current player dX, modified to produce return.
+     * @param floor boolean:  True if the player is on solid ground, false otherwise,
+     *              passed in because it will effect the ddX to apply.
+     *
+     * @return long: The suggested player dX after applying the effects of horizontal movement fade.
+     */
     private long getProposedPlayerDXDueToFade(long playerDX, boolean floor)
     {
         long proposedPlayerDX = 0;

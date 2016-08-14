@@ -9,8 +9,8 @@ import java.io.File;
  * main.Launcher will create and start the game.
  *
  * @author Scorple
- * @version 1.0
- * @since 2016.08.01
+ * @version dev01
+ * @since 2016_0801
  */
 class Launcher
 {
