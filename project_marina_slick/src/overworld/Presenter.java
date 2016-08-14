@@ -453,9 +453,7 @@ public class Presenter extends BasicGameState
             {
                 view.setFall();
             }
-            if ((playerDX < 0) || (view.getPlayerGraphicIndex() == runLeft) ||
-                (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
-                (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
+            if (playerDX < 0)
             {
                 view.setPlayerGraphicIndex(jumpLeft);
             }
