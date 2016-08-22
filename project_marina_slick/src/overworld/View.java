@@ -61,12 +61,7 @@ class View
     {
         g.setAntiAlias(false); //this is a pixel-art game, no anti-aliasing here
 
-        g.scale(scale, scale); //TODO: this should be based on window size
-
-        //because of the way scaling is handled the tiledmap needs to be drawn by location
-        //and then the pixels are scaled up, this causes the map to move 1 * scale pixels at a time
-        //this looks really bad at slow movement speeds and I don't know how to fix it
-        //tiledMap.render(Math.round(mapX), Math.round(mapY), 1); //TODO: 1 is the foreground layer, should be a global
+        g.scale(scale, scale);
 
         //TODO: performance, only draw the part of the map on screen
         mapImage.draw(mapX, mapY);

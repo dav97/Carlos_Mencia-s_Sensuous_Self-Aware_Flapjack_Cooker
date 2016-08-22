@@ -10,13 +10,13 @@ package overworld;
  */
 public class Map
 {
-    int         width; //the map width in tiles
-    int         height; //the map height in tiles
-    long        tileWidth; //the logical width/height of a tile
-    Boolean[][] clip; //the grid of passable (clip true) and not passable (clip false)
-    String[][]  hooks; //the grid of reference hooks in the current map
-    String      hookCurrent; //the reference hook of the current map
-    String      hookSpawn; //the reference hook of the spawn point (usually previous map)
+    private int         width; //the map width in tiles
+    private int         height; //the map height in tiles
+    private long        tileWidth; //the logical width/height of a tile
+    private Boolean[][] clip; //the grid of passable (clip true) and not passable (clip false)
+    private String[][]  hooks; //the grid of reference hooks in the current map
+    private String      hookCurrent; //the reference hook of the current map
+    private String      hookSpawn; //the reference hook of the spawn point (usually previous map)
 
     /**
      * Primary constructor. Requires the width in tiles of the map, the height in tiles of the map,
@@ -76,7 +76,7 @@ public class Map
      *
      * @return Boolean[][]: The grid of passable (clip true) and impassable (clip false) tiles.
      */
-    public Boolean[][] getClip()
+    Boolean[][] getClip()
     {
         return clip;
     }
@@ -86,7 +86,7 @@ public class Map
      *
      * @param clip Boolean[][]: The new grid of passable (clip true) and impassable (clip false) tiles.
      */
-    public void setClip(Boolean[][] clip)
+    void setClip(Boolean[][] clip)
     {
         this.clip = clip;
     }
@@ -96,7 +96,7 @@ public class Map
      *
      * @return String[][]: The grid of reference hooks in the map.
      */
-    public String[][] getHooks()
+    String[][] getHooks()
     {
         return hooks;
     }
@@ -106,7 +106,7 @@ public class Map
      *
      * @param hooks String[][]: The grid of reference hooks in the map.
      */
-    public void setHooks(String[][] hooks)
+    void setHooks(String[][] hooks)
     {
         this.hooks = hooks;
     }

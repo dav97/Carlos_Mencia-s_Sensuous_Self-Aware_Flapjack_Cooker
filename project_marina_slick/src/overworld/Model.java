@@ -50,6 +50,11 @@ class Model
         entityMap = new HashMap<>();
     }
 
+    /**
+     * Get the Map object associated with the currently loaded map.
+     *
+     * @return Map: The Map object associated with the currently loaded map.
+     */
     Map getMap()
     {
         return map;
