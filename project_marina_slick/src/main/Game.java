@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 /**
  * main.Game will act as the parent for the rest of the app.
  *
- * @author Scorple
+ * @author scorple
  * @version dev01
  * @since 2016_0801
  */

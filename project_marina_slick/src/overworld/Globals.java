@@ -67,7 +67,7 @@ class Globals
 
     static final String ACTOR_PROPERTIES_RESOURCE_PATH = "res/actors/";
     static final String DEFAULT_PLAYER_REF             = "marina";
-    static final String XML_EXTENTION                  = ".xml";
+    static final String XML_EXTENSION                  = ".xml";
 
     enum PlayerGraphicIndex
     {

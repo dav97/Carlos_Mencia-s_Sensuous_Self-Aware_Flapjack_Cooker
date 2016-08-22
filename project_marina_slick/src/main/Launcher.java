@@ -8,7 +8,7 @@ import java.io.File;
 /**
  * main.Launcher will create and start the game.
  *
- * @author Scorple
+ * @author scorple
  * @version dev01
  * @since 2016_0801
  */

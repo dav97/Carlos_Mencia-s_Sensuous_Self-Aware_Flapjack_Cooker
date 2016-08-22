@@ -10,35 +10,50 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static overworld.Globals.ACTOR_PROPERTIES_RESOURCE_PATH;
-import static overworld.Globals.XML_EXTENTION;
+import static overworld.Globals.XML_EXTENSION;
 
 /**
- * Created by Scorple on 8/22/2016.
+ * Each overworld.Actor object will store the data associated with one actor present
+ * in the Overworld. This includes the Player, Enemies and other NPCs.
+ *
+ * @author scorple
+ * @version dev04
+ * @since 2016_0822
  */
-public class Actor extends Entity
+class Actor extends Entity
 {
-    long dX;
-    long dY;
+    private long dX;
+    private long dY;
 
-    boolean onWallLeft;
-    boolean onWallRight;
+    private boolean onWallLeft;
+    private boolean onWallRight;
 
-    long inputDDX;
-    long inputMaxDX;
+    private long inputDDX;
+    private long inputMaxDX;
 
-    long instantaneousJumpDY;
-    long instantaneousWallJumpDX;
-    long instantaneousWallJumpDY;
+    private long instantaneousJumpDY;
+    private long instantaneousWallJumpDX;
+    private long instantaneousWallJumpDY;
 
-    long gravityDDY;
-    long gravityMaxDY;
-    long gravityMaxWallDY;
+    private long gravityDDY;
+    private long gravityMaxDY;
+    private long gravityMaxWallDY;
 
-    boolean resetJump;
+    private boolean resetJump;
 
-    long graphicOffsetX;
-    long graphicOffsetY;
+    private long graphicOffsetX;
+    private long graphicOffsetY;
 
+    /**
+     * Actor constructor. Requires the initial logical x and y coordinates of this Actor
+     * and a reference to load in the remainder of the Actor's properties from an .xml file.
+     * Sets some logic defaults and requests property population from .xml file.
+     *
+     * @param x   long: The initial x coordinate of this Actor.
+     * @param y   long: The initial y coordinate of this Actor.
+     * @param ref String: A reference tag for loading the rest of this Actor's properties
+     *            and referencing it later.
+     */
     Actor(long x, long y, String ref)
     {
         super(x, y);
@@ -51,11 +66,19 @@ public class Actor extends Entity
         getActorStats(ref);
     }
 
+    /**
+     * Given a reference tag, opens an .xml file to load the rest of the Actor properties from.
+     * The reference tag is the name of the .xml file without path or extension, at time of
+     * writing the default path is available in the Overworld Globals.
+     *
+     * @param ref String: Reference tag for this actor, also the name of the .xml file to get
+     *            its properties from.
+     */
     private void getActorStats(String ref)
     {
         SAXBuilder saxBuilder = new SAXBuilder();
         InputStream inputStream = ResourceLoader.getResourceAsStream(
-            ACTOR_PROPERTIES_RESOURCE_PATH + ref + XML_EXTENTION);
+            ACTOR_PROPERTIES_RESOURCE_PATH + ref + XML_EXTENSION);
         Document document = null;
 
         try
@@ -91,152 +114,302 @@ public class Actor extends Entity
         gravityMaxWallDY = Long.parseLong(movementElement.getChildText("gravityMaxWallDY"));
     }
 
-    public long getDX()
+    /**
+     * Get current actor dX.
+     *
+     * @return long: Current actor dX.
+     */
+    long getDX()
     {
         return dX;
     }
 
-    public void setDX(long dX)
+    /**
+     * Set actor dX.
+     *
+     * @param dX long: New actor dX.
+     */
+    void setDX(long dX)
     {
         this.dX = dX;
     }
 
-    public long getDY()
+    /**
+     * Get current actor dY.
+     *
+     * @return long: Current actor dY.
+     */
+    long getDY()
     {
         return dY;
     }
 
-    public void setDY(long dY)
+    /**
+     * Set actor dY.
+     *
+     * @param dY long: New actor dY.
+     */
+    void setDY(long dY)
     {
         this.dY = dY;
     }
 
-    public boolean isOnWallLeft()
+    /**
+     * Check whether the actor is on a left wall.
+     *
+     * @return boolean: True if the actor is on a left wall, otherwise false.
+     */
+    boolean isOnWallLeft()
     {
         return onWallLeft;
     }
 
-    public void setOnWallLeft(boolean onWallLeft)
+    /**
+     * Update whether the actor is on a left wall.
+     *
+     * @param onWallLeft boolean: True if the actor is on a left wall, otherwise false.
+     */
+    void setOnWallLeft(boolean onWallLeft)
     {
         this.onWallLeft = onWallLeft;
     }
 
-    public boolean isOnWallRight()
+    /**
+     * Check whether the actor is on a right wall.
+     *
+     * @return boolean: True if the actor is on a right wall, otherwise false
+     */
+    boolean isOnWallRight()
     {
         return onWallRight;
     }
 
-    public void setOnWallRight(boolean onWallRight)
+    /**
+     * Update whether the actor is on a right wall.
+     *
+     * @param onWallRight boolean: True if the actor is on a right wall, otherwise false
+     */
+    void setOnWallRight(boolean onWallRight)
     {
         this.onWallRight = onWallRight;
     }
 
-    public long getInputDDX()
+    /**
+     * Get the standard actor ddX due to input.
+     *
+     * @return long: The standard actor ddX due to input.
+     */
+    long getInputDDX()
     {
         return inputDDX;
     }
 
-    public void setInputDDX(long inputDDX)
+    /**
+     * Set the standard actor ddX due to input.
+     *
+     * @param inputDDX long: The new standard actor ddX due to input.
+     */
+    void setInputDDX(long inputDDX)
     {
         this.inputDDX = inputDDX;
     }
 
-    public long getInputMaxDX()
+    /**
+     * Get the maximum actor dX due to horizontal input.
+     *
+     * @return long: The maximum actor dX due to horizontal input.
+     */
+    long getInputMaxDX()
     {
         return inputMaxDX;
     }
 
-    public void setInputMaxDX(long inputMaxDX)
+    /**
+     * Set the maximum actor dX due to horizontal input.
+     *
+     * @param inputMaxDX long: The new maximum actor dX due to horizontal input.
+     */
+    void setInputMaxDX(long inputMaxDX)
     {
         this.inputMaxDX = inputMaxDX;
     }
 
-    public long getInstantaneousJumpDY()
+    /**
+     * Get the dY to assert at the instant the actor jumps (not wall jumps).
+     *
+     * @return long: The dY to assert at the instant the actor jumps.
+     */
+    long getInstantaneousJumpDY()
     {
         return instantaneousJumpDY;
     }
 
-    public void setInstantaneousJumpDY(long instantaneousJumpDY)
+    /**
+     * Set the dY to assert at the instant the actor jumps (not wall jumps).
+     *
+     * @param instantaneousJumpDY long: The new dY to assert at the instant the actor jumps.
+     */
+    void setInstantaneousJumpDY(long instantaneousJumpDY)
     {
         this.instantaneousJumpDY = instantaneousJumpDY;
     }
 
-    public long getInstantaneousWallJumpDX()
+    /**
+     * Get the dX to assert at the instant the actor jumps from a wall.
+     *
+     * @return long: The dX to assert at the instant the actor jumps from a wall.
+     */
+    long getInstantaneousWallJumpDX()
     {
         return instantaneousWallJumpDX;
     }
 
-    public void setInstantaneousWallJumpDX(long instantaneousWallJumpDX)
+    /**
+     * Set the dX to assert at the instant the actor jumps from a wall.
+     *
+     * @param instantaneousWallJumpDX long: The new dX to assert at the instant the actor jumps from a wall.
+     */
+    void setInstantaneousWallJumpDX(long instantaneousWallJumpDX)
     {
         this.instantaneousWallJumpDX = instantaneousWallJumpDX;
     }
 
-    public long getInstantaneousWallJumpDY()
+    /**
+     * Get the dY to assert at the instant the actor jumps from a wall.
+     *
+     * @return long: The dY to assert at the instant the actor jumps from a wall.
+     */
+    long getInstantaneousWallJumpDY()
     {
         return instantaneousWallJumpDY;
     }
 
-    public void setInstantaneousWallJumpDY(long instantaneousWallJumpDY)
+    /**
+     * Set the dY to assert at the instant the actor jumps from a wall.
+     *
+     * @param instantaneousWallJumpDY long: The new dY to assert at the instant the actor jumps from a wall.
+     */
+    void setInstantaneousWallJumpDY(long instantaneousWallJumpDY)
     {
         this.instantaneousWallJumpDY = instantaneousWallJumpDY;
     }
 
-    public long getGravityDDY()
+    /**
+     * Get the standard actor ddY due to gravity.
+     *
+     * @return long: The standard actor ddY due to gravity.
+     */
+    long getGravityDDY()
     {
         return gravityDDY;
     }
 
-    public void setGravityDDY(long gravityDDY)
+    /**
+     * Set the standard actor ddY due to gravity.
+     *
+     * @param gravityDDY long: The new standard actor ddY due to gravity.
+     */
+    void setGravityDDY(long gravityDDY)
     {
         this.gravityDDY = gravityDDY;
     }
 
-    public long getGravityMaxDY()
+    /**
+     * Get the maximum actor dY due to gravity.
+     *
+     * @return long: The maximum actor dY due to gravity.
+     */
+    long getGravityMaxDY()
     {
         return gravityMaxDY;
     }
 
-    public void setGravityMaxDY(long gravityMaxDY)
+    /**
+     * Set the maximum actor dY due to gravity.
+     *
+     * @param gravityMaxDY long: The new maximum actor dY due to gravity.
+     */
+    void setGravityMaxDY(long gravityMaxDY)
     {
         this.gravityMaxDY = gravityMaxDY;
     }
 
-    public long getGravityMaxWallDY()
+    /**
+     * Get the maximum actor dY due to gravity while on a wall.
+     *
+     * @return long: The maximum actor dY due to gravity while on a wall.
+     */
+    long getGravityMaxWallDY()
     {
         return gravityMaxWallDY;
     }
 
-    public void setGravityMaxWallDY(long gravityMaxWallDY)
+    /**
+     * Set the maximum actor dY due to gravity while on a wall.
+     *
+     * @param gravityMaxWallDY long: The new maximum actor dY due to gravity while on a wall.
+     */
+    void setGravityMaxWallDY(long gravityMaxWallDY)
     {
         this.gravityMaxWallDY = gravityMaxWallDY;
     }
 
-    public boolean isResetJump()
+    /**
+     * Check whether or not we should reset the jump animation.
+     *
+     * @return boolean: True if we should reset the jump animation, false otherwise.
+     */
+    boolean isResetJump()
     {
         return resetJump;
     }
 
-    public void setResetJump(boolean resetJump)
+    /**
+     * Update whether or not we should reset the jump animation.
+     *
+     * @param resetJump boolean: True if we should reset the jump animation, false otherwise.
+     */
+    void setResetJump(boolean resetJump)
     {
         this.resetJump = resetJump;
     }
 
-    public long getGraphicOffsetX()
+    /**
+     * Get the logical units to horizontally offset the actor graphic.
+     *
+     * @return long: Logical units to horizontally offset the actor graphic.
+     */
+    long getGraphicOffsetX()
     {
         return graphicOffsetX;
     }
 
-    public void setGraphicOffsetX(long graphicOffsetX)
+    /**
+     * Update the logical units to horizontally offset the actor graphic.
+     *
+     * @param graphicOffsetX long: The new logical units to horizontally offset the actor graphic.
+     */
+    void setGraphicOffsetX(long graphicOffsetX)
     {
         this.graphicOffsetX = graphicOffsetX;
     }
 
-    public long getGraphicOffsetY()
+    /**
+     * Get the logical units to vertically offset the actor graphic.
+     *
+     * @return long: Logical units to vertically offset the actor graphic.
+     */
+    long getGraphicOffsetY()
     {
         return graphicOffsetY;
     }
 
-    public void setGraphicOffsetY(long graphicOffsetY)
+    /**
+     * Update the logical units to vertically offset the actor graphic.
+     *
+     * @param graphicOffsetY long: The new logical units to vertically offset the actor graphic.
+     */
+    void setGraphicOffsetY(long graphicOffsetY)
     {
         this.graphicOffsetY = graphicOffsetY;
     }

@@ -102,25 +102,6 @@ class Model
     }
 
     /**
-     * Create the player model and set default location and
-     * movement values.
-     *
-     * @param playerWidth  int: The raw width of the player graphic.
-     * @param playerHeight int: The raw height of the player graphic.
-     */
-    /*
-    void setupPlayerModel(long playerWidth, long playerHeight)
-    {
-        this.playerWidth = playerWidth;
-        this.playerHeight = playerHeight;
-        playerX = 0;
-        playerY = 0;
-        playerDX = 0;
-        playerDY = 0;
-    }
-    */
-
-    /**
      * Set the player location and default movement values
      * based on the location of the given hook in the map.
      *
@@ -401,6 +382,14 @@ class Model
         return hooks;
     }
 
+    /**
+     * Given a reference tag, return the Entity mapped to that reference tag
+     * in this model.
+     *
+     * @param ref String: The reference tag to lookup an Entity.
+     *
+     * @return Entity: The Entity mapped to the given reference tag.
+     */
     Entity getEntityByRef(String ref)
     {
         return entityMap.get(ref);
