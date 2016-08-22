@@ -163,8 +163,8 @@ class PlayerUpdater
         if (playerInputUse && (playerDY == 0) && !staleInputUse)
         {
             staleInputUse = true;
-            String mapHookCurrent = model.getMapHookCurrent();
-            //String mapHookPrevious = model.getMapHookSpawn();
+            String mapHookCurrent = model.getMap().getHookCurrent();
+            //String mapHookPrevious = model.getHookSpawn();
             String hooks[] = model.getActorIntersectingTileHooks(player);
             //String feedback = "Intersecting tile hooks:";
 

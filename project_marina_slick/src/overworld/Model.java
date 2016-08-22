@@ -15,14 +15,7 @@ import static overworld.Globals.*;
  */
 class Model
 {
-    //TODO: move these to a separate class
-    int         mapWidth; //the map width in tiles
-    int         mapHeight; //the map height in tiles
-    long        tileWidth;
-    Boolean[][] mapClip; //the grid of passable (clip true) and not passable (clip false)
-    String      mapHookCurrent;
-    String      mapHookSpawn;
-    String[][]  mapHooks;
+    private Map map;
 
     private HashMap<String, Entity> entityMap;
 
@@ -50,55 +43,16 @@ class Model
      *                  such as spawn and transition points.
      *                  0
      */
-    void setupMapModel(int mapWidth, int mapHeight, long tileWidth, Boolean[][] mapClip, String[][] mapHooks)
+    void setupModel(int mapWidth, int mapHeight, long tileWidth, Boolean[][] mapClip, String[][] mapHooks)
     {
-        this.mapWidth = mapWidth;
-        this.mapHeight = mapHeight;
-        this.tileWidth = tileWidth;
-        this.mapClip = mapClip;
-        this.mapHooks = mapHooks;
+        map = new Map(mapWidth, mapHeight, tileWidth, mapClip, mapHooks);
 
-        entityMap = new HashMap<>(); //TODO: move, or make function more generic
+        entityMap = new HashMap<>();
     }
 
-    /**
-     * Get the reference hook for the currently loaded map.
-     *
-     * @return String: The reference hook for the currently loaded map.
-     */
-    String getMapHookCurrent()
+    Map getMap()
     {
-        return mapHookCurrent;
-    }
-
-    /**
-     * Set the reference hook for the currently loaded map.
-     *
-     * @param mapHookCurrent String: The reference hook for the currently loaded map.
-     */
-    void setMapHookCurrent(String mapHookCurrent)
-    {
-        this.mapHookCurrent = mapHookCurrent;
-    }
-
-    /**
-     * Get the reference hook for the player spawn location.
-     *
-     * @return String: The reference hook for the player spawn location.
-     */
-    String getMapHookSpawn()
-    {
-        return mapHookSpawn;
-    }
-
-    /**
-     * Set the reference hook for the player spawn location.
-     *
-     * @param mapHookPrevious String: The reference hook for the player spawn location.
-     */
-    void setMapHookSpawn(String mapHookPrevious)
-    {
-        this.mapHookSpawn = mapHookPrevious;
+        return map;
     }
 
     /**
@@ -111,16 +65,16 @@ class Model
     {
         System.out.println("Spawning player at hook <" + hook + ">");
 
-        for (int x = 0; x < mapWidth; ++x)
+        for (int x = 0; x < map.getWidth(); ++x)
         {
-            for (int y = 0; y < mapHeight; ++y)
+            for (int y = 0; y < map.getHeight(); ++y)
             {
-                if (mapHooks[x][y].equals(hook))
+                if (map.getHooks()[x][y].equals(hook))
                 {
                     System.out.println("Hook <" + hook + "> found at <" + x + ", " + y + ">");
-                    Actor actor = new Actor(x * tileWidth, y * tileWidth, actorRef);
+                    Actor actor = new Actor(x * map.getTileWidth(), y * map.getTileWidth(), actorRef);
                     entityMap.put(actorRef, actor);
-                    mapHookSpawn = hook;
+                    map.setHookSpawn(hook);
                     return;
                 }
             }
@@ -161,42 +115,43 @@ class Model
         {
             return -(actor.getX());
         }
-        if (playerXTest >= (((mapWidth) * tileWidth)))
+        if (playerXTest >= (((map.getWidth()) * map.getTileWidth())))
         {
-            return (((mapWidth) * tileWidth) - (actor.getX() + actor.getWidth()));
+            return (((map.getWidth()) * map.getTileWidth()) - (actor.getX() + actor.getWidth()));
         }
         //end map bounds checking
 
-        int maxMapXCollisionTiles = (int) (1 + ((actor.getHeight() > tileWidth) ? (actor.getHeight() / tileWidth) : 0) +
-                                           1); //check the mapY, at minimum, level with the top and bottom of the player
+        int maxMapXCollisionTiles =
+            (int) (1 + ((actor.getHeight() > map.getTileWidth()) ? (actor.getHeight() / map.getTileWidth()) : 0) +
+                   1); //check the mapY, at minimum, level with the top and bottom of the player
 
-        int   mapXTest = (int) (playerXTest / tileWidth);
+        int   mapXTest = (int) (playerXTest / map.getTileWidth());
         int[] mapYTest = new int[maxMapXCollisionTiles];
 
         mapYTest[0] = (int) (actor.getY() /
-                             tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
+                             map.getTileWidth()); //the first mapY to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxMapXCollisionTiles - 1); ++i)
         {
             mapYTest[i] = mapYTest[i - 1] +
                           1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
         mapYTest[maxMapXCollisionTiles - 1] = (int) (((actor.getY() + actor.getHeight()) - 1) /
-                                                     tileWidth); //the last mapY to test is the grid coordinate level with the bottom of the player
+                                                     map.getTileWidth()); //the last mapY to test is the grid coordinate level with the bottom of the player
 
         for (int i = 0; i < maxMapXCollisionTiles; ++i)
         { //check collision on every tile to the left or right of the player within a distance of dX
-            if (!mapClip[mapXTest][mapYTest[i]])
+            if (!map.getClip()[mapXTest][mapYTest[i]])
             {
                 long collisionDX = 0;
                 if (dX < 0)
                 {
-                    collisionDX = (((mapXTest + 1) * tileWidth)) -
+                    collisionDX = (((mapXTest + 1) * map.getTileWidth())) -
                                   actor.getX(); //subtract the X location of the left side of the player from the X location of the right side of the tile
                 }
                 else if (dX > 0)
                 {
-                    collisionDX = ((mapXTest) * tileWidth) - ((actor.getX() +
-                                                               actor.getWidth())); //subtract the X location of the right side of the player from the X location of the left side of the tile
+                    collisionDX = ((mapXTest) * map.getTileWidth()) - ((actor.getX() +
+                                                                        actor.getWidth())); //subtract the X location of the right side of the player from the X location of the left side of the tile
                 }
                 return collisionDX;
             }
@@ -259,42 +214,43 @@ class Model
         {
             return -(actor.getY());
         }
-        if (playerYTest >= (((mapHeight) * tileWidth)))
+        if (playerYTest >= (((map.getHeight()) * map.getTileWidth())))
         {
-            return (((mapHeight) * tileWidth) - (actor.getY() + actor.getHeight()));
+            return (((map.getHeight()) * map.getTileWidth()) - (actor.getY() + actor.getHeight()));
         }
         //end map bounds checking
 
-        int maxMapYCollisionTiles = (int) (1 + ((actor.getWidth() > tileWidth) ? (actor.getWidth() / tileWidth) : 0) +
-                                           1); //check the mapX, at minimum, level with the left and right side of the player
+        int maxMapYCollisionTiles =
+            (int) (1 + ((actor.getWidth() > map.getTileWidth()) ? (actor.getWidth() / map.getTileWidth()) : 0) +
+                   1); //check the mapX, at minimum, level with the left and right side of the player
 
         int[] mapXTest = new int[maxMapYCollisionTiles];
-        int   mapYTest = (int) (playerYTest / tileWidth);
+        int   mapYTest = (int) (playerYTest / map.getTileWidth());
 
         mapXTest[0] = (int) (actor.getX() /
-                             tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
+                             map.getTileWidth()); //the first mapX to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxMapYCollisionTiles - 1); ++i)
         {
             mapXTest[i] = mapXTest[i - 1] +
                           1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
         mapXTest[maxMapYCollisionTiles - 1] = (int) (((actor.getX() + actor.getWidth()) - 1) /
-                                                     tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+                                                     map.getTileWidth()); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         for (int i = 0; i < maxMapYCollisionTiles; ++i)
         { //check collision on every tile to the left or right of the player within a distance of dX
-            if (!mapClip[mapXTest[i]][mapYTest])
+            if (!map.getClip()[mapXTest[i]][mapYTest])
             {
                 long collisionDY = 0;
                 if (dY < 0)
                 {
-                    collisionDY = (((mapYTest + 1) * tileWidth)) -
+                    collisionDY = (((mapYTest + 1) * map.getTileWidth())) -
                                   actor.getY(); //subtract the Y location of the top of the player from the Y location of the bottom of the tile
                 }
                 else if (dY > 0)
                 {
-                    collisionDY = ((mapYTest) * tileWidth) - ((actor.getY() +
-                                                               actor.getHeight())); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
+                    collisionDY = ((mapYTest) * map.getTileWidth()) - ((actor.getY() +
+                                                                        actor.getHeight())); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
                 }
                 return collisionDY;
             }
@@ -335,10 +291,10 @@ class Model
     String[] getActorIntersectingTileHooks(Actor actor)
     {
         int maxPlayerIntersectionTilesTopToBottom =
-            (int) (1 + ((actor.getHeight() > tileWidth) ? (actor.getHeight() / tileWidth) : 0) +
+            (int) (1 + ((actor.getHeight() > map.getTileWidth()) ? (actor.getHeight() / map.getTileWidth()) : 0) +
                    1); //check the mapY, at minimum, level with the top and bottom of the player
         int maxPlayerIntersectionTilesLeftToRight =
-            (int) (1 + ((actor.getWidth() > tileWidth) ? (actor.getWidth() / tileWidth) : 0) +
+            (int) (1 + ((actor.getWidth() > map.getTileWidth()) ? (actor.getWidth() / map.getTileWidth()) : 0) +
                    1); //check the mapX, at minimum, level with the left and right side of the player
         int maxIntersectingTiles = maxPlayerIntersectionTilesTopToBottom * maxPlayerIntersectionTilesLeftToRight;
 
@@ -346,27 +302,27 @@ class Model
 
         //get every mapX grid coordinate we will need to check for hooks
         mapXTest[0] = (int) (actor.getX() /
-                             tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
+                             map.getTileWidth()); //the first mapX to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxPlayerIntersectionTilesLeftToRight - 1); ++i)
         {
             mapXTest[i] = mapXTest[i - 1] +
                           1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
         mapXTest[maxPlayerIntersectionTilesLeftToRight - 1] = (int) (((actor.getX() + actor.getWidth()) - 1) /
-                                                                     tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+                                                                     map.getTileWidth()); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         int[] mapYTest = new int[maxPlayerIntersectionTilesTopToBottom];
 
         //get every mapY grid coordinate we will need to check for hooks
         mapYTest[0] = (int) (actor.getY() /
-                             tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
+                             map.getTileWidth()); //the first mapY to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxPlayerIntersectionTilesTopToBottom - 1); ++i)
         {
             mapYTest[i] = mapYTest[i - 1] +
                           1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
         mapYTest[maxPlayerIntersectionTilesTopToBottom - 1] = (int) (((actor.getY() + actor.getHeight()) - 1) /
-                                                                     tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
+                                                                     map.getTileWidth()); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         String[] hooks = new String[maxIntersectingTiles];
 
@@ -375,7 +331,7 @@ class Model
         {
             for (int y = 0; y < maxPlayerIntersectionTilesTopToBottom; ++y)
             {
-                hooks[y + x * maxPlayerIntersectionTilesTopToBottom] = mapHooks[mapXTest[x]][mapYTest[y]];
+                hooks[y + x * maxPlayerIntersectionTilesTopToBottom] = map.getHooks()[mapXTest[x]][mapYTest[y]];
             }
         }
 

@@ -45,7 +45,7 @@ class Actor extends Entity
     private long graphicOffsetY;
 
     /**
-     * Actor constructor. Requires the initial logical x and y coordinates of this Actor
+     * Primary constructor. Requires the initial logical x and y coordinates of this Actor
      * and a reference to load in the remainder of the Actor's properties from an .xml file.
      * Sets some logic defaults and requests property population from .xml file.
      *

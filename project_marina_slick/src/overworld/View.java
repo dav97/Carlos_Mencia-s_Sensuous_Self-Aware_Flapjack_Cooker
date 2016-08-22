@@ -121,20 +121,6 @@ class View
     }
 
     /**
-     * Set a reference to the current overworld map for drawing.
-     *
-     * @param tiledMap TiledMap: The source of the map to draw.
-     *
-     * @deprecated
-     */
-    void setupMapViewModel(TiledMap tiledMap)
-    {
-        this.tiledMap = tiledMap;
-        this.mapX = 0;
-        this.mapY = 0;
-    }
-
-    /**
      * Set the overworld map image to use for drawing.
      *
      * @param mapImage Image: The map to draw.

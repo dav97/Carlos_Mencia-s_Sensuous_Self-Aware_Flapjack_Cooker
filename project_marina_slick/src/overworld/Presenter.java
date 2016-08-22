@@ -89,12 +89,6 @@ public class Presenter extends BasicGameState
         Image playerBasic =
             new Image(inputStream, DEFAULT_CHARACTER_IMAGE_PATH, false, FILTER_NEAREST);
 
-        long playerWidth = playerBasic.getWidth() *
-                           GRAPHIC_TO_LOGIC_CONVERSION; //the logical player width is the raw graphic width
-        long playerHeight = playerBasic.getHeight() *
-                            GRAPHIC_TO_LOGIC_CONVERSION; //the logical player height is the raw graphic height
-
-        //model.setupPlayerModel(playerWidth, playerHeight);
         view.setupPlayerViewModel(playerBasic);
 
         loadPlayerGraphics();
@@ -154,11 +148,11 @@ public class Presenter extends BasicGameState
             }
         }
 
-        model.setupMapModel(tiledMap.getWidth(),
-                            tiledMap.getHeight(),
+        model.setupModel(tiledMap.getWidth(),
+                         tiledMap.getHeight(),
                             tiledMap.getTileWidth() * GRAPHIC_TO_LOGIC_CONVERSION,
-                            mapClip,
-                            mapHooks);
+                         mapClip,
+                         mapHooks);
 
         inputStream = ResourceLoader.getResourceAsStream(
             MAP_RESOURCE_PATH + loadMapName + GRAPHICS_EXTENSION);
@@ -171,7 +165,7 @@ public class Presenter extends BasicGameState
         view.setMapImage(tiledMapImage);
 
         MAP_HOOK = loadMapName;
-        model.setMapHookCurrent(MAP_HOOK);
+        model.getMap().setHookCurrent(MAP_HOOK);
     }
 
     /**
@@ -363,7 +357,7 @@ public class Presenter extends BasicGameState
         loadMap(newMapHook);
 
         model.spawnActor(PLAYER_REF, spawnHook);
-        model.setMapHookSpawn(spawnHook);
+        model.getMap().setHookSpawn(spawnHook);
     }
 
     /**
