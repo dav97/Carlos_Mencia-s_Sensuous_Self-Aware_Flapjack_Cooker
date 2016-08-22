@@ -190,7 +190,7 @@ class PlayerUpdater
         //end player input
 
         //update player movement and location
-        //if the proposed player dx is non-zero, check for collisions and use the collision distance for setting dx
+        //if the proposed player dX is non-zero, check for collisions and use the collision distance for setting dX
         if (proposedPlayerDX != 0)
         {
             long adjustedDX = model.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
@@ -244,13 +244,13 @@ class PlayerUpdater
     private void checkOffWall(boolean floor)
     {
         //if there is not collision to the left of the player or the player is on solid ground,
-        //unset the playerOnWallLeft flag
+        //unset the onWallLeft flag
         if (!model.isPlayerCollisionLeft() || floor)
         {
             model.setPlayerOnWallLeft(false);
         }
         //if there is not collision to the right of the player or the player is on solid ground,
-        //unset the playerOnWallRight flag
+        //unset the onWallRight flag
         if (!model.isPlayerCollisionRight() || floor)
         {
             model.setPlayerOnWallRight(false);

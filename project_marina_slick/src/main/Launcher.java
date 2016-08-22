@@ -26,13 +26,12 @@ class Launcher
      */
     public static void main(String[] args) throws SlickException
     {
-        File relLibDir = new File("slick");
         File devLibDir = new File("lib/slick");
 
-        System.setProperty("org.lwjgl.librarypath",
-                           (devLibDir.exists() ?
-                               devLibDir.getAbsolutePath() :
-                               relLibDir.getAbsolutePath()));
+        if (devLibDir.exists())
+        {
+            System.setProperty("org.lwjgl.librarypath", devLibDir.getAbsolutePath());
+        }
 
         AppGameContainer app = new AppGameContainer(new Game("Project Marina"));
 

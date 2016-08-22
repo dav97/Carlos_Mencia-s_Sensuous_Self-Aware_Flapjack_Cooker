@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="jdom">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jdom/lib/xalan/serializer-2.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom/lib/xalan/xalan-2.7.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom/lib/jaxen-1.1.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom/lib/xercesImpl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom/lib/xml-apis.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom/jdom-2.0.6-contrib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom/jdom-2.0.6-junit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom/jdom-2.0.6.jar!/" />
+      <root url="file://$PROJECT_DIR$/lib/jdom" />
+      <root url="file://$PROJECT_DIR$/lib/jdom/lib" />
+      <root url="file://$PROJECT_DIR$/lib/jdom/lib/xalan" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/jdom/jdom-2.0.6-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/jdom/jdom-2.0.6-sources.jar!/" />
+      <root url="file://$PROJECT_DIR$/lib/jdom" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/lib/jdom" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/jdom/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/jdom/lib/xalan" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/lib/jdom" recursive="false" type="SOURCES" />
+  </library>
+</component>
