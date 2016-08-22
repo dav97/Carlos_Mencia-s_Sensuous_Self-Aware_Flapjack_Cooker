@@ -24,32 +24,7 @@ class Model
     String      mapHookSpawn;
     String[][]  mapHooks;
 
-    HashMap<String, Entity> entityMap;
-
-    //TODO: move these to a separate class
-    /*long playerWidth;
-    long playerHeight;
-    long playerX;
-    long playerY;
-    long playerDX;
-    long playerDY;
-
-    boolean playerOnWallLeft;
-    boolean playerOnWallRight;
-
-    long dDXDueToInput;
-    long maxDXDueToInput;
-
-    long instantaneousJumpDY;
-    long instantaneousWallJumpDY;
-    long instantaneousWallJumpLeftDX;
-    long instantaneousWallJumpRightDX;
-
-    long dDYDueToGravity;
-    long maxDYDueToGravity;
-    long maxDYOnWall;
-
-    boolean resetJump;*/
+    private HashMap<String, Entity> entityMap;
 
     /**
      * Default constructor for this model.
@@ -164,12 +139,6 @@ class Model
                     System.out.println("Hook <" + hook + "> found at <" + x + ", " + y + ">");
                     Actor actor = new Actor(x * tileWidth, y * tileWidth, actorRef);
                     entityMap.put(actorRef, actor);
-                    /*playerX = x * tileWidth;
-                    playerY = y * tileWidth;
-                    playerDX = 0;
-                    playerDY = 0;
-                    playerOnWallLeft = false;
-                    playerOnWallRight = false;*/
                     mapHookSpawn = hook;
                     return;
                 }
@@ -195,7 +164,7 @@ class Model
      */
     long getActorHorizontalCollisionDistanceByDX(Actor actor, long dX)
     {
-        long playerXTest = actor.getX();//playerX;
+        long playerXTest = actor.getX();
 
         if (dX < 0)
         {
