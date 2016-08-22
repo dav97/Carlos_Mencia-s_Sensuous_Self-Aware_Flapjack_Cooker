@@ -28,7 +28,7 @@ class Model
     }
 
     /**
-     * Set the map model.
+     * Setup the model.
      *
      * @param mapWidth  int: The width in tiles of the map.
      * @param mapHeight int: The height in tiles of the map.
