@@ -8,7 +8,7 @@ package overworld;
  * @version dev04
  * @since 2016_0822
  */
-public class Map
+class Map
 {
     private int         width; //the map width in tiles
     private int         height; //the map height in tiles
