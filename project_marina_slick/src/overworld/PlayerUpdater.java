@@ -13,7 +13,9 @@ import org.newdawn.slick.SlickException;
 class PlayerUpdater
 {
     private Presenter presenter;
+    private String    playerRef;
     private Model     model;
+    private Actor     player;
 
     private boolean staleInputUp;
     private boolean staleInputUse;
@@ -23,9 +25,10 @@ class PlayerUpdater
      *
      * @param presenter Presenter: The presenter to call back to where applicable.
      */
-    PlayerUpdater(Presenter presenter)
+    PlayerUpdater(Presenter presenter, String playerRef)
     {
         this.presenter = presenter;
+        this.playerRef = playerRef;
         staleInputUp = false;
         staleInputUse = false;
     }
@@ -45,17 +48,18 @@ class PlayerUpdater
     void update(Model model, Input input) throws SlickException
     {
         this.model = model;
+        player = (Actor) model.getEntityByRef(playerRef);
 
-        long playerDX = model.getPlayerDX();
-        long playerDY = model.getPlayerDY();
+        long playerDX = player.getDX();
+        long playerDY = player.getDY();
 
         long proposedPlayerDX = 0;
         long proposedPlayerDY = 0;
 
-        boolean playerFloor = model.isPlayerCollisionDown();
+        boolean playerFloor = model.isActorCollisionDown(player);
 
         checkOffWall(playerFloor);
-        model.setResetJump(playerFloor);
+        player.setResetJump(playerFloor);
 
         boolean playerInputLeft  = input.isKeyDown(Input.KEY_A);
         boolean playerInputRight = input.isKeyDown(Input.KEY_D);
@@ -63,8 +67,8 @@ class PlayerUpdater
         boolean playerInputDown  = input.isKeyDown(Input.KEY_S);
         boolean playerInputUse   = input.isKeyDown(Input.KEY_E);
 
-        boolean playerOnWallLeft  = model.isPlayerOnWallLeft();
-        boolean playerOnWallRight = model.isPlayerOnWallRight();
+        boolean playerOnWallLeft  = player.isOnWallLeft();
+        boolean playerOnWallRight = player.isOnWallRight();
 
         //if the player is not on solid ground, we need to calculate the effects of gravity
         if (!playerFloor)
@@ -82,42 +86,42 @@ class PlayerUpdater
         //move left
         if (playerInputLeft && !playerInputRight)
         {
-            if (playerDX > -(model.getMaxDXDueToInput()))
+            if (playerDX > -(player.getInputMaxDX()))
             {
-                proposedPlayerDX = Math.max((playerDX - (model.getDDXDueToInput())), -model.getMaxDXDueToInput());
+                proposedPlayerDX = Math.max((playerDX - (player.getInputDDX())), -(player.getInputMaxDX()));
             }
-            else if (playerDX < -(model.getMaxDXDueToInput()))
+            else if (playerDX < -(player.getInputMaxDX()))
             {
-                proposedPlayerDX = Math.min((playerDX + (model.getDDXDueToInput() / 2)), -model.getMaxDXDueToInput());
+                proposedPlayerDX = Math.min((playerDX + (player.getInputDDX() / 2)), -(player.getInputMaxDX()));
             }
             else
             {
                 proposedPlayerDX = playerDX;
             }
-            if (model.isPlayerCollisionLeft() && !model.isPlayerCollisionDown())
+            if (model.isActorCollisionLeft(player) && !model.isActorCollisionDown(player))
             {
-                model.setPlayerOnWallLeft(true);
+                player.setOnWallLeft(true);
                 //System.out.println("Player is on left wall");
             }
         }
         //move right
         if (playerInputRight && !playerInputLeft)
         {
-            if (playerDX < model.getMaxDXDueToInput())
+            if (playerDX < player.getInputMaxDX())
             {
-                proposedPlayerDX = Math.min((playerDX + model.getDDXDueToInput()), model.getMaxDXDueToInput());
+                proposedPlayerDX = Math.min((playerDX + player.getInputDDX()), player.getInputMaxDX());
             }
-            else if (playerDX > model.getMaxDXDueToInput())
+            else if (playerDX > player.getInputMaxDX())
             {
-                proposedPlayerDX = Math.max((playerDX - (model.getDDXDueToInput() / 2)), model.getMaxDXDueToInput());
+                proposedPlayerDX = Math.max((playerDX - (player.getInputDDX() / 2)), player.getInputMaxDX());
             }
             else
             {
                 proposedPlayerDX = playerDX;
             }
-            if (model.isPlayerCollisionRight() && !model.isPlayerCollisionDown())
+            if (model.isActorCollisionRight(player) && !model.isActorCollisionDown(player))
             {
-                model.setPlayerOnWallRight(true);
+                player.setOnWallRight(true);
                 //System.out.println("Player is on right wall");
             }
         }
@@ -127,21 +131,21 @@ class PlayerUpdater
             if (playerFloor)
             { //if the player has solid ground beneath her
                 staleInputUp = true;
-                proposedPlayerDY = model.getInstantaneousJumpDY();
+                proposedPlayerDY = player.getInstantaneousJumpDY();
             }
             else if (playerOnWallLeft)
             {
                 staleInputUp = true;
-                model.setPlayerOnWallLeft(false);
-                proposedPlayerDY = model.getInstantaneousWallJumpDY();
-                proposedPlayerDX = model.getInstantaneousWallJumpRightDX();
+                player.setOnWallLeft(false);
+                proposedPlayerDX = player.getInstantaneousWallJumpDX();
+                proposedPlayerDY = player.getInstantaneousWallJumpDY();
             }
             else if (playerOnWallRight)
             {
                 staleInputUp = true;
-                model.setPlayerOnWallRight(false);
-                proposedPlayerDY = model.getInstantaneousWallJumpDY();
-                proposedPlayerDX = model.getInstantaneousWallJumpLeftDX();
+                player.setOnWallRight(false);
+                proposedPlayerDX = -(player.getInstantaneousWallJumpDX());
+                proposedPlayerDY = player.getInstantaneousWallJumpDY();
             }
         }
         if (!playerInputUp)
@@ -152,8 +156,8 @@ class PlayerUpdater
         //will currently cause the player to let go of the wall and do nothing else
         if (playerInputDown)
         {
-            model.setPlayerOnWallLeft(false);
-            model.setPlayerOnWallRight(false);
+            player.setOnWallLeft(false);
+            player.setOnWallRight(false);
         }
         //"use", currently disallowed while jumping or falling
         if (playerInputUse && (playerDY == 0) && !staleInputUse)
@@ -161,7 +165,7 @@ class PlayerUpdater
             staleInputUse = true;
             String mapHookCurrent = model.getMapHookCurrent();
             //String mapHookPrevious = model.getMapHookSpawn();
-            String hooks[] = model.getIntersectingTileHooks();
+            String hooks[] = model.getActorIntersectingTileHooks(player);
             //String feedback = "Intersecting tile hooks:";
 
             for (String hook : hooks)
@@ -193,7 +197,7 @@ class PlayerUpdater
         //if the proposed player dX is non-zero, check for collisions and use the collision distance for setting dX
         if (proposedPlayerDX != 0)
         {
-            long adjustedDX = model.getHorizontalCollisionDistanceByDX(proposedPlayerDX);
+            long adjustedDX = model.getActorHorizontalCollisionDistanceByDX(player, proposedPlayerDX);
 
             //if the proposed player movement was left or right but she ends up on a wall
             //(such as from faded movement or jump off of wall movement) set the playerOnWall
@@ -203,35 +207,35 @@ class PlayerUpdater
             {
                 if (proposedPlayerDX < 0)
                 {
-                    model.setPlayerOnWallLeft(true);
+                    player.setOnWallLeft(true);
                 }
                 else
                 {
-                    model.setPlayerOnWallRight(true);
+                    player.setOnWallRight(true);
                 }
             }
 
-            model.setPlayerDX(adjustedDX);
+            player.setDX(adjustedDX);
         }
         else
         {
-            model.setPlayerDX(proposedPlayerDX);
+            player.setDX(proposedPlayerDX);
         }
 
         //if the proposed player dy is non-zero, check for collisions and use the collision distance for setting dy
         if (proposedPlayerDY != 0)
         {
-            long adjustedDY = model.getVerticalCollisionDistanceByDY(proposedPlayerDY);
+            long adjustedDY = model.getActorVerticalCollisionDistanceByDY(player, proposedPlayerDY);
 
-            model.setPlayerDY(adjustedDY);
+            player.setDY(adjustedDY);
         }
         else
         {
-            model.setPlayerDY(proposedPlayerDY);
+            player.setDY(proposedPlayerDY);
         }
 
-        model.setPlayerX(model.getPlayerX() + model.getPlayerDX());
-        model.setPlayerY(model.getPlayerY() + model.getPlayerDY());
+        player.setX(player.getX() + player.getDX());
+        player.setY(player.getY() + player.getDY());
         //end update player movement and location
     }
 
@@ -245,15 +249,15 @@ class PlayerUpdater
     {
         //if there is not collision to the left of the player or the player is on solid ground,
         //unset the onWallLeft flag
-        if (!model.isPlayerCollisionLeft() || floor)
+        if (!model.isActorCollisionLeft(player) || floor)
         {
-            model.setPlayerOnWallLeft(false);
+            player.setOnWallLeft(false);
         }
         //if there is not collision to the right of the player or the player is on solid ground,
         //unset the onWallRight flag
-        if (!model.isPlayerCollisionRight() || floor)
+        if (!model.isActorCollisionRight(player) || floor)
         {
-            model.setPlayerOnWallRight(false);
+            player.setOnWallRight(false);
         }
     }
 
@@ -278,26 +282,26 @@ class PlayerUpdater
         //if the player is on a wall,
         if (wall)
         {
-            maxDYOnWall = model.getMaxDYOnWall();
+            maxDYOnWall = player.getGravityMaxWallDY();
             //if the player dy is less than the max due to gravity while on a wall, add to it
             if (playerDY < maxDYOnWall)
             {
-                proposedPlayerDY = Math.min(playerDY + model.getDDYDueToGravity(), maxDYOnWall);
+                proposedPlayerDY = Math.min(playerDY + player.getGravityDDY(), maxDYOnWall);
             }
             //else if the player dy is greater than the max due to gravity while on a wall, remove from it
             else if (playerDY > maxDYOnWall)
             {
-                proposedPlayerDY = Math.min(model.getPlayerDY() - model.getDDYDueToGravity(), maxDYOnWall);
+                proposedPlayerDY = Math.min(player.getDY() - player.getGravityDDY(), maxDYOnWall);
             }
         }
         //else if the player is not on solid ground,
-        else if (!model.isPlayerCollisionDown())
+        else if (!model.isActorCollisionDown(player))
         {
-            maxDYDueToGravity = model.getMaxDYDueToGravity();
+            maxDYDueToGravity = player.getGravityMaxDY();
             //if the player dy is less than the max dy due to gravity, add to it
-            if (model.getPlayerDY() < maxDYDueToGravity)
+            if (playerDY < maxDYDueToGravity)
             {
-                proposedPlayerDY = Math.min(playerDY + model.getDDYDueToGravity(), maxDYDueToGravity);
+                proposedPlayerDY = Math.min(playerDY + player.getGravityDDY(), maxDYDueToGravity);
             }
             //else, just propose the last player dy
             else
@@ -316,8 +320,8 @@ class PlayerUpdater
      * under shoot 0 when applying ddX.
      *
      * @param playerDX long: The current player dX, modified to produce return.
-     * @param floor boolean:  True if the player is on solid ground, false otherwise,
-     *              passed in because it will effect the ddX to apply.
+     * @param floor    boolean:  True if the player is on solid ground, false otherwise,
+     *                 passed in because it will effect the ddX to apply.
      *
      * @return long: The suggested player dX after applying the effects of horizontal movement fade.
      */
@@ -330,22 +334,22 @@ class PlayerUpdater
         {
             if (floor)
             {
-                proposedPlayerDX = Math.max(playerDX - model.getDDXDueToInput(), 0);
+                proposedPlayerDX = Math.max(playerDX - player.getInputDDX(), 0);
             }
             else
             {
-                proposedPlayerDX = Math.max((playerDX - (model.getDDXDueToInput() / 2)), 0);
+                proposedPlayerDX = Math.max((playerDX - (player.getInputDDX() / 2)), 0);
             }
         }
         else if (playerDX < 0)
         {
             if (floor)
             {
-                proposedPlayerDX = Math.min(playerDX + model.getDDXDueToInput(), 0);
+                proposedPlayerDX = Math.min(playerDX + player.getInputDDX(), 0);
             }
             else
             {
-                proposedPlayerDX = Math.min((playerDX + (model.getDDXDueToInput() / 2)), 0);
+                proposedPlayerDX = Math.min((playerDX + (player.getInputDDX() / 2)), 0);
             }
         }
         //end horizontal player movement fade

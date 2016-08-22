@@ -65,6 +65,10 @@ class Globals
     static final        long     STANDARD_MAX_DY_DUE_TO_GRAVITY            = 2000;
     static final        long     STANDARD_MAX_DY_ON_WALL                   = 200;
 
+    static final String ACTOR_PROPERTIES_RESOURCE_PATH = "res/actors/";
+    static final String DEFAULT_PLAYER_REF             = "marina";
+    static final String XML_EXTENTION                  = ".xml";
+
     enum PlayerGraphicIndex
     {
         faceFront,

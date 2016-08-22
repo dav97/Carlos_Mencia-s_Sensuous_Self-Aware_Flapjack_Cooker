@@ -1,5 +1,9 @@
 package overworld;
 
+import java.util.HashMap;
+
+import static overworld.Globals.*;
+
 /**
  * overworld.Model holds all the logical data for the overworld game state and acts as
  * an interface to that data, regularly queried and updated by the overworld presenter
@@ -20,8 +24,10 @@ class Model
     String      mapHookSpawn;
     String[][]  mapHooks;
 
+    HashMap<String, Entity> entityMap;
+
     //TODO: move these to a separate class
-    long playerWidth;
+    /*long playerWidth;
     long playerHeight;
     long playerX;
     long playerY;
@@ -43,7 +49,7 @@ class Model
     long maxDYDueToGravity;
     long maxDYOnWall;
 
-    boolean resetJump;
+    boolean resetJump;*/
 
     /**
      * Default constructor for this model.
@@ -76,6 +82,8 @@ class Model
         this.tileWidth = tileWidth;
         this.mapClip = mapClip;
         this.mapHooks = mapHooks;
+
+        entityMap = new HashMap<>(); //TODO: move, or make function more generic
     }
 
     /**
@@ -125,6 +133,7 @@ class Model
      * @param playerWidth  int: The raw width of the player graphic.
      * @param playerHeight int: The raw height of the player graphic.
      */
+    /*
     void setupPlayerModel(long playerWidth, long playerHeight)
     {
         this.playerWidth = playerWidth;
@@ -134,6 +143,7 @@ class Model
         playerDX = 0;
         playerDY = 0;
     }
+    */
 
     /**
      * Set the player location and default movement values
@@ -141,7 +151,7 @@ class Model
      *
      * @param hook String: A reference point in the map.
      */
-    void spawnPlayer(String hook)
+    void spawnActor(String actorRef, String hook)
     {
         System.out.println("Spawning player at hook <" + hook + ">");
 
@@ -152,12 +162,14 @@ class Model
                 if (mapHooks[x][y].equals(hook))
                 {
                     System.out.println("Hook <" + hook + "> found at <" + x + ", " + y + ">");
-                    playerX = x * tileWidth;
+                    Actor actor = new Actor(x * tileWidth, y * tileWidth, actorRef);
+                    entityMap.put(actorRef, actor);
+                    /*playerX = x * tileWidth;
                     playerY = y * tileWidth;
                     playerDX = 0;
                     playerDY = 0;
                     playerOnWallLeft = false;
-                    playerOnWallRight = false;
+                    playerOnWallRight = false;*/
                     mapHookSpawn = hook;
                     return;
                 }
@@ -181,44 +193,44 @@ class Model
      * @return long: The player distance from the tile she will
      * collide with if she moved the proposed amount.
      */
-    long getHorizontalCollisionDistanceByDX(long dX)
+    long getActorHorizontalCollisionDistanceByDX(Actor actor, long dX)
     {
-        long playerXTest = playerX;
+        long playerXTest = actor.getX();//playerX;
 
         if (dX < 0)
         {
-            playerXTest = playerX + dX;
+            playerXTest = actor.getX() + dX;
         }
         else if (dX > 0)
         {
-            playerXTest = playerX + playerWidth + dX;
+            playerXTest = actor.getX() + actor.getWidth() + dX;
         }
 
         //map bounds checking
         if (playerXTest < 0)
         {
-            return -(playerX);
+            return -(actor.getX());
         }
         if (playerXTest >= (((mapWidth) * tileWidth)))
         {
-            return (((mapWidth) * tileWidth) - (playerX + playerWidth));
+            return (((mapWidth) * tileWidth) - (actor.getX() + actor.getWidth()));
         }
         //end map bounds checking
 
-        int maxMapXCollisionTiles = (int) (1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) +
+        int maxMapXCollisionTiles = (int) (1 + ((actor.getHeight() > tileWidth) ? (actor.getHeight() / tileWidth) : 0) +
                                            1); //check the mapY, at minimum, level with the top and bottom of the player
 
         int   mapXTest = (int) (playerXTest / tileWidth);
         int[] mapYTest = new int[maxMapXCollisionTiles];
 
-        mapYTest[0] = (int) (playerY /
+        mapYTest[0] = (int) (actor.getY() /
                              tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxMapXCollisionTiles - 1); ++i)
         {
             mapYTest[i] = mapYTest[i - 1] +
                           1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
-        mapYTest[maxMapXCollisionTiles - 1] = (int) (((playerY + playerHeight) - 1) /
+        mapYTest[maxMapXCollisionTiles - 1] = (int) (((actor.getY() + actor.getHeight()) - 1) /
                                                      tileWidth); //the last mapY to test is the grid coordinate level with the bottom of the player
 
         for (int i = 0; i < maxMapXCollisionTiles; ++i)
@@ -229,12 +241,12 @@ class Model
                 if (dX < 0)
                 {
                     collisionDX = (((mapXTest + 1) * tileWidth)) -
-                                  playerX; //subtract the X location of the left side of the player from the X location of the right side of the tile
+                                  actor.getX(); //subtract the X location of the left side of the player from the X location of the right side of the tile
                 }
                 else if (dX > 0)
                 {
-                    collisionDX = ((mapXTest) * tileWidth) - ((playerX +
-                                                               playerWidth)); //subtract the X location of the right side of the player from the X location of the left side of the tile
+                    collisionDX = ((mapXTest) * tileWidth) - ((actor.getX() +
+                                                               actor.getWidth())); //subtract the X location of the right side of the player from the X location of the left side of the tile
                 }
                 return collisionDX;
             }
@@ -249,9 +261,9 @@ class Model
      *
      * @return boolean: True if there is collision immediately left of the player.
      */
-    boolean isPlayerCollisionLeft()
+    boolean isActorCollisionLeft(Actor actor)
     {
-        return (getHorizontalCollisionDistanceByDX(Globals.STANDARD_COLLISION_CHECK_DISTANCE_LEFT) == 0.0f);
+        return (getActorHorizontalCollisionDistanceByDX(actor, STANDARD_COLLISION_CHECK_DISTANCE_LEFT) == 0.0f);
     }
 
     /**
@@ -260,9 +272,9 @@ class Model
      *
      * @return boolean: True if there is collision immediately right of the player.
      */
-    boolean isPlayerCollisionRight()
+    boolean isActorCollisionRight(Actor actor)
     {
-        return (getHorizontalCollisionDistanceByDX(Globals.STANDARD_COLLISION_CHECK_DISTANCE_RIGHT) == 0.0f);
+        return (getActorHorizontalCollisionDistanceByDX(actor, STANDARD_COLLISION_CHECK_DISTANCE_RIGHT) == 0.0f);
     }
 
     /**
@@ -279,44 +291,44 @@ class Model
      * @return long: The player distance from the tile she will
      * collide with if she moved the proposed amount.
      */
-    long getVerticalCollisionDistanceByDY(long dY)
+    long getActorVerticalCollisionDistanceByDY(Actor actor, long dY)
     {
-        long playerYTest = playerY;
+        long playerYTest = actor.getY();
 
         if (dY < 0)
         {
-            playerYTest = playerY + dY;
+            playerYTest = actor.getY() + dY;
         }
         else if (dY > 0)
         {
-            playerYTest = playerY + playerHeight + dY;
+            playerYTest = actor.getY() + actor.getHeight() + dY;
         }
 
         //map bounds checking
         if (playerYTest < 0)
         {
-            return -(playerY);
+            return -(actor.getY());
         }
         if (playerYTest >= (((mapHeight) * tileWidth)))
         {
-            return (((mapHeight) * tileWidth) - (playerY + playerHeight));
+            return (((mapHeight) * tileWidth) - (actor.getY() + actor.getHeight()));
         }
         //end map bounds checking
 
-        int maxMapYCollisionTiles = (int) (1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) +
+        int maxMapYCollisionTiles = (int) (1 + ((actor.getWidth() > tileWidth) ? (actor.getWidth() / tileWidth) : 0) +
                                            1); //check the mapX, at minimum, level with the left and right side of the player
 
         int[] mapXTest = new int[maxMapYCollisionTiles];
         int   mapYTest = (int) (playerYTest / tileWidth);
 
-        mapXTest[0] = (int) (playerX /
+        mapXTest[0] = (int) (actor.getX() /
                              tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxMapYCollisionTiles - 1); ++i)
         {
             mapXTest[i] = mapXTest[i - 1] +
                           1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
-        mapXTest[maxMapYCollisionTiles - 1] = (int) (((playerX + playerWidth) - 1) /
+        mapXTest[maxMapYCollisionTiles - 1] = (int) (((actor.getX() + actor.getWidth()) - 1) /
                                                      tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         for (int i = 0; i < maxMapYCollisionTiles; ++i)
@@ -327,12 +339,12 @@ class Model
                 if (dY < 0)
                 {
                     collisionDY = (((mapYTest + 1) * tileWidth)) -
-                                  playerY; //subtract the Y location of the top of the player from the Y location of the bottom of the tile
+                                  actor.getY(); //subtract the Y location of the top of the player from the Y location of the bottom of the tile
                 }
                 else if (dY > 0)
                 {
-                    collisionDY = ((mapYTest) * tileWidth) - ((playerY +
-                                                               playerHeight)); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
+                    collisionDY = ((mapYTest) * tileWidth) - ((actor.getY() +
+                                                               actor.getHeight())); //subtract the Y location of the bottom of the player from the Y location of the top of the tile
                 }
                 return collisionDY;
             }
@@ -347,9 +359,9 @@ class Model
      *
      * @return boolean: True if there is collision immediately above the player.
      */
-    boolean isPlayerCollisionUp()
+    boolean isActorCollisionUp(Actor actor)
     {
-        return (getVerticalCollisionDistanceByDY(Globals.STANDARD_COLLISION_CHECK_DISTANCE_UP) == 0.0f);
+        return (getActorVerticalCollisionDistanceByDY(actor, STANDARD_COLLISION_CHECK_DISTANCE_UP) == 0.0f);
     }
 
     /**
@@ -358,9 +370,9 @@ class Model
      *
      * @return boolean: True if there is collision immediately below the player.
      */
-    boolean isPlayerCollisionDown()
+    boolean isActorCollisionDown(Actor actor)
     {
-        return (getVerticalCollisionDistanceByDY(Globals.STANDARD_COLLISION_CHECK_DISTANCE_DOWN) == 0.0f);
+        return (getActorVerticalCollisionDistanceByDY(actor, STANDARD_COLLISION_CHECK_DISTANCE_DOWN) == 0.0f);
     }
 
     /**
@@ -370,40 +382,40 @@ class Model
      * is intersecting with. WARNING: MAY CONTAIN DUPLICATES, ESPECIALLY IF CHECKED
      * DURING JUMP.
      */
-    String[] getIntersectingTileHooks()
+    String[] getActorIntersectingTileHooks(Actor actor)
     {
         int maxPlayerIntersectionTilesTopToBottom =
-            (int) (1 + ((playerHeight > tileWidth) ? (playerHeight / tileWidth) : 0) +
+            (int) (1 + ((actor.getHeight() > tileWidth) ? (actor.getHeight() / tileWidth) : 0) +
                    1); //check the mapY, at minimum, level with the top and bottom of the player
         int maxPlayerIntersectionTilesLeftToRight =
-            (int) (1 + ((playerWidth > tileWidth) ? (playerWidth / tileWidth) : 0) +
+            (int) (1 + ((actor.getWidth() > tileWidth) ? (actor.getWidth() / tileWidth) : 0) +
                    1); //check the mapX, at minimum, level with the left and right side of the player
         int maxIntersectingTiles = maxPlayerIntersectionTilesTopToBottom * maxPlayerIntersectionTilesLeftToRight;
 
         int[] mapXTest = new int[maxPlayerIntersectionTilesLeftToRight];
 
         //get every mapX grid coordinate we will need to check for hooks
-        mapXTest[0] = (int) (playerX /
+        mapXTest[0] = (int) (actor.getX() /
                              tileWidth); //the first mapX to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxPlayerIntersectionTilesLeftToRight - 1); ++i)
         {
             mapXTest[i] = mapXTest[i - 1] +
                           1; //for every mapX we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
-        mapXTest[maxPlayerIntersectionTilesLeftToRight - 1] = (int) (((playerX + playerWidth) - 1) /
+        mapXTest[maxPlayerIntersectionTilesLeftToRight - 1] = (int) (((actor.getX() + actor.getWidth()) - 1) /
                                                                      tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         int[] mapYTest = new int[maxPlayerIntersectionTilesTopToBottom];
 
         //get every mapY grid coordinate we will need to check for hooks
-        mapYTest[0] = (int) (playerY /
+        mapYTest[0] = (int) (actor.getY() /
                              tileWidth); //the first mapY to test is the grid coordinate level with the top of the player
         for (int i = 1; i < (maxPlayerIntersectionTilesTopToBottom - 1); ++i)
         {
             mapYTest[i] = mapYTest[i - 1] +
                           1; //for every mapY we need to test in between the top and bottom of the player, add one to the previous grid Y coordinate
         }
-        mapYTest[maxPlayerIntersectionTilesTopToBottom - 1] = (int) (((playerY + playerHeight) - 1) /
+        mapYTest[maxPlayerIntersectionTilesTopToBottom - 1] = (int) (((actor.getY() + actor.getHeight()) - 1) /
                                                                      tileWidth); //the last mapX to test is the grid coordinate level with the bottom of the player
 
         String[] hooks = new String[maxIntersectingTiles];
@@ -420,355 +432,8 @@ class Model
         return hooks;
     }
 
-    /**
-     * Get the raw player width in pixels.
-     *
-     * @return int: The raw player width in pixels.
-     */
-    long getPlayerWidth()
+    Entity getEntityByRef(String ref)
     {
-        return playerWidth;
-    }
-
-    /**
-     * Get the raw player height in pixels.
-     *
-     * @return int: The raw player width in pixels.
-     */
-    long getPlayerHeight()
-    {
-        return playerHeight;
-    }
-
-    /**
-     * Get the logical X coordinate of the player.
-     *
-     * @return long: The logical X coordinate of the player.
-     */
-    long getPlayerX()
-    {
-        return playerX;
-    }
-
-    /**
-     * Set the logical player X coordinate.
-     *
-     * @param playerX long: The logical X coordinate of the player.
-     */
-    void setPlayerX(long playerX)
-    {
-        this.playerX = playerX;
-    }
-
-    /**
-     * Get the logical Y coordinate of the player.
-     *
-     * @return long: The logical Y coordinate of the player.
-     */
-    long getPlayerY()
-    {
-        return playerY;
-    }
-
-    /**
-     * Set the logical player Y coordinate.
-     *
-     * @param playerY long: The logical Y coordinate of the player.
-     */
-    void setPlayerY(long playerY)
-    {
-        this.playerY = playerY;
-    }
-
-    /**
-     * Set the logical player X and Y coordinate.
-     *
-     * @param playerX long: The logical X coordinate of the player.
-     * @param playerY long: The logical Y coordinate of the player.
-     */
-    void setPlayerLocation(long playerX, long playerY)
-    {
-        this.playerX = playerX;
-        this.playerY = playerY;
-    }
-
-    /**
-     * Get current player dX.
-     *
-     * @return long: Current player dX.
-     */
-    long getPlayerDX()
-    {
-        return playerDX;
-    }
-
-    /**
-     * Set player dX.
-     *
-     * @param playerDX long: New player dX.
-     */
-    void setPlayerDX(long playerDX)
-    {
-        this.playerDX = playerDX;
-    }
-
-    /**
-     * Get current player dY.
-     *
-     * @return long: Current player dY.
-     */
-    long getPlayerDY()
-    {
-        return playerDY;
-    }
-
-    /**
-     * Set player dY.
-     *
-     * @param playerDY long: New player dY.
-     */
-    void setPlayerDY(long playerDY)
-    {
-        this.playerDY = playerDY;
-    }
-
-    /**
-     * Check whether the player is on a left wall.
-     *
-     * @return boolean: True if the player is on a left wall, otherwise false.
-     */
-    boolean isPlayerOnWallLeft()
-    {
-        return playerOnWallLeft;
-    }
-
-    /**
-     * Update whether the player is on a left wall.
-     *
-     * @param playerOnWallLeft boolean: True if the player is on a left wall, otherwise false.
-     */
-    void setPlayerOnWallLeft(boolean playerOnWallLeft)
-    {
-        this.playerOnWallLeft = playerOnWallLeft;
-    }
-
-    /**
-     * Check whether the player is on a right wall.
-     *
-     * @return boolean: True if the player is on a right wall, otherwise false
-     */
-    boolean isPlayerOnWallRight()
-    {
-        return playerOnWallRight;
-    }
-
-    /**
-     * Update whether the player is on a right wall.
-     *
-     * @param playerOnWallRight boolean: True if the player is on a right wall, otherwise false
-     */
-    void setPlayerOnWallRight(boolean playerOnWallRight)
-    {
-        this.playerOnWallRight = playerOnWallRight;
-    }
-
-    /**
-     * Get the standard player ddX due to input.
-     *
-     * @return long: The standard player ddX due to input.
-     */
-    long getDDXDueToInput()
-    {
-        return dDXDueToInput;
-    }
-
-    /**
-     * Set the standard player ddX due to input.
-     *
-     * @param dDXDueToInput long: The new standard player ddX due to input.
-     */
-    void setDDXDueToInput(long dDXDueToInput)
-    {
-        this.dDXDueToInput = dDXDueToInput;
-    }
-
-    /**
-     * Get the maximum player dX due to horizontal input.
-     *
-     * @return long: The maximum player dX due to horizontal input.
-     */
-    long getMaxDXDueToInput()
-    {
-        return maxDXDueToInput;
-    }
-
-    /**
-     * Set the maximum player dX due to horizontal input.
-     *
-     * @param maxDXDueToInput long: The new maximum player dX due to horizontal input.
-     */
-    void setMaxDXDueToInput(long maxDXDueToInput)
-    {
-        this.maxDXDueToInput = maxDXDueToInput;
-    }
-
-    /**
-     * Get the dY to assert at the instant the player jumps (not wall jumps).
-     *
-     * @return long: The dY to assert at the instant the player jumps.
-     */
-    long getInstantaneousJumpDY()
-    {
-        return instantaneousJumpDY;
-    }
-
-    /**
-     * Set the dY to assert at the instant the player jumps (not wall jumps).
-     *
-     * @param instantaneousJumpDY long: The new dY to assert at the instant the player jumps.
-     */
-    void setInstantaneousJumpDY(long instantaneousJumpDY)
-    {
-        this.instantaneousJumpDY = instantaneousJumpDY;
-    }
-
-    /**
-     * Get the dY to assert at the instant the player jumps from a wall.
-     *
-     * @return long: The dY to assert at the instant the player jumps from a wall.
-     */
-    long getInstantaneousWallJumpDY()
-    {
-        return instantaneousWallJumpDY;
-    }
-
-    /**
-     * Set the dY to assert at the instant the player jumps from a wall.
-     *
-     * @param instantaneousWallJumpDY long: The new dY to assert at the instant the player jumps from a wall.
-     */
-    void setInstantaneousWallJumpDY(long instantaneousWallJumpDY)
-    {
-        this.instantaneousWallJumpDY = instantaneousWallJumpDY;
-    }
-
-    /**
-     * Get the dX to assert at the instant the player jumps from a left wall.
-     *
-     * @return long: The dX to assert at the instant the player jumps from a left wall.
-     */
-    long getInstantaneousWallJumpLeftDX()
-    {
-        return instantaneousWallJumpLeftDX;
-    }
-
-    /**
-     * Set the dX to assert at the instant the player jumps from a left wall.
-     *
-     * @param instantaneousWallJumpLeftDX long: The new dX to assert at the instant the player jumps from a left wall.
-     */
-    void setInstantaneousWallJumpLeftDX(long instantaneousWallJumpLeftDX)
-    {
-        this.instantaneousWallJumpLeftDX = instantaneousWallJumpLeftDX;
-    }
-
-    /**
-     * Get the dX to assert at the instant the player jumps from a right wall.
-     *
-     * @return long: The dX to assert at the instant the player jumps from a right wall.
-     */
-    long getInstantaneousWallJumpRightDX()
-    {
-        return instantaneousWallJumpRightDX;
-    }
-
-    /**
-     * Set the dX to assert at the instant the player jumps from a right wall.
-     *
-     * @param instantaneousWallJumpRightDX long: The new dX to assert at the instant the player jumps from a right wall.
-     */
-    void setInstantaneousWallJumpRightDX(long instantaneousWallJumpRightDX)
-    {
-        this.instantaneousWallJumpRightDX = instantaneousWallJumpRightDX;
-    }
-
-    /**
-     * Get the standard player ddY due to gravity.
-     *
-     * @return long: The standard player ddY due to gravity.
-     */
-    long getDDYDueToGravity()
-    {
-        return dDYDueToGravity;
-    }
-
-    /**
-     * Set the standard player ddY due to gravity.
-     *
-     * @param dDYDueToGravity long: The new standard player ddY due to gravity.
-     */
-    void setDDYDueToGravity(long dDYDueToGravity)
-    {
-        this.dDYDueToGravity = dDYDueToGravity;
-    }
-
-    /**
-     * Get the maximum player dY due to gravity.
-     *
-     * @return long: The maximum player dY due to gravity.
-     */
-    long getMaxDYDueToGravity()
-    {
-        return maxDYDueToGravity;
-    }
-
-    /**
-     * Set the maximum player dY due to gravity.
-     *
-     * @param maxDYDueToGravity long: The new maximum player dY due to gravity.
-     */
-    void setMaxDYDueToGravity(long maxDYDueToGravity)
-    {
-        this.maxDYDueToGravity = maxDYDueToGravity;
-    }
-
-    /**
-     * Get the maximum player dY due to gravity while on a wall.
-     *
-     * @return long: The maximum player dY due to gravity while on a wall.
-     */
-    long getMaxDYOnWall()
-    {
-        return maxDYOnWall;
-    }
-
-    /**
-     * Set the maximum player dY due to gravity while on a wall.
-     *
-     * @param maxDYOnWall long: The new maximum player dY due to gravity while on a wall.
-     */
-    void setMaxDYOnWall(long maxDYOnWall)
-    {
-        this.maxDYOnWall = maxDYOnWall;
-    }
-
-    /**
-     * Check whether or not we should reset the jump animation.
-     *
-     * @return boolean: True if we should reset the jump animation, false otherwise.
-     */
-    boolean isResetJump()
-    {
-        return resetJump;
-    }
-
-    /**
-     * Update whether or not we should reset the jump animation.
-     *
-     * @param resetJump boolean: True if we should reset the jump animation, false otherwise.
-     */
-    void setResetJump(boolean resetJump)
-    {
-        this.resetJump = resetJump;
+        return entityMap.get(ref);
     }
 }

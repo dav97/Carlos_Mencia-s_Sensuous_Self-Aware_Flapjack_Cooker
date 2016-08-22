@@ -30,6 +30,7 @@ public class Presenter extends BasicGameState
     private static float         WINDOW_CENTER_HORIZONTAL;
     private static float         WINDOW_CENTER_VERTIAL;
     private static String        MAP_HOOK;
+    private static String        PLAYER_REF;
     //private final ActionListener changeStateListener; //TODO: needs redoing
     private final  int           id;
     private        Model         model;
@@ -93,25 +94,16 @@ public class Presenter extends BasicGameState
         long playerHeight = playerBasic.getHeight() *
                             GRAPHIC_TO_LOGIC_CONVERSION; //the logical player height is the raw graphic height
 
-        model.setupPlayerModel(playerWidth, playerHeight);
+        //model.setupPlayerModel(playerWidth, playerHeight);
         view.setupPlayerViewModel(playerBasic);
 
         loadPlayerGraphics();
 
-        model.spawnPlayer(TILED_HOOK_PROPERTY_SPAWN);
-
-        model.setDDXDueToInput(STANDARD_DDX_DUE_TO_INPUT);
-        model.setMaxDXDueToInput(STANDARD_MAX_DX_DUE_TO_INPUT);
-        model.setInstantaneousJumpDY(STANDARD_INSTANTANEOUS_JUMP_DY);
-        model.setInstantaneousWallJumpDY(STANDARD_INSTANTANEOUS_WALL_JUMP_DY);
-        model.setInstantaneousWallJumpLeftDX(STANDARD_INSTANTANEOUS_WALL_JUMP_LEFT_DX);
-        model.setInstantaneousWallJumpRightDX(STANDARD_INSTANTANEOUS_WALL_JUMP_RIGHT_DX);
-        model.setDDYDueToGravity(STANDARD_DDY_DUE_TO_GRAVITY);
-        model.setMaxDYDueToGravity(STANDARD_MAX_DY_DUE_TO_GRAVITY);
-        model.setMaxDYOnWall(STANDARD_MAX_DY_ON_WALL);
+        PLAYER_REF = DEFAULT_PLAYER_REF;
+        model.spawnActor(DEFAULT_PLAYER_REF, TILED_HOOK_PROPERTY_SPAWN);
         //end player setup
 
-        playerUpdater = new PlayerUpdater(this);
+        playerUpdater = new PlayerUpdater(this, PLAYER_REF);
     }
 
     /**
@@ -370,7 +362,7 @@ public class Presenter extends BasicGameState
     {
         loadMap(newMapHook);
 
-        model.spawnPlayer(spawnHook);
+        model.spawnActor(PLAYER_REF, spawnHook);
         model.setMapHookSpawn(spawnHook);
     }
 
@@ -394,12 +386,15 @@ public class Presenter extends BasicGameState
         //end check window size change and update logic
 
         //view updating
-        long playerX      = model.getPlayerX();
-        long playerY      = model.getPlayerY();
-        long playerDX     = model.getPlayerDX();
-        long playerDY     = model.getPlayerDY();
-        long playerWidth  = model.getPlayerWidth();
-        long playerHeight = model.getPlayerHeight();
+        //player
+        Actor player       = (Actor) model.getEntityByRef(PLAYER_REF);
+        long  playerX      = player.getX() + player.getGraphicOffsetX();
+        long  playerY      = player.getY() + player.getGraphicOffsetY();
+        long  playerDX     = player.getDX();
+        long  playerDY     = player.getDY();
+        long  playerWidth  = player.getWidth();
+        long  playerHeight = player.getHeight();
+        //end player
 
         //map draw position updating
         float mapX = -(((float) playerX / GRAPHIC_TO_LOGIC_CONVERSION) +
@@ -420,20 +415,20 @@ public class Presenter extends BasicGameState
         //end player draw position updating
 
         //player graphic/animation updating
-        if (model.isPlayerOnWallLeft())
+        if (player.isOnWallLeft())
         {
             view.setPlayerGraphicIndex(wallLeft);
         }
-        else if (model.isPlayerOnWallRight())
+        else if (player.isOnWallRight())
         {
             view.setPlayerGraphicIndex(wallRight);
         }
         else if (playerDY < 0)
         {
-            if ((model.isResetJump()) ||
+            if ((player.isResetJump()) ||
                 ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight)))
             {
-                model.setResetJump(false);
+                player.setResetJump(false);
                 view.resetJump();
             }
             if (playerDX < 0)
@@ -455,7 +450,7 @@ public class Presenter extends BasicGameState
                 view.setPlayerGraphicIndex(jumpRight);
             }
         }
-        else if (playerDY > 0 || !model.isPlayerCollisionDown())
+        else if (playerDY > 0 || !model.isActorCollisionDown(player))
         {
             if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
             {
@@ -513,6 +508,8 @@ public class Presenter extends BasicGameState
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException
     {
+        //System.out.println(delta);
+
         playerUpdater.update(model, container.getInput());
 
         //example of requesting game state change, i.e. to the main menu or fight state

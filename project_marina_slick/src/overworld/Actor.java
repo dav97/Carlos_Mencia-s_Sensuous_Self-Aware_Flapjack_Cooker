@@ -9,6 +9,9 @@ import org.newdawn.slick.util.ResourceLoader;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static overworld.Globals.ACTOR_PROPERTIES_RESOURCE_PATH;
+import static overworld.Globals.XML_EXTENTION;
+
 /**
  * Created by Scorple on 8/22/2016.
  */
@@ -36,7 +39,7 @@ public class Actor extends Entity
     long graphicOffsetX;
     long graphicOffsetY;
 
-    public Actor(long x, long y, String ref)
+    Actor(long x, long y, String ref)
     {
         super(x, y);
         dX = 0;
@@ -50,9 +53,10 @@ public class Actor extends Entity
 
     private void getActorStats(String ref)
     {
-        SAXBuilder  saxBuilder  = new SAXBuilder();
-        InputStream inputStream = ResourceLoader.getResourceAsStream(ref);
-        Document    document    = null;
+        SAXBuilder saxBuilder = new SAXBuilder();
+        InputStream inputStream = ResourceLoader.getResourceAsStream(
+            ACTOR_PROPERTIES_RESOURCE_PATH + ref + XML_EXTENTION);
+        Document document = null;
 
         try
         {
