@@ -148,6 +148,36 @@ class View
     }
 
     /**
+     * Set the overworld map foreground image to use for drawing.
+     *
+     * @param mapForegroundImage Image: The foreground of the map to draw.
+     */
+    void setMapForegroundImage(Image mapForegroundImage)
+    {
+        this.mapForegroundImage = mapForegroundImage;
+    }
+
+    /**
+     * Set the overworld map midground image to use for drawing.
+     *
+     * @param mapMidgroundImage Image: The midground of the map to draw.
+     */
+    void setMapMidgroundImage(Image mapMidgroundImage)
+    {
+        this.mapMidgroundImage = mapMidgroundImage;
+    }
+
+    /**
+     * Set the overworld map background image to use for drawing.
+     *
+     * @param mapBackgroundImage Image: The background of the map to draw.
+     */
+    void setMapBackgroundImage(Image mapBackgroundImage)
+    {
+        this.mapBackgroundImage = mapBackgroundImage;
+    }
+
+    /**
      * Sets the coordinate to use for drawing the map.
      * This pair is the upper left corner of the map,
      * it is drawn right and down from this pair.
