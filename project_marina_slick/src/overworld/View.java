@@ -132,21 +132,6 @@ class View
         this.mapImage = mapImage;
     }
 
-    void setMapForegroundImage(Image mapForegroundImage)
-    {
-        this.mapForegroundImage = mapForegroundImage;
-    }
-
-    void setMapMidgroundImage(Image mapMidgroundImage)
-    {
-        this.mapMidgroundImage = mapMidgroundImage;
-    }
-
-    void setMapBackgroundImage(Image mapBackgroundImage)
-    {
-        this.mapBackgroundImage = mapBackgroundImage;
-    }
-
     /**
      * Set the overworld map foreground image to use for drawing.
      *
