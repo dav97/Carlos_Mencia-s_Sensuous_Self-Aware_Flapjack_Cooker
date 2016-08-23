@@ -12,42 +12,42 @@ class Globals
 
     public static final String   DEFAULT_TILED_MAP_PATH                    = "res/debug/debug.tmx";
     public static final String   TILED_CLIP_PROPERTY_DISABLED              = "0";
-    public static final String   DEFAULT_MAP_IMAGE_PATH                    = "res/debug/debug.png";
-    public static final String   PLAYER_GRAPHICS_PATH                      = "res/Overworld Characters/PCs/Marina/";
-    static final        String[] MAP_HOOK_LIST                             = new String[]{"debug", "debug_house"};
-    static final        int      DEFAULT_MAP_ID                            = 0;
+    public static final String   DEFAULT_MAP_IMAGE_PATH              = "res/debug/debug.png";
+    public static final String   PLAYER_GRAPHICS_PATH                = "res/Overworld Characters/PCs/Marina/";
+    static final        String[] MAP_HOOK_LIST                       = new String[]{"debug", "debug_house"};
+    static final        int      DEFAULT_MAP_ID                      = 0;
     //this is annoying but currently necessary because the TiledMap constructor
     //adds a "/" to the tileset path... TODO: revisit
-    static final String MAP_RESOURCE_PATH                = "res/debug/";
-    static final String MAP_TILESET_PATH                 = "res/debug";
-    static final String TILED_MAP_EXTENSION              = ".tmx";
-    static final String GRAPHICS_EXTENSION               = ".png";
-    static final String TILED_REFERENCE_LAYER_NAME       = "reflayer";
-    static final String TILED_COLLISION_LAYER_NAME       = "collisionlayer";
-    static final String TILED_FOREGROUND_LAYER_NAME      = "foreground";
-    static final String TILED_MIDGROUND_LAYER_NAME       = "midground";
-    static final String TILED_BACKGROUND_LAYER_NAME      = "background";
-    static final String TILED_CLIP_PROPERTY_NAME         = "clip";
-    static final String TILED_CLIP_PROPERTY_ENABLED      = "1";
-    static final String TILED_HOOK_PROPERTY_NAME         = "hook";
-    static final String TILED_HOOK_PROPERTY_DEFAULT      = "";
-    static final String TILED_HOOK_PROPERTY_SPAWN        = "spawn";
-    static final String MAP_GRAPHIC_FOREGROUND_POSTFIX   = "_foreground";
-    static final String MAP_GRAPHIC_MIDGROUND_POSTFIX    = "_midground";
-    static final String MAP_GRAPHIC_BACKGROUND_POSTFIX   = "_background";
-    static final String DEFAULT_CHARACTER_IMAGE_PATH     =
+    static final        String   MAP_RESOURCE_PATH                   = "res/debug/";
+    static final        String   MAP_TILESET_PATH                    = "res/debug";
+    static final        String   TILED_MAP_EXTENSION                 = ".tmx";
+    static final        String   GRAPHICS_EXTENSION                  = ".png";
+    static final        String   TILED_REFERENCE_LAYER_NAME          = "reflayer";
+    static final        String   TILED_COLLISION_LAYER_NAME          = "collisionlayer";
+    static final        String   TILED_FOREGROUND_LAYER_NAME         = "foreground";
+    static final        String   TILED_MIDGROUND_LAYER_NAME          = "midground";
+    static final        String   TILED_BACKGROUND_LAYER_NAME         = "background";
+    static final        String   TILED_CLIP_PROPERTY_NAME            = "clip";
+    static final        String   TILED_CLIP_PROPERTY_ENABLED         = "1";
+    static final        String   TILED_HOOK_PROPERTY_NAME            = "hook";
+    static final        String   TILED_HOOK_PROPERTY_DEFAULT         = "";
+    static final        String   TILED_HOOK_PROPERTY_SPAWN           = "spawn";
+    static final        String   MAP_GRAPHIC_FOREGROUND_POSTFIX      = "_foreground";
+    static final        String   MAP_GRAPHIC_MIDGROUND_POSTFIX       = "_midground";
+    static final        String   MAP_GRAPHIC_BACKGROUND_POSTFIX      = "_background";
+    static final        String   DEFAULT_CHARACTER_IMAGE_PATH        =
         "res/Overworld Characters/PCs/Marina/mf.png";
-    static final String PLAYER_GRAPHICS_LEFT_PREFIX      = "l";
-    static final String PLAYER_GRAPHICS_RIGHT_PREFIX     = "r";
-    static final String PLAYER_GRAPHICS_WALK_PATH        =
+    static final        String   PLAYER_GRAPHICS_LEFT_PREFIX         = "l";
+    static final        String   PLAYER_GRAPHICS_RIGHT_PREFIX        = "r";
+    static final        String   PLAYER_GRAPHICS_WALK_PATH           =
         "res/Overworld Characters/PCs/Marina/walk/";
-    static final int    PLAYER_GRAPHICS_WALK_FRAME_COUNT = 3;
-    static final        int      PLAYER_GRAPHICS_WALK_FRAME_DURATION       = 200;
-    static final        String   PLAYER_GRAPHICS_WALK_POSTFIX              = "w";
-    static final        String   PLAYER_GRAPHICS_RUN_PATH                  = "res/Overworld Characters/PCs/Marina/run/";
-    static final        int      PLAYER_GRAPHICS_RUN_FRAME_COUNT           = 4;
-    static final        int      PLAYER_GRAPHICS_RUN_FRAME_DURATION        = 125;
-    static final        String   PLAYER_GRAPHICS_RUN_POSTFIX               = "run";
+    static final        int      PLAYER_GRAPHICS_WALK_FRAME_COUNT    = 3;
+    static final        int      PLAYER_GRAPHICS_WALK_FRAME_DURATION = 200;
+    static final        String   PLAYER_GRAPHICS_WALK_POSTFIX        = "w";
+    static final        String   PLAYER_GRAPHICS_RUN_PATH            = "res/Overworld Characters/PCs/Marina/run/";
+    static final        int      PLAYER_GRAPHICS_RUN_FRAME_COUNT     = 4;
+    static final        int      PLAYER_GRAPHICS_RUN_FRAME_DURATION  = 125;
+    static final        String   PLAYER_GRAPHICS_RUN_POSTFIX         = "run";
     static final        String   PLAYER_GRAPHICS_JUMP_PATH                 =
         "res/Overworld Characters/PCs/Marina/jump/";
     static final        int      PLAYER_GRAPHICS_JUMP_FRAME_COUNT          = 2;
