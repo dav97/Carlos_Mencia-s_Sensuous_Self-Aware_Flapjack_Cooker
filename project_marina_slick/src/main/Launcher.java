@@ -36,6 +36,12 @@ class Launcher
         AppGameContainer app = new AppGameContainer(new Game("Project Marina"));
 
         app.setDisplayMode(WIDTH, HEIGHT, false);
+        //app.setVSync(true);
+        //app.setTargetFrameRate(144);
+        app.setShowFPS(true);
+        app.setMinimumLogicUpdateInterval(5);
+        app.setMaximumLogicUpdateInterval(5);
+        //app.setSmoothDeltas(true);
         app.start();
     }
 }

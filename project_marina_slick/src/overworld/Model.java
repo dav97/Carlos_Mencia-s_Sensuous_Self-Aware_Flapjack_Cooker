@@ -24,11 +24,11 @@ class Model
      */
     Model()
     {
-
+        entityMap = new HashMap<>();
     }
 
     /**
-     * Setup the model.
+     * Setup the map model.
      *
      * @param mapWidth  int: The width in tiles of the map.
      * @param mapHeight int: The height in tiles of the map.
@@ -43,11 +43,9 @@ class Model
      *                  such as spawn and transition points.
      *                  0
      */
-    void setupModel(int mapWidth, int mapHeight, long tileWidth, Boolean[][] mapClip, String[][] mapHooks)
+    void setupMapModel(int mapWidth, int mapHeight, long tileWidth, Boolean[][] mapClip, String[][] mapHooks)
     {
         map = new Map(mapWidth, mapHeight, tileWidth, mapClip, mapHooks);
-
-        entityMap = new HashMap<>();
     }
 
     /**
@@ -64,11 +62,29 @@ class Model
      * Set the player location and default movement values
      * based on the location of the given hook in the map.
      *
+     * @param actorRef String: A an Actor properties reference.
      * @param hook String: A reference point in the map.
      */
-    void spawnActor(String actorRef, String hook)
+    String spawnActor(String actorRef, String hook, boolean unique)
     {
-        System.out.println("Spawning player at hook <" + hook + ">");
+        int    id = 0;
+        String uniqueActorRef;
+
+        if (!unique)
+        {
+            uniqueActorRef = actorRef + "_" + id;
+
+            while (!entityMap.containsKey(uniqueActorRef))
+            {
+                uniqueActorRef = actorRef + "_" + ++id;
+            }
+        }
+        else
+        {
+            uniqueActorRef = actorRef;
+        }
+
+        System.out.println("Spawning actor <" + actorRef + "> at hook <" + hook + ">");
 
         for (int x = 0; x < map.getWidth(); ++x)
         {
@@ -77,13 +93,25 @@ class Model
                 if (map.getHooks()[x][y].equals(hook))
                 {
                     System.out.println("Hook <" + hook + "> found at <" + x + ", " + y + ">");
-                    Actor actor = new Actor(x * map.getTileWidth(), y * map.getTileWidth(), actorRef);
-                    entityMap.put(actorRef, actor);
-                    map.setHookSpawn(hook);
-                    return;
+
+                    if (!unique || !entityMap.containsKey(actorRef))
+                    {
+                        Actor actor = new Actor(x * map.getTileWidth(), y * map.getTileWidth(), actorRef);
+                        entityMap.put(actorRef, actor);
+                    }
+                    else
+                    {
+                        Actor actor = (Actor) getEntityByRef(actorRef);
+                        actor.setX(x * map.getTileWidth());
+                        actor.setY(y * map.getTileWidth());
+                    }
+
+                    return uniqueActorRef;
                 }
             }
         }
+
+        return "";
     }
 
     //TODO: consider splitting, generalizing

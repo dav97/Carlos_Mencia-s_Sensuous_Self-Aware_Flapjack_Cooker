@@ -94,7 +94,8 @@ public class Presenter extends BasicGameState
         loadPlayerGraphics();
 
         PLAYER_REF = DEFAULT_PLAYER_REF;
-        model.spawnActor(DEFAULT_PLAYER_REF, TILED_HOOK_PROPERTY_SPAWN);
+        model.spawnActor(DEFAULT_PLAYER_REF, TILED_HOOK_PROPERTY_SPAWN, true);
+        model.getMap().setHookSpawn(TILED_HOOK_PROPERTY_SPAWN);
         //end player setup
 
         playerUpdater = new PlayerUpdater(this, PLAYER_REF);
@@ -148,11 +149,11 @@ public class Presenter extends BasicGameState
             }
         }
 
-        model.setupModel(tiledMap.getWidth(),
-                         tiledMap.getHeight(),
+        model.setupMapModel(tiledMap.getWidth(),
+                            tiledMap.getHeight(),
                             tiledMap.getTileWidth() * GRAPHIC_TO_LOGIC_CONVERSION,
-                         mapClip,
-                         mapHooks);
+                            mapClip,
+                            mapHooks);
 
         inputStream = ResourceLoader.getResourceAsStream(
             MAP_RESOURCE_PATH + loadMapName + GRAPHICS_EXTENSION);
@@ -356,7 +357,7 @@ public class Presenter extends BasicGameState
     {
         loadMap(newMapHook);
 
-        model.spawnActor(PLAYER_REF, spawnHook);
+        model.spawnActor(PLAYER_REF, spawnHook, true);
         model.getMap().setHookSpawn(spawnHook);
     }
 

@@ -103,15 +103,23 @@ class Actor extends Entity
         Element movementElement = actorElement.getChild("movement");
 
         inputDDX = Long.parseLong(movementElement.getChildText("inputDDX"));
+        System.out.println("inputDDX:<" + inputDDX + ">");
         inputMaxDX = Long.parseLong(movementElement.getChildText("inputMaxDX"));
+        System.out.println("inputMaxDX:<" + inputMaxDX + ">");
 
         instantaneousJumpDY = Long.parseLong(movementElement.getChildText("instantaneousJumpDY"));
+        System.out.println("instantaneousJumpDY:<" + instantaneousJumpDY + ">");
         instantaneousWallJumpDX = Long.parseLong(movementElement.getChildText("instantaneousWallJumpDX"));
+        System.out.println("instantaneousWallJumpDX:<" + instantaneousWallJumpDX + ">");
         instantaneousWallJumpDY = Long.parseLong(movementElement.getChildText("instantaneousWallJumpDY"));
+        System.out.println("instantaneousWallJumpDY:<" + instantaneousWallJumpDY + ">");
 
         gravityDDY = Long.parseLong(movementElement.getChildText("gravityDDY"));
+        System.out.println("gravityDDY:<" + gravityDDY + ">");
         gravityMaxDY = Long.parseLong(movementElement.getChildText("gravityMaxDY"));
+        System.out.println("gravityMaxDY:<" + gravityMaxDY + ">");
         gravityMaxWallDY = Long.parseLong(movementElement.getChildText("gravityMaxWallDY"));
+        System.out.println("gravityMaxWallDY:<" + gravityMaxWallDY + ">");
     }
 
     /**
