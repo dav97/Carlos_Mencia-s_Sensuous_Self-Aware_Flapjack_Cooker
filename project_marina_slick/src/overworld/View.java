@@ -23,6 +23,9 @@ class View
     //TODO: move these to a separate class
     private TiledMap tiledMap;
     private Image    mapImage;
+    private Image    mapForegroundImage;
+    private Image    mapMidgroundImage;
+    private Image    mapBackgroundImage;
     private float    mapX;
     private float    mapY;
 
@@ -64,7 +67,9 @@ class View
         g.scale(scale, scale);
 
         //TODO: performance, only draw the part of the map on screen
-        mapImage.draw(mapX, mapY);
+        mapBackgroundImage.draw(mapX, mapY);
+
+        mapMidgroundImage.draw(mapX, mapY);
 
         //playerImage.draw(playerX, playerY);
         switch (playerGraphicIndex)
@@ -103,6 +108,8 @@ class View
                 playerImageWallRight.draw(playerX, playerY);
                 break;
         }
+
+        mapForegroundImage.draw(mapX, mapY);
     }
 
     /**
@@ -123,6 +130,21 @@ class View
     void setMapImage(Image mapImage)
     {
         this.mapImage = mapImage;
+    }
+
+    void setMapForegroundImage(Image mapForegroundImage)
+    {
+        this.mapForegroundImage = mapForegroundImage;
+    }
+
+    void setMapMidgroundImage(Image mapMidgroundImage)
+    {
+        this.mapMidgroundImage = mapMidgroundImage;
+    }
+
+    void setMapBackgroundImage(Image mapBackgroundImage)
+    {
+        this.mapBackgroundImage = mapBackgroundImage;
     }
 
     /**

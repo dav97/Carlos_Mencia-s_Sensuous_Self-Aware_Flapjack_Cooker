@@ -117,9 +117,9 @@ public class Presenter extends BasicGameState
         System.out.println(MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
         InputStream inputStream = ResourceLoader.getResourceAsStream(
             MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
-        TiledMap tiledMap               = new TiledMap(inputStream, MAP_TILESET_PATH);
-        int      tiledForegroundLayerId = tiledMap.getLayerIndex(TILED_FOREGROUND_LAYER_NAME);
-        int      tiledReferenceLayerId  = tiledMap.getLayerIndex(TILED_REFERENCE_LAYER_NAME);
+        TiledMap tiledMap              = new TiledMap(inputStream, MAP_TILESET_PATH);
+        int      tiledCollisionLayerId = tiledMap.getLayerIndex(TILED_COLLISION_LAYER_NAME);
+        int      tiledReferenceLayerId = tiledMap.getLayerIndex(TILED_REFERENCE_LAYER_NAME);
 
         Boolean mapClip[][] =
             new Boolean[tiledMap.getWidth()][tiledMap.getHeight()]; //true means passable, false means not passable
@@ -132,7 +132,7 @@ public class Presenter extends BasicGameState
         {
             for (int y = 0; y < tiledMap.getHeight(); ++y)
             {
-                tileId = tiledMap.getTileId(x, y, tiledForegroundLayerId);
+                tileId = tiledMap.getTileId(x, y, tiledCollisionLayerId);
                 mapClip[x][y] = tiledMap.getTileProperty(tileId,
                                                          TILED_CLIP_PROPERTY_NAME,
                                                          TILED_CLIP_PROPERTY_ENABLED)
@@ -156,14 +156,34 @@ public class Presenter extends BasicGameState
                             mapHooks);
 
         inputStream = ResourceLoader.getResourceAsStream(
-            MAP_RESOURCE_PATH + loadMapName + GRAPHICS_EXTENSION);
-        Image tiledMapImage =
+            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_FOREGROUND_POSTFIX + GRAPHICS_EXTENSION);
+        Image mapForegroundImage =
             new Image(inputStream,
-                      MAP_RESOURCE_PATH + loadMapName + GRAPHICS_EXTENSION,
+                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_FOREGROUND_POSTFIX + GRAPHICS_EXTENSION,
                       false,
                       FILTER_NEAREST);
 
-        view.setMapImage(tiledMapImage);
+        view.setMapForegroundImage(mapForegroundImage);
+
+        inputStream = ResourceLoader.getResourceAsStream(
+            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_MIDGROUND_POSTFIX + GRAPHICS_EXTENSION);
+        Image mapMidgroundImage =
+            new Image(inputStream,
+                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_MIDGROUND_POSTFIX + GRAPHICS_EXTENSION,
+                      false,
+                      FILTER_NEAREST);
+
+        view.setMapMidgroundImage(mapMidgroundImage);
+
+        inputStream = ResourceLoader.getResourceAsStream(
+            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_BACKGROUND_POSTFIX + GRAPHICS_EXTENSION);
+        Image mapBackgroundImage =
+            new Image(inputStream,
+                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_BACKGROUND_POSTFIX + GRAPHICS_EXTENSION,
+                      false,
+                      FILTER_NEAREST);
+
+        view.setMapBackgroundImage(mapBackgroundImage);
 
         MAP_HOOK = loadMapName;
         model.getMap().setHookCurrent(MAP_HOOK);
