@@ -1,9 +1,13 @@
 Manifest-Version: 1.0
-Class-Path: lib/slick/lib/ibxm.jar lib/slick/lib/jinput.jar lib/slick/
- lib/jnlp.jar lib/slick/lib/jogg-0.0.7.jar lib/slick/lib/jorbis-0.0.15
- .jar lib/slick/lib/lwjgl.jar lib/slick/lib/lwjgl_util.jar lib/slick/l
- ib/lwjgl_util_applet.jar lib/slick/lib/natives-windows.jar lib/slick/
- lib/Pack200Task.jar lib/slick/lib/slick-examples.jar lib/slick/lib/sl
- ick.jar lib/slick/lib/tinylineapp.jar
+Class-Path: lib/jdom/lib/xalan/serializer-2.7.2.jar lib/jdom/lib/xalan
+ /xalan-2.7.2.jar lib/jdom/lib/jaxen-1.1.6.jar lib/jdom/lib/xerceslmpl
+ .jar lib/jdom/lib/xml-apis.jar lib/jdom/jdom-2.0.6.jar lib/jdom/jdom-
+ 2.0.6-contrib.jar lib/jdom/jdom-2.0.6-junit.jar lib/slick/lib/ibxm.ja
+ r lib/slick/lib/jinput.jar lib/slick/lib/jnlp.jar lib/slick/lib/jogg-
+ 0.0.7.jar lib/slick/lib/jorbis-0.0.15.jar lib/slick/lib/lwjgl.jar lib
+ /slick/lib/lwjgl_util.jar lib/slick/lib/lwjgl_util_applet.jar lib/sli
+ ck/lib/natives-windows.jar lib/slick/lib/Pack200Task.jar lib/slick/li
+ b/slick-examples.jar lib/slick/lib/slick.jar lib/slick/lib/tinylineap
+ p.jar
 Main-Class: main.Launcher
 

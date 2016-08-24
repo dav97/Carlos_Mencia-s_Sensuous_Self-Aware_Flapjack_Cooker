@@ -16,8 +16,8 @@ import static overworld.Globals.*;
 import static overworld.Globals.PlayerGraphicIndex.*;
 
 /**
- * overworld.Presenter will act as the presenter for the overworld game state, mediating between the model and view.
- * Post updates to the view. Post updates to and request data from the model.
+ * overworld.Presenter will act as the presenter for the overworld game state, mediating between the MODEL and VIEW.
+ * Post updates to the VIEW. Post updates to and request data from the MODEL.
  *
  * @author scorple
  * @version dev01
@@ -28,15 +28,15 @@ public class Presenter extends BasicGameState
     private static int           WINDOW_WIDTH;
     private static int           WINDOW_HEIGHT;
     private static float         WINDOW_CENTER_HORIZONTAL;
-    private static float         WINDOW_CENTER_VERTIAL;
+    private static float         WINDOW_CENTER_VERTICAL;
     private static String        MAP_HOOK;
     private static String        PLAYER_REF;
     //private final ActionListener changeStateListener; //TODO: needs redoing
     private final  int           id;
-    private        Model         model;
-    private        PlayerUpdater playerUpdater;
-    private        View          view;
-    private float scale = 6;
+    private        Model         MODEL;
+    private        PlayerUpdater PLAYER_UPDATER;
+    private        View          VIEW;
+    private float GRAPHIC_SCALE = 6;
 
     /**
      * State constructor. Stores reference parameters.
@@ -67,15 +67,15 @@ public class Presenter extends BasicGameState
     {
         WINDOW_WIDTH = container.getWidth();
         WINDOW_HEIGHT = container.getHeight();
-        WINDOW_CENTER_HORIZONTAL = (((float) WINDOW_WIDTH / 2.0f) / scale);
-        WINDOW_CENTER_VERTIAL = (((float) WINDOW_HEIGHT / 2.0f) / scale);
+        WINDOW_CENTER_HORIZONTAL = (((float) WINDOW_WIDTH / 2.0f) / GRAPHIC_SCALE);
+        WINDOW_CENTER_VERTICAL = (((float) WINDOW_HEIGHT / 2.0f) / GRAPHIC_SCALE);
 
         //component setup
-        model = new Model();
-        view = new View();
-        scale = Math.min((container.getWidth() / DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
-                         (container.getHeight() / main.Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
-        view.setScale(scale);
+        MODEL = new Model();
+        VIEW = new View();
+        GRAPHIC_SCALE = Math.min((container.getWidth() / DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
+                                 (container.getHeight() / main.Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+        VIEW.setScale(GRAPHIC_SCALE);
         //end component setup
 
         //map setup
@@ -89,21 +89,21 @@ public class Presenter extends BasicGameState
         Image playerBasic =
             new Image(inputStream, DEFAULT_CHARACTER_IMAGE_PATH, false, FILTER_NEAREST);
 
-        view.setupPlayerViewModel(playerBasic);
+        VIEW.setupPlayerViewModel(playerBasic);
 
         loadPlayerGraphics();
 
         PLAYER_REF = DEFAULT_PLAYER_REF;
-        model.spawnActor(DEFAULT_PLAYER_REF, TILED_HOOK_PROPERTY_SPAWN, true);
-        model.getMap().setHookSpawn(TILED_HOOK_PROPERTY_SPAWN);
+        MODEL.spawnActor(DEFAULT_PLAYER_REF, TILED_HOOK_PROPERTY_SPAWN, true);
+        MODEL.getMap().setHookSpawn(TILED_HOOK_PROPERTY_SPAWN);
         //end player setup
 
-        playerUpdater = new PlayerUpdater(this, PLAYER_REF);
+        PLAYER_UPDATER = new PlayerUpdater(this, PLAYER_REF);
     }
 
     /**
-     * Load in a TiledMap and map graphic from the map name. Update the model with map logic
-     * and pass the new map graphic to the view.
+     * Load in a TiledMap and map graphic from the map name. Update the MODEL with map logic
+     * and pass the new map graphic to the VIEW.
      *
      * @param loadMapName String: The name of the map to load. Should always match one of the
      *                    strings in overworld.Globals.MAP_HOOK_LIST. The Tiled map and graphic
@@ -149,7 +149,7 @@ public class Presenter extends BasicGameState
             }
         }
 
-        model.setupMapModel(tiledMap.getWidth(),
+        MODEL.setupMapModel(tiledMap.getWidth(),
                             tiledMap.getHeight(),
                             tiledMap.getTileWidth() * GRAPHIC_TO_LOGIC_CONVERSION,
                             mapClip,
@@ -163,7 +163,7 @@ public class Presenter extends BasicGameState
                       false,
                       FILTER_NEAREST);
 
-        view.setMapForegroundImage(mapForegroundImage);
+        VIEW.setMapForegroundImage(mapForegroundImage);
 
         inputStream = ResourceLoader.getResourceAsStream(
             MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_MIDGROUND_POSTFIX + GRAPHICS_EXTENSION);
@@ -173,7 +173,7 @@ public class Presenter extends BasicGameState
                       false,
                       FILTER_NEAREST);
 
-        view.setMapMidgroundImage(mapMidgroundImage);
+        VIEW.setMapMidgroundImage(mapMidgroundImage);
 
         inputStream = ResourceLoader.getResourceAsStream(
             MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_BACKGROUND_POSTFIX + GRAPHICS_EXTENSION);
@@ -183,15 +183,15 @@ public class Presenter extends BasicGameState
                       false,
                       FILTER_NEAREST);
 
-        view.setMapBackgroundImage(mapBackgroundImage);
+        VIEW.setMapBackgroundImage(mapBackgroundImage);
 
         MAP_HOOK = loadMapName;
-        model.getMap().setHookCurrent(MAP_HOOK);
+        MODEL.getMap().setHookCurrent(MAP_HOOK);
     }
 
     /**
      * Load in all the raw graphics and construct image and animation objects to be used in
-     * rendering the player, and pass them all to the view which will actually use them.
+     * rendering the player, and pass them all to the VIEW which will actually use them.
      *
      * @throws SlickException Slick library exception.
      */
@@ -352,16 +352,16 @@ public class Presenter extends BasicGameState
                                                false,
                                                FILTER_NEAREST);
 
-        view.setPlayerImageFaceLeft(playerImageFaceLeft);
-        view.setPlayerImageFaceRight(playerImageFaceRight);
-        view.setPlayerAnimationWalkLeft(playerAnimationWalkLeft);
-        view.setPlayerAnimationWalkRight(playerAnimationWalkRight);
-        view.setPlayerAnimationRunLeft(playerAnimationRunLeft);
-        view.setPlayerAnimationRunRight(playerAnimationRunRight);
-        view.setPlayerAnimationJumpLeft(playerAnimationJumpLeft);
-        view.setPlayerAnimationJumpRight(playerAnimationJumpRight);
-        view.setPlayerImageWallLeft(playerImageWallLeft);
-        view.setPlayerImageWallRight(playerImageWallRight);
+        VIEW.setPlayerImageFaceLeft(playerImageFaceLeft);
+        VIEW.setPlayerImageFaceRight(playerImageFaceRight);
+        VIEW.setPlayerAnimationWalkLeft(playerAnimationWalkLeft);
+        VIEW.setPlayerAnimationWalkRight(playerAnimationWalkRight);
+        VIEW.setPlayerAnimationRunLeft(playerAnimationRunLeft);
+        VIEW.setPlayerAnimationRunRight(playerAnimationRunRight);
+        VIEW.setPlayerAnimationJumpLeft(playerAnimationJumpLeft);
+        VIEW.setPlayerAnimationJumpRight(playerAnimationJumpRight);
+        VIEW.setPlayerImageWallLeft(playerImageWallLeft);
+        VIEW.setPlayerImageWallRight(playerImageWallRight);
     }
 
     /**
@@ -377,8 +377,8 @@ public class Presenter extends BasicGameState
     {
         loadMap(newMapHook);
 
-        model.spawnActor(PLAYER_REF, spawnHook, true);
-        model.getMap().setHookSpawn(spawnHook);
+        MODEL.spawnActor(PLAYER_REF, spawnHook, true);
+        MODEL.getMap().setHookSpawn(spawnHook);
     }
 
     /**
@@ -392,129 +392,175 @@ public class Presenter extends BasicGameState
         {
             WINDOW_WIDTH = Display.getWidth();
             WINDOW_HEIGHT = Display.getHeight();
-            scale = Math.min((WINDOW_WIDTH / DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
-                             (WINDOW_HEIGHT / main.Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
-            view.setScale(scale);
-            WINDOW_CENTER_HORIZONTAL = (((float) WINDOW_WIDTH / 2.0f) / scale);
-            WINDOW_CENTER_VERTIAL = (((float) WINDOW_HEIGHT / 2.0f) / scale);
+            GRAPHIC_SCALE = Math.min((WINDOW_WIDTH / DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR),
+                                     (WINDOW_HEIGHT / main.Globals.DRAW_SCALE_BY_CONTAINER_HEIGHT_DIVISOR));
+            VIEW.setScale(GRAPHIC_SCALE);
+            WINDOW_CENTER_HORIZONTAL = (((float) WINDOW_WIDTH / 2.0f) / GRAPHIC_SCALE);
+            WINDOW_CENTER_VERTICAL = (((float) WINDOW_HEIGHT / 2.0f) / GRAPHIC_SCALE);
         }
         //end check window size change and update logic
 
-        //view updating
+        //VIEW updating
         //player
-        Actor player       = (Actor) model.getEntityByRef(PLAYER_REF);
-        long  playerX      = player.getX() + player.getGraphicOffsetX();
-        long  playerY      = player.getY() + player.getGraphicOffsetY();
-        long  playerDX     = player.getDX();
-        long  playerDY     = player.getDY();
-        long  playerWidth  = player.getWidth();
-        long  playerHeight = player.getHeight();
+        Actor player                 = (Actor) MODEL.getEntityByRef(PLAYER_REF);
+        long  playerX                = player.getX() + player.getGraphicOffsetX();
+        long  playerY                = player.getY() + player.getGraphicOffsetY();
+        long  playerDX               = player.getDX();
+        long  playerDY               = player.getDY();
+        long  playerWidth            = player.getWidth();
+        long  playerHeight           = player.getHeight();
+        long  playerMiddleHorizontal = playerX + (playerWidth / 2);
+        long  playerMiddleVertical   = playerY + (playerHeight / 2);
+
+        float playerRenderX =
+            WINDOW_CENTER_HORIZONTAL - (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
+        float playerRenderY =
+            WINDOW_CENTER_VERTICAL - (((float) playerHeight / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
         //end player
 
         //map draw position updating
-        float mapX = -(((float) playerX / GRAPHIC_TO_LOGIC_CONVERSION) +
-                       (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_HORIZONTAL);
-        float mapY = -(((float) playerY / GRAPHIC_TO_LOGIC_CONVERSION) +
-                       (((float) playerHeight / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_VERTIAL);
+        float mapRenderX = -(((float) playerX / GRAPHIC_TO_LOGIC_CONVERSION) +
+                             (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_HORIZONTAL);
+        float mapRenderY = -(((float) playerY / GRAPHIC_TO_LOGIC_CONVERSION) +
+                             (((float) playerHeight / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f) - WINDOW_CENTER_VERTICAL);
 
-        view.setMapLocation(mapX, mapY);
+        //check player too far left and correct for overscroll
+        if ((playerMiddleHorizontal / GRAPHIC_TO_LOGIC_CONVERSION) < (WINDOW_CENTER_HORIZONTAL))
+        {
+            System.out.println("Player too far left.");
+            mapRenderX = 0;
+            playerRenderX = ((float) playerX / (float) GRAPHIC_TO_LOGIC_CONVERSION);
+        }
+
+        //check player too far right and correct for overscroll
+        if ((playerMiddleHorizontal / GRAPHIC_TO_LOGIC_CONVERSION) >
+            ((MODEL.getMap().getWidth() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)) -
+             WINDOW_CENTER_HORIZONTAL))
+        {
+            System.out.println("Player too far right.");
+            mapRenderX = ((WINDOW_WIDTH / GRAPHIC_SCALE) -
+                          (MODEL.getMap().getWidth() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)));
+            playerRenderX = ((WINDOW_WIDTH / GRAPHIC_SCALE) - (MODEL.getMap().getWidth() *
+                                                               (MODEL.getMap().getTileWidth() /
+                                                                GRAPHIC_TO_LOGIC_CONVERSION))) +
+                            ((float) playerX / (float) GRAPHIC_TO_LOGIC_CONVERSION);
+        }
+
+        //check player too far up and correct for overscroll
+        if ((playerMiddleVertical / GRAPHIC_TO_LOGIC_CONVERSION) < (WINDOW_CENTER_VERTICAL))
+        {
+            System.out.println("Player too far up.");
+            mapRenderY = 0;
+            playerRenderY = ((float) playerY / (float) GRAPHIC_TO_LOGIC_CONVERSION);
+        }
+
+        //check player too far down and correct for overscroll
+        if ((playerMiddleVertical / GRAPHIC_TO_LOGIC_CONVERSION) >
+            ((MODEL.getMap().getHeight() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)) -
+             WINDOW_CENTER_VERTICAL))
+        {
+            System.out.println("Player too far down.");
+            mapRenderY = ((WINDOW_HEIGHT / GRAPHIC_SCALE) -
+                          (MODEL.getMap().getHeight() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)));
+            playerRenderY = (((WINDOW_HEIGHT / GRAPHIC_SCALE) - (MODEL.getMap().getHeight() * (
+                MODEL.getMap().getTileWidth() /
+                GRAPHIC_TO_LOGIC_CONVERSION))) +
+                             ((float) playerY / (float) GRAPHIC_TO_LOGIC_CONVERSION));
+        }
+
+        VIEW.setMapLocation(mapRenderX, mapRenderY);
         //end map draw position updating
 
         //player draw position updating
-        float centeredPlayerX =
-            WINDOW_CENTER_HORIZONTAL - (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
-        float centeredPlayerY =
-            WINDOW_CENTER_VERTIAL - (((float) playerHeight / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
-
-        view.setPlayerLocation(centeredPlayerX, centeredPlayerY);
+        VIEW.setPlayerLocation(playerRenderX, playerRenderY);
         //end player draw position updating
 
         //player graphic/animation updating
         if (player.isOnWallLeft())
         {
-            view.setPlayerGraphicIndex(wallLeft);
+            VIEW.setPlayerGraphicIndex(wallLeft);
         }
         else if (player.isOnWallRight())
         {
-            view.setPlayerGraphicIndex(wallRight);
+            VIEW.setPlayerGraphicIndex(wallRight);
         }
         else if (playerDY < 0)
         {
             if ((player.isResetJump()) ||
-                ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight)))
+                ((VIEW.getPlayerGraphicIndex() != jumpLeft) && (VIEW.getPlayerGraphicIndex() != jumpRight)))
             {
                 player.setResetJump(false);
-                view.resetJump();
+                VIEW.resetJump();
             }
             if (playerDX < 0)
             {
-                view.setPlayerGraphicIndex(jumpLeft);
+                VIEW.setPlayerGraphicIndex(jumpLeft);
             }
             else if (playerDX > 0)
             {
-                view.setPlayerGraphicIndex(jumpRight);
+                VIEW.setPlayerGraphicIndex(jumpRight);
             }
-            else if ((view.getPlayerGraphicIndex() == runLeft) ||
-                     (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
-                     (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
+            else if ((VIEW.getPlayerGraphicIndex() == runLeft) ||
+                     (VIEW.getPlayerGraphicIndex() == faceLeft) || (VIEW.getPlayerGraphicIndex() == jumpLeft) ||
+                     (VIEW.getPlayerGraphicIndex() == walkLeft) || (VIEW.getPlayerGraphicIndex() == wallLeft))
             {
-                view.setPlayerGraphicIndex(jumpLeft);
+                VIEW.setPlayerGraphicIndex(jumpLeft);
             }
             else
             {
-                view.setPlayerGraphicIndex(jumpRight);
+                VIEW.setPlayerGraphicIndex(jumpRight);
             }
         }
-        else if (playerDY > 0 || !model.isActorCollisionDown(player))
+        else if (playerDY > 0 || !MODEL.isActorCollisionDown(player))
         {
-            if ((view.getPlayerGraphicIndex() != jumpLeft) && (view.getPlayerGraphicIndex() != jumpRight))
+            if ((VIEW.getPlayerGraphicIndex() != jumpLeft) && (VIEW.getPlayerGraphicIndex() != jumpRight))
             {
-                view.setFall();
+                VIEW.setFall();
             }
             if (playerDX < 0)
             {
-                view.setPlayerGraphicIndex(jumpLeft);
+                VIEW.setPlayerGraphicIndex(jumpLeft);
             }
             else if (playerDX > 0)
             {
-                view.setPlayerGraphicIndex(jumpRight);
+                VIEW.setPlayerGraphicIndex(jumpRight);
             }
-            else if ((view.getPlayerGraphicIndex() == runLeft) ||
-                     (view.getPlayerGraphicIndex() == faceLeft) || (view.getPlayerGraphicIndex() == jumpLeft) ||
-                     (view.getPlayerGraphicIndex() == walkLeft) || (view.getPlayerGraphicIndex() == wallLeft))
+            else if ((VIEW.getPlayerGraphicIndex() == runLeft) ||
+                     (VIEW.getPlayerGraphicIndex() == faceLeft) || (VIEW.getPlayerGraphicIndex() == jumpLeft) ||
+                     (VIEW.getPlayerGraphicIndex() == walkLeft) || (VIEW.getPlayerGraphicIndex() == wallLeft))
             {
-                view.setPlayerGraphicIndex(jumpLeft);
+                VIEW.setPlayerGraphicIndex(jumpLeft);
             }
             else
             {
-                view.setPlayerGraphicIndex(jumpRight);
+                VIEW.setPlayerGraphicIndex(jumpRight);
             }
         }
         else if (playerDX > 0)
         {
-            view.setPlayerGraphicIndex(runRight);
+            VIEW.setPlayerGraphicIndex(runRight);
         }
         else if (playerDX < 0)
         {
-            view.setPlayerGraphicIndex(runLeft);
+            VIEW.setPlayerGraphicIndex(runLeft);
         }
         else
         {
-            if ((view.getPlayerGraphicIndex() == runLeft) || (view.getPlayerGraphicIndex() == walkLeft) ||
-                (view.getPlayerGraphicIndex() == wallLeft) || (view.getPlayerGraphicIndex() == jumpLeft))
+            if ((VIEW.getPlayerGraphicIndex() == runLeft) || (VIEW.getPlayerGraphicIndex() == walkLeft) ||
+                (VIEW.getPlayerGraphicIndex() == wallLeft) || (VIEW.getPlayerGraphicIndex() == jumpLeft))
             {
-                view.setPlayerGraphicIndex(faceLeft);
+                VIEW.setPlayerGraphicIndex(faceLeft);
             }
-            else if ((view.getPlayerGraphicIndex() == runRight) || (view.getPlayerGraphicIndex() == walkRight) ||
-                     (view.getPlayerGraphicIndex() == wallRight) || (view.getPlayerGraphicIndex() == jumpRight))
+            else if ((VIEW.getPlayerGraphicIndex() == runRight) || (VIEW.getPlayerGraphicIndex() == walkRight) ||
+                     (VIEW.getPlayerGraphicIndex() == wallRight) || (VIEW.getPlayerGraphicIndex() == jumpRight))
             {
-                view.setPlayerGraphicIndex(faceRight);
+                VIEW.setPlayerGraphicIndex(faceRight);
             }
         }
         //end player graphic/animation updating
-        //end view updating
+        //end VIEW updating
 
-        view.draw(g);
+        VIEW.draw(g);
     }
 
     /**
@@ -525,7 +571,7 @@ public class Presenter extends BasicGameState
     {
         //System.out.println(delta);
 
-        playerUpdater.update(model, container.getInput());
+        PLAYER_UPDATER.update(MODEL, container.getInput());
 
         //example of requesting game state change, i.e. to the main menu or fight state
         /*if (false) {

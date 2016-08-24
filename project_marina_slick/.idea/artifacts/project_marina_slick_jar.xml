@@ -4,6 +4,7 @@
     <root id="archive" name="project_marina_slick.jar">
       <element id="module-output" name="project_marina_slick" />
       <element id="library" level="project" name="slick" />
+      <element id="library" level="project" name="jdom" />
     </root>
   </artifact>
 </component>
