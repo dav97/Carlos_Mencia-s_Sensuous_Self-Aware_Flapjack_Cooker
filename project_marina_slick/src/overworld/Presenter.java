@@ -427,7 +427,7 @@ public class Presenter extends BasicGameState
         //check player too far left and correct for overscroll
         if ((playerMiddleHorizontal / GRAPHIC_TO_LOGIC_CONVERSION) < (WINDOW_CENTER_HORIZONTAL))
         {
-            System.out.println("Player too far left.");
+            //System.out.println("Player too far left.");
             mapRenderX = 0;
             playerRenderX = ((float) playerX / (float) GRAPHIC_TO_LOGIC_CONVERSION);
         }
@@ -437,7 +437,7 @@ public class Presenter extends BasicGameState
             ((MODEL.getMap().getWidth() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)) -
              WINDOW_CENTER_HORIZONTAL))
         {
-            System.out.println("Player too far right.");
+            //System.out.println("Player too far right.");
             mapRenderX = ((WINDOW_WIDTH / GRAPHIC_SCALE) -
                           (MODEL.getMap().getWidth() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)));
             playerRenderX = ((WINDOW_WIDTH / GRAPHIC_SCALE) - (MODEL.getMap().getWidth() *
@@ -449,7 +449,7 @@ public class Presenter extends BasicGameState
         //check player too far up and correct for overscroll
         if ((playerMiddleVertical / GRAPHIC_TO_LOGIC_CONVERSION) < (WINDOW_CENTER_VERTICAL))
         {
-            System.out.println("Player too far up.");
+            //System.out.println("Player too far up.");
             mapRenderY = 0;
             playerRenderY = ((float) playerY / (float) GRAPHIC_TO_LOGIC_CONVERSION);
         }
@@ -459,7 +459,7 @@ public class Presenter extends BasicGameState
             ((MODEL.getMap().getHeight() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)) -
              WINDOW_CENTER_VERTICAL))
         {
-            System.out.println("Player too far down.");
+            //System.out.println("Player too far down.");
             mapRenderY = ((WINDOW_HEIGHT / GRAPHIC_SCALE) -
                           (MODEL.getMap().getHeight() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)));
             playerRenderY = (((WINDOW_HEIGHT / GRAPHIC_SCALE) - (MODEL.getMap().getHeight() * (
