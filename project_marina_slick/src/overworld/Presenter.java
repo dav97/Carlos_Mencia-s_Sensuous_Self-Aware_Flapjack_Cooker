@@ -455,7 +455,7 @@ public class Presenter extends BasicGameState
         }
 
         //check player too far down and correct for overscroll
-        if ((playerMiddleVertical / GRAPHIC_TO_LOGIC_CONVERSION) >
+        if (((playerMiddleVertical / GRAPHIC_TO_LOGIC_CONVERSION) + 1) > //+1 to force round up
             ((MODEL.getMap().getHeight() * (MODEL.getMap().getTileWidth() / GRAPHIC_TO_LOGIC_CONVERSION)) -
              WINDOW_CENTER_VERTICAL))
         {
