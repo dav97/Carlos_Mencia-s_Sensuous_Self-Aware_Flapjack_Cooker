@@ -429,6 +429,8 @@ public class Presenter extends BasicGameState
         long  playerMiddleHorizontal = playerX + (playerWidth / 2);
         long  playerMiddleVertical   = playerY + (playerHeight / 2);
 
+        //System.out.println(playerDY);
+
         float playerRenderX =
             WINDOW_CENTER_HORIZONTAL - (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
         float playerRenderY =
