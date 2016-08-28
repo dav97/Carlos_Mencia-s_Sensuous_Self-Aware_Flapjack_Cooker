@@ -94,8 +94,8 @@ public class Presenter extends BasicGameState
         loadPlayerGraphics();
 
         PLAYER_REF = DEFAULT_PLAYER_REF;
-        MODEL.spawnActor(DEFAULT_PLAYER_REF, TILED_HOOK_PROPERTY_SPAWN, true);
-        MODEL.getMap().setHookSpawn(TILED_HOOK_PROPERTY_SPAWN);
+        MODEL.spawnActor(DEFAULT_PLAYER_REF, MAP_HOOK, true);
+        MODEL.getMap().setHookSpawn(MAP_HOOK);
         //end player setup
 
         PLAYER_UPDATER = new PlayerUpdater(this, PLAYER_REF);
@@ -114,9 +114,9 @@ public class Presenter extends BasicGameState
      */
     private void loadMap(String loadMapName) throws SlickException
     {
-        System.out.println(MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
+        System.out.println(MAP_RESOURCE_PATH + loadMapName + "/" + loadMapName + TILED_MAP_EXTENSION);
         InputStream inputStream = ResourceLoader.getResourceAsStream(
-            MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
+            MAP_RESOURCE_PATH + loadMapName + "/" + loadMapName + TILED_MAP_EXTENSION);
         TiledMap tiledMap              = new TiledMap(inputStream, MAP_TILESET_PATH);
         int      tiledCollisionLayerId = tiledMap.getLayerIndex(TILED_COLLISION_LAYER_NAME);
         int      tiledReferenceLayerId = tiledMap.getLayerIndex(TILED_REFERENCE_LAYER_NAME);
@@ -156,34 +156,51 @@ public class Presenter extends BasicGameState
                             mapHooks);
 
         inputStream = ResourceLoader.getResourceAsStream(
-            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_FOREGROUND_POSTFIX + GRAPHICS_EXTENSION);
+            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_DIRECTORY + loadMapName + MAP_GRAPHIC_FOREGROUND_POSTFIX +
+            GRAPHICS_EXTENSION);
         Image mapForegroundImage =
             new Image(inputStream,
-                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_FOREGROUND_POSTFIX + GRAPHICS_EXTENSION,
+                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_DIRECTORY + loadMapName +
+                      MAP_GRAPHIC_FOREGROUND_POSTFIX + GRAPHICS_EXTENSION,
                       false,
                       FILTER_NEAREST);
 
         VIEW.setMapForegroundImage(mapForegroundImage);
 
         inputStream = ResourceLoader.getResourceAsStream(
-            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_MIDGROUND_POSTFIX + GRAPHICS_EXTENSION);
+            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_DIRECTORY + loadMapName + MAP_GRAPHIC_MIDGROUND_POSTFIX +
+            GRAPHICS_EXTENSION);
         Image mapMidgroundImage =
             new Image(inputStream,
-                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_MIDGROUND_POSTFIX + GRAPHICS_EXTENSION,
+                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_DIRECTORY + loadMapName +
+                      MAP_GRAPHIC_MIDGROUND_POSTFIX + GRAPHICS_EXTENSION,
                       false,
                       FILTER_NEAREST);
 
         VIEW.setMapMidgroundImage(mapMidgroundImage);
 
         inputStream = ResourceLoader.getResourceAsStream(
-            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_BACKGROUND_POSTFIX + GRAPHICS_EXTENSION);
+            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_DIRECTORY + loadMapName + MAP_GRAPHIC_BACKGROUND_POSTFIX +
+            GRAPHICS_EXTENSION);
         Image mapBackgroundImage =
             new Image(inputStream,
-                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_BACKGROUND_POSTFIX + GRAPHICS_EXTENSION,
+                      MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_DIRECTORY + loadMapName +
+                      MAP_GRAPHIC_BACKGROUND_POSTFIX + GRAPHICS_EXTENSION,
                       false,
                       FILTER_NEAREST);
 
         VIEW.setMapBackgroundImage(mapBackgroundImage);
+
+        inputStream = ResourceLoader.getResourceAsStream(
+            MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_DIRECTORY + loadMapName + MAP_GRAPHIC_SKYBOX_POSTFIX +
+            GRAPHICS_EXTENSION);
+        Image mapSkyboxImage = new Image(inputStream,
+                                         MAP_RESOURCE_PATH + loadMapName + MAP_GRAPHIC_DIRECTORY + loadMapName +
+                                         MAP_GRAPHIC_SKYBOX_POSTFIX + GRAPHICS_EXTENSION,
+                                         false,
+                                         FILTER_NEAREST);
+
+        VIEW.setMapSkyboxImage(mapSkyboxImage);
 
         MAP_HOOK = loadMapName;
         MODEL.getMap().setHookCurrent(MAP_HOOK);

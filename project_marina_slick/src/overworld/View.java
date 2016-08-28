@@ -26,6 +26,7 @@ class View
     private Image    mapForegroundImage;
     private Image    mapMidgroundImage;
     private Image    mapBackgroundImage;
+    private Image    mapSkyboxImage;
     private float    mapX;
     private float    mapY;
 
@@ -67,6 +68,8 @@ class View
         g.scale(scale, scale);
 
         //TODO: performance, only draw the part of the map on screen
+        mapSkyboxImage.draw(mapX, mapY);
+
         mapBackgroundImage.draw(mapX, mapY);
 
         mapMidgroundImage.draw(mapX, mapY);
@@ -160,6 +163,11 @@ class View
     void setMapBackgroundImage(Image mapBackgroundImage)
     {
         this.mapBackgroundImage = mapBackgroundImage;
+    }
+
+    void setMapSkyboxImage(Image mapSkyboxImage)
+    {
+        this.mapSkyboxImage = mapSkyboxImage;
     }
 
     /**

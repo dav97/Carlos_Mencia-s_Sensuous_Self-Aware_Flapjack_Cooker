@@ -78,7 +78,7 @@ class Actor extends Entity
     {
         SAXBuilder saxBuilder = new SAXBuilder();
         InputStream inputStream = ResourceLoader.getResourceAsStream(
-            ACTOR_PROPERTIES_RESOURCE_PATH + ref + XML_EXTENSION);
+            ACTOR_PROPERTIES_RESOURCE_PATH + ref + "/" + ref + XML_EXTENSION);
         Document document = null;
 
         try
