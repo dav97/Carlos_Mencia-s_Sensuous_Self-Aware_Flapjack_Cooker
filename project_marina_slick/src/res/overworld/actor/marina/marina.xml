@@ -13,6 +13,6 @@
         <instantaneousWallJumpDY>-6500</instantaneousWallJumpDY>
         <gravityDDY>120</gravityDDY>
         <gravityMaxDY>10000</gravityMaxDY>
-        <gravityMaxWallDY>1000</gravityMaxWallDY>
+        <gravityMaxWallDY>5000</gravityMaxWallDY>
     </movement>
 </actor>

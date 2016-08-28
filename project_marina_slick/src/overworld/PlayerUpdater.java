@@ -293,6 +293,10 @@ class PlayerUpdater
             {
                 proposedPlayerDY = Math.min(player.getDY() - player.getGravityDDY(), maxDYOnWall);
             }
+            else
+            {
+                proposedPlayerDY = maxDYOnWall;
+            }
         }
         //else if the player is not on solid ground,
         else if (!model.isActorCollisionDown(player))
