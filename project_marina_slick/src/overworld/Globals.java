@@ -78,6 +78,8 @@ class Globals
     static final String DEFAULT_PLAYER_REF             = "marina";
     static final String XML_EXTENSION                  = ".xml";
 
+    static final String NPC_HOOK_PREFIX = "npc_";
+
     enum PlayerGraphicIndex
     {
         faceFront,

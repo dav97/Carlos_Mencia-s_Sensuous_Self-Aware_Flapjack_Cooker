@@ -493,11 +493,11 @@ public class Presenter extends BasicGameState
         //end player draw position updating
 
         //player graphic/animation updating
-        if (player.isOnWallLeft())
+        if (player.isOnWallLeft() && playerDY >= 0)
         {
             VIEW.setPlayerGraphicIndex(wallLeft);
         }
-        else if (player.isOnWallRight())
+        else if (player.isOnWallRight() && playerDY >= 0)
         {
             VIEW.setPlayerGraphicIndex(wallRight);
         }
