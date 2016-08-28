@@ -1,0 +1,18 @@
+<actor>
+    <general>
+        <width>160000</width>
+        <height>270000</height>
+        <graphicOffsetX>0</graphicOffsetX>
+        <graphicOffsetY>0</graphicOffsetY>
+    </general>
+    <movement>
+        <inputDDX>60</inputDDX>
+        <inputMaxDX>5000</inputMaxDX>
+        <instantaneousJumpDY>-12000</instantaneousJumpDY>
+        <instantaneousWallJumpDX>6500</instantaneousWallJumpDX>
+        <instantaneousWallJumpDY>-6500</instantaneousWallJumpDY>
+        <gravityDDY>120</gravityDDY>
+        <gravityMaxDY>10000</gravityMaxDY>
+        <gravityMaxWallDY>1000</gravityMaxWallDY>
+    </movement>
+</actor>

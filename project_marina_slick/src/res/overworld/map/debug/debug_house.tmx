@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="23" height="13" tilewidth="16" tileheight="16" backgroundcolor="#000000" nextobjectid="1">
+ <tileset firstgid="1" name="maptile1" tilewidth="16" tileheight="16" spacing="1" tilecount="413" columns="7">
+  <image source="maptile1.png" width="118" height="1002"/>
+  <tile id="71">
+   <properties>
+    <property name="hook" value="debug"/>
+   </properties>
+  </tile>
+  <tile id="311">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="317">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="319">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="328">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="409">
+   <properties>
+    <property name="hook" value="debug"/>
+   </properties>
+  </tile>
+  <tile id="412">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="background" width="23" height="13">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAX4wBcqYHxmOzEisCMjKh8bRlZDitnWRJhtTabZtHQ3Lcw2RdNnimYejG8GVWNKhrvxhbcVENvSKLwdsajBZ/ZQAgB1BLvhrAQAAA==
+  </data>
+ </layer>
+ <layer name="midground" width="23" height="13">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAX4gD0jA4MFBRikHxewwyMHAjYE5B0oMJsQoMTsIhq6u5KGZjfQ0OwOCs32pADjM3soAQB3fTNjrAQAAA==
+  </data>
+ </layer>
+ <layer name="foreground" width="23" height="13">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBSMgsEPAMYbaWusBAAA
+  </data>
+ </layer>
+ <layer name="collisionlayer" width="23" height="13" opacity="0.53">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAX4wFxGyjE+syl126jZI8NsWqXBoQQAXHH23KwEAAA=
+  </data>
+ </layer>
+ <layer name="reflayer" width="23" height="13" opacity="0.68">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBRgA7MYB9oFowAZAABJhw3frAQAAA==
+  </data>
+ </layer>
+</map>
