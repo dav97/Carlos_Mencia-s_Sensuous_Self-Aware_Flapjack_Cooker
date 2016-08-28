@@ -315,6 +315,8 @@ class PlayerUpdater
         }
         //end gravity
 
+        System.out.println(proposedPlayerDY);
+
         return proposedPlayerDY;
     }
 
