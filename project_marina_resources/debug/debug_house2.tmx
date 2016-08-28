@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="23" height="13" tilewidth="16" tileheight="16" backgroundcolor="#000000" nextobjectid="1">
+ <tileset firstgid="1" name="maptile1" tilewidth="16" tileheight="16" spacing="1" tilecount="434" columns="7">
+  <image source="maptile1.PNG" width="118" height="1053"/>
+ </tileset>
+ <tileset firstgid="435" name="maptile1" tilewidth="16" tileheight="16" spacing="1" tilecount="434" columns="7">
+  <image source="maptile1.PNG" width="118" height="1053"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="23" height="13">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF+MAXKmB8Zt9gQuDrTKh8bBhZDSlmXyTC7Itkmk1Ld9PC7NNo+mB8J0YIhvHNGCFqTpPhbvTwhpkNwheAfFtGiBoQn5ph4shIWpgMJQAAt4xxNA==
+  </data>
+ </layer>
+ <layer name="Tile Layer 2" width="23" height="13">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF+MBVJgaGcxRgkH5c4AoeORC4RED+GgVmEwKUmM3BTDuz+WlothgNzZaj0Oz7FGB8Zg8lAADb2Sf7
+  </data>
+ </layer>
+</map>

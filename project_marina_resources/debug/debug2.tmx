@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="maptile1" tilewidth="16" tileheight="16" spacing="1" tilecount="434" columns="7">
+  <image source="maptile1.PNG" width="118" height="1053"/>
+ </tileset>
+ <tileset firstgid="435" name="logitile0" tilewidth="16" tileheight="16" spacing="1" tilecount="7" columns="7">
+  <image source="logitile0.png" width="118" height="16"/>
+  <tile id="0">
+   <properties>
+    <property name="clip" value="0"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="ref" value="debug_house2"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="skybox" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMA6DOYP3LqYb9kNBLqqqqqqqqqqqq6vsAy4nkvw==
+  </data>
+ </layer>
+ <layer name="background" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztlstOAjEUhs8koq8jG3Xh5RFcunPnjhcBH8hrFIUXQcG74gXvLvwNbaaMQEuqndPM+ZIv02Ya2vxM/hmiYrAFtyd0J5eT8kTnt09pPrZxqPxa8ASewjbswDN4Hmh/F3R+DUpzso1D5XcBL+EVvIY38BbeBdrfBZ1fk9KcbONQ+XXhPXyAj/AJ9uBzoP1d4Nx/L/AVvsF3+AE/4Veg/V3gnF83Y4/4PH+L6sr5/REDnN8fMcD5/REDnPsvBqT//JD+80P6zw/pPz+k//yQ/vND+s+PPPpvNfH8AUZI/9lZG/N/S//ZWXfIT/rvN7PqupEMzk3k+280ZXWtJINzEzM/s+uymveKlN8SXIYrND6/aer325RSZ6XnDbWmaPn94PL8zVC/30rKXbhnzJtqTQz5/cX30RycH+JCZt0BPBziETweca/ufzwhAjbzPkDE1Mgtv+p/HyQyaoYuVCdYG5JvQo8sKQ==
+  </data>
+ </layer>
+ <layer name="midground" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztmMuuAUEQhtveu3kHFmyw4WxPgo2xQUiwOsnxoKoSFaX0XIye7kJ9yb+Ya9o31aVnnDMMwzCMuHRaqUegnxlkAfmvmXP8IatiCVlB9pBTTvYFxw/xh3zHb8NzZFFynPwhO/fo58jO5cfRZ2p3MViJbZqvxFKc8+eK62vn2ffJSH9ryJZtS3+8xnjtfSvSn0T6Q9Ch5vmJPa/pvkfU8Wfc2Hr2YQ+cX5M58/cs2AM3LD7HxmcRq98ZYcEeV7aG1kyKurP/h9fANUnGkvcOovH9X0OfK/PHvxnQGrmrYNxaqOqviN4X+wzhr2mG8HxGkLHC59SEv1Dzm7wNIFPIzxv6k99gYjK5epu+sb8UyLqj9BXO4Vf80doR1zftmuHrT7qXrDtZg/KalMnco7+qvzlEzcrn5yr4k9doShUXIec8vxcy9MxbXw9M7UmTPySv58nwHpjalcwFBKzYfQ==
+  </data>
+ </layer>
+ <layer name="foreground" width="80" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt0DEOgDAMA8DCBEL8/7ssHRMPiKncSZHswUvGAAAAAAAAAAC+cje56itLf0iuJld9ZekPb3d/+N82b29y2qRd1Vd0zDubnDZpV/WVPNpxAWo=
+  </data>
+ </layer>
+ <layer name="collisions" width="80" height="30" opacity="0.46">
+  <data encoding="base64" compression="zlib">
+   eJztmEsOgCAMRPH+x/GCxoWREBuQtji185IudKHD4xcohRBCCCFo7Ju+MhPdn/f/e9+vHfT8oLlbQdtGyUn7LDnK4u1C6y87b+Zv+w7V38psM/7IzZObjPuAJfSXD/ZxTKLPzy+yc33TMXqGQHSLkGfGH0JuFCzOsJl9RrgDQF0/Tjz8WbUzwt6GPP7+4A8lE1K+Gk2+XjtZ42XZf9HLc8zSH/1JdQBk9C/Q
+  </data>
+ </layer>
+ <layer name="reference" width="80" height="30" opacity="0.74">
+  <properties>
+   <property name="ref" value="debug2"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzrEJAEAIwEDdfx3dz8IdfHjuIH0iAAAAAAAAAPhN5euDe50bAFwapnsCIg==
+  </data>
+ </layer>
+</map>
