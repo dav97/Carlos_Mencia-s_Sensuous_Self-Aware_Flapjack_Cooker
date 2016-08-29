@@ -63,7 +63,7 @@ class Model
      * based on the location of the given hook in the map.
      *
      * @param actorRef String: A an Actor properties reference.
-     * @param hook String: A reference point in the map.
+     * @param hook     String: A reference point in the map.
      */
     String spawnActor(String actorRef, String hook, boolean unique)
     {
@@ -382,5 +382,22 @@ class Model
     Entity getEntityByRef(String ref)
     {
         return entityMap.get(ref);
+    }
+
+    void spawnEntities()
+    {
+        for (String[] row : map.getHooks())
+        {
+            for (String hook : row)
+            {
+                for (String actor_hook : ACTOR_HOOK_LIST)
+                {
+                    if (hook.equals(actor_hook))
+                    {
+
+                    }
+                }
+            }
+        }
     }
 }

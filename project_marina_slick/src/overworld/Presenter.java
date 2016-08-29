@@ -204,6 +204,7 @@ public class Presenter extends BasicGameState
 
         MAP_HOOK = loadMapName;
         MODEL.getMap().setHookCurrent(MAP_HOOK);
+        MODEL.spawnEntities();
     }
 
     /**

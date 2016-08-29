@@ -22,7 +22,7 @@
   </tile>
   <tile id="3">
    <properties>
-    <property name="hook" value="npc_sg"/>
+    <property name="hook" value="save_girl"/>
    </properties>
   </tile>
  </tileset>
