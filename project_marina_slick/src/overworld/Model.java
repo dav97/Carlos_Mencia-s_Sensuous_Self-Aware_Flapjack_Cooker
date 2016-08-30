@@ -386,15 +386,17 @@ class Model
 
     void spawnEntities()
     {
-        for (String[] row : map.getHooks())
+        for (int x = 0; x < map.getHooks().length; ++x)
         {
-            for (String hook : row)
+            for (int y = 0; y < map.getHooks()[x].length; ++y)
             {
                 for (String actor_hook : ACTOR_HOOK_LIST)
                 {
-                    if (hook.equals(actor_hook))
+                    if (map.getHooks()[x][y].equals(actor_hook))
                     {
-
+                        //Actor actor = new Actor(x * map.getTileWidth(), y * map.getTileWidth(), map.getHooks()[x][y]);
+                        System.out.println("Actor hook found");
+                        spawnActor(map.getHooks()[x][y], map.getHooks()[x][y], true);
                     }
                 }
             }
