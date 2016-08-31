@@ -117,9 +117,9 @@ public class Presenter extends BasicGameState
      */
     private void loadMap(String loadMapName) throws SlickException
     {
-        System.out.println(MAP_RESOURCE_PATH + loadMapName + "/" + loadMapName + TILED_MAP_EXTENSION);
+        System.out.println(MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
         InputStream inputStream = ResourceLoader.getResourceAsStream(
-            MAP_RESOURCE_PATH + loadMapName + "/" + loadMapName + TILED_MAP_EXTENSION);
+            MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
         TiledMap tiledMap              = new TiledMap(inputStream, MAP_TILESET_PATH);
         int      tiledCollisionLayerId = tiledMap.getLayerIndex(TILED_COLLISION_LAYER_NAME);
         int      tiledReferenceLayerId = tiledMap.getLayerIndex(TILED_REFERENCE_LAYER_NAME);
