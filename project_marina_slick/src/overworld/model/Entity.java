@@ -8,7 +8,7 @@ package overworld.model;
  * @version dev04
  * @since 2016_0822
  */
-class Entity
+public class Entity
 {
     private long x;
     private long y;
