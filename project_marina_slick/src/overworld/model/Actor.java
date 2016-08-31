@@ -1,4 +1,4 @@
-package overworld;
+package overworld.model;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -13,14 +13,14 @@ import static overworld.Globals.ACTOR_PROPERTIES_RESOURCE_PATH;
 import static overworld.Globals.XML_EXTENSION;
 
 /**
- * Each overworld.Actor object will store the data associated with one actor present
+ * Each overworld.model.Actor object will store the data associated with one actor present
  * in the Overworld. This includes the Player, Enemies and other NPCs.
  *
  * @author scorple
  * @version dev04
  * @since 2016_0822
  */
-class Actor extends Entity
+public class Actor extends Entity
 {
     private long dX;
     private long dY;
@@ -127,7 +127,7 @@ class Actor extends Entity
      *
      * @return long: Current actor dX.
      */
-    long getDX()
+    public long getDX()
     {
         return dX;
     }
@@ -137,7 +137,7 @@ class Actor extends Entity
      *
      * @param dX long: New actor dX.
      */
-    void setDX(long dX)
+    public void setDX(long dX)
     {
         this.dX = dX;
     }
@@ -147,7 +147,7 @@ class Actor extends Entity
      *
      * @return long: Current actor dY.
      */
-    long getDY()
+    public long getDY()
     {
         return dY;
     }
@@ -157,7 +157,7 @@ class Actor extends Entity
      *
      * @param dY long: New actor dY.
      */
-    void setDY(long dY)
+    public void setDY(long dY)
     {
         this.dY = dY;
     }
@@ -167,7 +167,7 @@ class Actor extends Entity
      *
      * @return boolean: True if the actor is on a left wall, otherwise false.
      */
-    boolean isOnWallLeft()
+    public boolean isOnWallLeft()
     {
         return onWallLeft;
     }
@@ -177,7 +177,7 @@ class Actor extends Entity
      *
      * @param onWallLeft boolean: True if the actor is on a left wall, otherwise false.
      */
-    void setOnWallLeft(boolean onWallLeft)
+    public void setOnWallLeft(boolean onWallLeft)
     {
         this.onWallLeft = onWallLeft;
     }
@@ -187,7 +187,7 @@ class Actor extends Entity
      *
      * @return boolean: True if the actor is on a right wall, otherwise false
      */
-    boolean isOnWallRight()
+    public boolean isOnWallRight()
     {
         return onWallRight;
     }
@@ -197,7 +197,7 @@ class Actor extends Entity
      *
      * @param onWallRight boolean: True if the actor is on a right wall, otherwise false
      */
-    void setOnWallRight(boolean onWallRight)
+    public void setOnWallRight(boolean onWallRight)
     {
         this.onWallRight = onWallRight;
     }
@@ -207,7 +207,7 @@ class Actor extends Entity
      *
      * @return long: The standard actor ddX due to input.
      */
-    long getInputDDX()
+    public long getInputDDX()
     {
         return inputDDX;
     }
@@ -227,7 +227,7 @@ class Actor extends Entity
      *
      * @return long: The maximum actor dX due to horizontal input.
      */
-    long getInputMaxDX()
+    public long getInputMaxDX()
     {
         return inputMaxDX;
     }
@@ -247,7 +247,7 @@ class Actor extends Entity
      *
      * @return long: The dY to assert at the instant the actor jumps.
      */
-    long getInstantaneousJumpDY()
+    public long getInstantaneousJumpDY()
     {
         return instantaneousJumpDY;
     }
@@ -267,7 +267,7 @@ class Actor extends Entity
      *
      * @return long: The dX to assert at the instant the actor jumps from a wall.
      */
-    long getInstantaneousWallJumpDX()
+    public long getInstantaneousWallJumpDX()
     {
         return instantaneousWallJumpDX;
     }
@@ -287,7 +287,7 @@ class Actor extends Entity
      *
      * @return long: The dY to assert at the instant the actor jumps from a wall.
      */
-    long getInstantaneousWallJumpDY()
+    public long getInstantaneousWallJumpDY()
     {
         return instantaneousWallJumpDY;
     }
@@ -307,7 +307,7 @@ class Actor extends Entity
      *
      * @return long: The standard actor ddY due to gravity.
      */
-    long getGravityDDY()
+    public long getGravityDDY()
     {
         return gravityDDY;
     }
@@ -327,7 +327,7 @@ class Actor extends Entity
      *
      * @return long: The maximum actor dY due to gravity.
      */
-    long getGravityMaxDY()
+    public long getGravityMaxDY()
     {
         return gravityMaxDY;
     }
@@ -347,7 +347,7 @@ class Actor extends Entity
      *
      * @return long: The maximum actor dY due to gravity while on a wall.
      */
-    long getGravityMaxWallDY()
+    public long getGravityMaxWallDY()
     {
         return gravityMaxWallDY;
     }
@@ -367,7 +367,7 @@ class Actor extends Entity
      *
      * @return boolean: True if we should reset the jump animation, false otherwise.
      */
-    boolean isResetJump()
+    public boolean isResetJump()
     {
         return resetJump;
     }
@@ -377,7 +377,7 @@ class Actor extends Entity
      *
      * @param resetJump boolean: True if we should reset the jump animation, false otherwise.
      */
-    void setResetJump(boolean resetJump)
+    public void setResetJump(boolean resetJump)
     {
         this.resetJump = resetJump;
     }
@@ -387,7 +387,7 @@ class Actor extends Entity
      *
      * @return long: Logical units to horizontally offset the actor graphic.
      */
-    long getGraphicOffsetX()
+    public long getGraphicOffsetX()
     {
         return graphicOffsetX;
     }
@@ -407,7 +407,7 @@ class Actor extends Entity
      *
      * @return long: Logical units to vertically offset the actor graphic.
      */
-    long getGraphicOffsetY()
+    public long getGraphicOffsetY()
     {
         return graphicOffsetY;
     }

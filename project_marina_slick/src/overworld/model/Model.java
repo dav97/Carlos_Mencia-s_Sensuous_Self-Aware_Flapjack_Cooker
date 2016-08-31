@@ -1,11 +1,11 @@
-package overworld;
+package overworld.model;
 
 import java.util.HashMap;
 
 import static overworld.Globals.*;
 
 /**
- * overworld.Model holds all the logical data for the overworld game state and acts as
+ * overworld.model.Model holds all the logical data for the overworld game state and acts as
  * an interface to that data, regularly queried and updated by the overworld presenter
  * and its members.
  *
@@ -13,7 +13,7 @@ import static overworld.Globals.*;
  * @version dev01
  * @since 2016_0801
  */
-class Model
+public class Model
 {
     private Map map;
 
@@ -22,7 +22,7 @@ class Model
     /**
      * Default constructor for this model.
      */
-    Model()
+    public Model()
     {
         entityMap = new HashMap<>();
     }
@@ -43,7 +43,7 @@ class Model
      *                  such as spawn and transition points.
      *                  0
      */
-    void setupMapModel(int mapWidth, int mapHeight, long tileWidth, Boolean[][] mapClip, String[][] mapHooks)
+    public void setupMapModel(int mapWidth, int mapHeight, long tileWidth, Boolean[][] mapClip, String[][] mapHooks)
     {
         map = new Map(mapWidth, mapHeight, tileWidth, mapClip, mapHooks);
     }
@@ -53,7 +53,7 @@ class Model
      *
      * @return Map: The Map object associated with the currently loaded map.
      */
-    Map getMap()
+    public Map getMap()
     {
         return map;
     }
@@ -65,7 +65,7 @@ class Model
      * @param actorRef String: A an Actor properties reference.
      * @param hook     String: A reference point in the map.
      */
-    String spawnActor(String actorRef, String hook, boolean unique)
+    public String spawnActor(String actorRef, String hook, boolean unique)
     {
         int    id = 0;
         String uniqueActorRef;
@@ -130,7 +130,7 @@ class Model
      * @return long: The player distance from the tile she will
      * collide with if she moved the proposed amount.
      */
-    long getActorHorizontalCollisionDistanceByDX(Actor actor, long dX)
+    public long getActorHorizontalCollisionDistanceByDX(Actor actor, long dX)
     {
         long playerXTest = actor.getX();
 
@@ -199,7 +199,7 @@ class Model
      *
      * @return boolean: True if there is collision immediately left of the player.
      */
-    boolean isActorCollisionLeft(Actor actor)
+    public boolean isActorCollisionLeft(Actor actor)
     {
         return (getActorHorizontalCollisionDistanceByDX(actor, STANDARD_COLLISION_CHECK_DISTANCE_LEFT) == 0.0f);
     }
@@ -210,7 +210,7 @@ class Model
      *
      * @return boolean: True if there is collision immediately right of the player.
      */
-    boolean isActorCollisionRight(Actor actor)
+    public boolean isActorCollisionRight(Actor actor)
     {
         return (getActorHorizontalCollisionDistanceByDX(actor, STANDARD_COLLISION_CHECK_DISTANCE_RIGHT) == 0.0f);
     }
@@ -229,7 +229,7 @@ class Model
      * @return long: The player distance from the tile she will
      * collide with if she moved the proposed amount.
      */
-    long getActorVerticalCollisionDistanceByDY(Actor actor, long dY)
+    public long getActorVerticalCollisionDistanceByDY(Actor actor, long dY)
     {
         long playerYTest = actor.getY();
 
@@ -298,7 +298,7 @@ class Model
      *
      * @return boolean: True if there is collision immediately above the player.
      */
-    boolean isActorCollisionUp(Actor actor)
+    public boolean isActorCollisionUp(Actor actor)
     {
         return (getActorVerticalCollisionDistanceByDY(actor, STANDARD_COLLISION_CHECK_DISTANCE_UP) == 0.0f);
     }
@@ -309,7 +309,7 @@ class Model
      *
      * @return boolean: True if there is collision immediately below the player.
      */
-    boolean isActorCollisionDown(Actor actor)
+    public boolean isActorCollisionDown(Actor actor)
     {
         return (getActorVerticalCollisionDistanceByDY(actor, STANDARD_COLLISION_CHECK_DISTANCE_DOWN) == 0.0f);
     }
@@ -321,7 +321,7 @@ class Model
      * is intersecting with. WARNING: MAY CONTAIN DUPLICATES, ESPECIALLY IF CHECKED
      * DURING JUMP.
      */
-    String[] getActorIntersectingTileHooks(Actor actor)
+    public String[] getActorIntersectingTileHooks(Actor actor)
     {
         int maxPlayerIntersectionTilesTopToBottom =
             (int) (1 + ((actor.getHeight() > map.getTileWidth()) ? (actor.getHeight() / map.getTileWidth()) : 0) +
@@ -379,12 +379,12 @@ class Model
      *
      * @return Entity: The Entity mapped to the given reference tag.
      */
-    Entity getEntityByRef(String ref)
+    public Entity getEntityByRef(String ref)
     {
         return entityMap.get(ref);
     }
 
-    void spawnEntities()
+    public void spawnEntities()
     {
         for (int x = 0; x < map.getHooks().length; ++x)
         {

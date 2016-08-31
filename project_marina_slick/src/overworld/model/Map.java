@@ -1,14 +1,14 @@
-package overworld;
+package overworld.model;
 
 /**
- * Each overworld.Map object will store the data associated with the currently loaded map,
+ * Each overworld.model.Map object will store the data associated with the currently loaded map,
  * including its collision and reference matrix.
  *
  * @author scorple
  * @version dev04
  * @since 2016_0822
  */
-class Map
+public class Map
 {
     private int         width; //the map width in tiles
     private int         height; //the map height in tiles
@@ -29,7 +29,7 @@ class Map
      * @param clip      Boolean[][]: The grid of passable (clip true) and impassable (clip false) tiles.
      * @param hooks     String[][]: The grid of reference hooks in the map.
      */
-    Map(int width, int height, long tileWidth, Boolean[][] clip, String[][] hooks)
+    public Map(int width, int height, long tileWidth, Boolean[][] clip, String[][] hooks)
     {
         this.width = width;
         this.height = height;
@@ -46,7 +46,7 @@ class Map
      *
      * @return int: The width of the map in tiles.
      */
-    int getWidth()
+    public int getWidth()
     {
         return width;
     }
@@ -56,7 +56,7 @@ class Map
      *
      * @return int: The height of the map in tiles.
      */
-    int getHeight()
+    public int getHeight()
     {
         return height;
     }
@@ -66,7 +66,7 @@ class Map
      *
      * @return long: The logical width/height of a map tile.
      */
-    long getTileWidth()
+    public long getTileWidth()
     {
         return tileWidth;
     }
@@ -76,7 +76,7 @@ class Map
      *
      * @return Boolean[][]: The grid of passable (clip true) and impassable (clip false) tiles.
      */
-    Boolean[][] getClip()
+    public Boolean[][] getClip()
     {
         return clip;
     }
@@ -86,7 +86,7 @@ class Map
      *
      * @param clip Boolean[][]: The new grid of passable (clip true) and impassable (clip false) tiles.
      */
-    void setClip(Boolean[][] clip)
+    public void setClip(Boolean[][] clip)
     {
         this.clip = clip;
     }
@@ -96,7 +96,7 @@ class Map
      *
      * @return String[][]: The grid of reference hooks in the map.
      */
-    String[][] getHooks()
+    public String[][] getHooks()
     {
         return hooks;
     }
@@ -106,7 +106,7 @@ class Map
      *
      * @param hooks String[][]: The grid of reference hooks in the map.
      */
-    void setHooks(String[][] hooks)
+    public void setHooks(String[][] hooks)
     {
         this.hooks = hooks;
     }
@@ -116,7 +116,7 @@ class Map
      *
      * @return String: The reference hook for the currently loaded map.
      */
-    String getHookCurrent()
+    public String getHookCurrent()
     {
         return hookCurrent;
     }
@@ -126,7 +126,7 @@ class Map
      *
      * @param hookCurrent String: The reference hook for the currently loaded map.
      */
-    void setHookCurrent(String hookCurrent)
+    public void setHookCurrent(String hookCurrent)
     {
         this.hookCurrent = hookCurrent;
     }
@@ -136,7 +136,7 @@ class Map
      *
      * @return String: The reference hook for the player spawn location.
      */
-    String getHookSpawn()
+    public String getHookSpawn()
     {
         return hookSpawn;
     }
@@ -146,7 +146,7 @@ class Map
      *
      * @param hookSpawn String: The reference hook for the player spawn location.
      */
-    void setHookSpawn(String hookSpawn)
+    public void setHookSpawn(String hookSpawn)
     {
         this.hookSpawn = hookSpawn;
     }

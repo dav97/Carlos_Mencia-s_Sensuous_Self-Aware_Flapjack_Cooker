@@ -1,7 +1,7 @@
-package overworld;
+package overworld.model;
 
 /**
- * overworld.Entity is a generic class for storing the location and size of any
+ * overworld.model.Entity is a generic class for storing the location and size of any
  * applicable object in the Overworld, and extending for more specialized objects.
  *
  * @author scorple

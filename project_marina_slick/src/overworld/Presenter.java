@@ -6,6 +6,9 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.ResourceLoader;
+import overworld.model.Actor;
+import overworld.model.Model;
+import overworld.view.View;
 
 import java.awt.event.ActionListener;
 import java.io.InputStream;

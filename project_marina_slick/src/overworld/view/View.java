@@ -1,4 +1,4 @@
-package overworld;
+package overworld.view;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
@@ -9,14 +9,14 @@ import static overworld.Globals.PlayerGraphicIndex;
 import static overworld.Globals.PlayerGraphicIndex.faceFront;
 
 /**
- * overworld.View holds and renders all the graphical elements for the overworld game state,
+ * overworld.view.View holds and renders all the graphical elements for the overworld game state,
  * updated regularly by the overworld presenter.
  *
  * @author Scorple
  * @version dev01
  * @since 2016_0801
  */
-class View
+public class View
 {
     private float scale;
 
@@ -51,7 +51,7 @@ class View
     /**
      * Default constructor for this view.
      */
-    View()
+    public View()
     {
 
     }
@@ -61,7 +61,7 @@ class View
      *
      * @param g Graphics: The graphics context.
      */
-    void draw(Graphics g)
+    public void draw(Graphics g)
     {
         g.setAntiAlias(false); //this is a pixel-art game, no anti-aliasing here
 
@@ -120,7 +120,7 @@ class View
      *
      * @param scale float: The scale to use for drawing.
      */
-    void setScale(float scale)
+    public void setScale(float scale)
     {
         this.scale = scale;
     }
@@ -130,7 +130,7 @@ class View
      *
      * @param mapImage Image: The map to draw.
      */
-    void setMapImage(Image mapImage)
+    public void setMapImage(Image mapImage)
     {
         this.mapImage = mapImage;
     }
@@ -140,7 +140,7 @@ class View
      *
      * @param mapForegroundImage Image: The foreground of the map to draw.
      */
-    void setMapForegroundImage(Image mapForegroundImage)
+    public void setMapForegroundImage(Image mapForegroundImage)
     {
         this.mapForegroundImage = mapForegroundImage;
     }
@@ -150,7 +150,7 @@ class View
      *
      * @param mapMidgroundImage Image: The midground of the map to draw.
      */
-    void setMapMidgroundImage(Image mapMidgroundImage)
+    public void setMapMidgroundImage(Image mapMidgroundImage)
     {
         this.mapMidgroundImage = mapMidgroundImage;
     }
@@ -160,12 +160,12 @@ class View
      *
      * @param mapBackgroundImage Image: The background of the map to draw.
      */
-    void setMapBackgroundImage(Image mapBackgroundImage)
+    public void setMapBackgroundImage(Image mapBackgroundImage)
     {
         this.mapBackgroundImage = mapBackgroundImage;
     }
 
-    void setMapSkyboxImage(Image mapSkyboxImage)
+    public void setMapSkyboxImage(Image mapSkyboxImage)
     {
         this.mapSkyboxImage = mapSkyboxImage;
     }
@@ -178,7 +178,7 @@ class View
      * @param mapX int: The X coordinate to draw the map.
      * @param mapY int: The Y coordinate to draw the map.
      */
-    void setMapLocation(float mapX, float mapY)
+    public void setMapLocation(float mapX, float mapY)
     {
         this.mapX = mapX;
         this.mapY = mapY;
@@ -190,7 +190,7 @@ class View
      *
      * @param playerImage Image: The still player character graphic.
      */
-    void setupPlayerViewModel(Image playerImage)
+    public void setupPlayerViewModel(Image playerImage)
     {
         this.playerImage = playerImage;
         this.playerX = 0;
@@ -204,7 +204,7 @@ class View
      *
      * @param playerImageFaceLeft Image: The image to use when the player is standing still and facing left.
      */
-    void setPlayerImageFaceLeft(Image playerImageFaceLeft)
+    public void setPlayerImageFaceLeft(Image playerImageFaceLeft)
     {
         this.playerImageFaceLeft = playerImageFaceLeft;
     }
@@ -215,7 +215,7 @@ class View
      *
      * @param playerImageFaceRight Image: The image to use when the player is standing still and facing right.
      */
-    void setPlayerImageFaceRight(Image playerImageFaceRight)
+    public void setPlayerImageFaceRight(Image playerImageFaceRight)
     {
         this.playerImageFaceRight = playerImageFaceRight;
     }
@@ -227,7 +227,7 @@ class View
      *
      * @param playerAnimationWalkLeft Animation: The animation to use when the player is walking left.
      */
-    void setPlayerAnimationWalkLeft(Animation playerAnimationWalkLeft)
+    public void setPlayerAnimationWalkLeft(Animation playerAnimationWalkLeft)
     {
         this.playerAnimationWalkLeft = playerAnimationWalkLeft;
     }
@@ -239,7 +239,7 @@ class View
      *
      * @param playerAnimationWalkRight Animation: The animation to use when the player is walking right.
      */
-    void setPlayerAnimationWalkRight(Animation playerAnimationWalkRight)
+    public void setPlayerAnimationWalkRight(Animation playerAnimationWalkRight)
     {
         this.playerAnimationWalkRight = playerAnimationWalkRight;
     }
@@ -250,7 +250,7 @@ class View
      *
      * @param playerAnimationRunLeft Animation: The animation to use when the player is running left.
      */
-    void setPlayerAnimationRunLeft(Animation playerAnimationRunLeft)
+    public void setPlayerAnimationRunLeft(Animation playerAnimationRunLeft)
     {
         this.playerAnimationRunLeft = playerAnimationRunLeft;
     }
@@ -261,7 +261,7 @@ class View
      *
      * @param playerAnimationRunRight Animation: The animation to use when the player is running right.
      */
-    void setPlayerAnimationRunRight(Animation playerAnimationRunRight)
+    public void setPlayerAnimationRunRight(Animation playerAnimationRunRight)
     {
         this.playerAnimationRunRight = playerAnimationRunRight;
     }
@@ -272,7 +272,7 @@ class View
      *
      * @param playerAnimationJumpLeft Animation: The animation to use when the player is jumping (or falling) left.
      */
-    void setPlayerAnimationJumpLeft(Animation playerAnimationJumpLeft)
+    public void setPlayerAnimationJumpLeft(Animation playerAnimationJumpLeft)
     {
         this.playerAnimationJumpLeft = playerAnimationJumpLeft;
     }
@@ -283,7 +283,7 @@ class View
      *
      * @param playerAnimationJumpRight Animation: The animation to use when the player is jumping (or falling) right.
      */
-    void setPlayerAnimationJumpRight(Animation playerAnimationJumpRight)
+    public void setPlayerAnimationJumpRight(Animation playerAnimationJumpRight)
     {
         this.playerAnimationJumpRight = playerAnimationJumpRight;
     }
@@ -291,7 +291,7 @@ class View
     /**
      * Restart the player jump animation since that animation does not loop.
      */
-    void resetJump()
+    public void resetJump()
     {
         playerAnimationJumpLeft.restart();
         playerAnimationJumpRight.restart();
@@ -300,7 +300,7 @@ class View
     /**
      * Set the jump animation to its final frame since that frame is used for falls.
      */
-    void setFall()
+    public void setFall()
     {
         playerAnimationJumpLeft.setCurrentFrame(playerAnimationJumpLeft.getFrameCount() - 1);
         playerAnimationJumpRight.setCurrentFrame(playerAnimationJumpLeft.getFrameCount() - 1);
@@ -312,7 +312,7 @@ class View
      *
      * @param playerImageWallLeft Image: The image to use when the player is on the left wall.
      */
-    void setPlayerImageWallLeft(Image playerImageWallLeft)
+    public void setPlayerImageWallLeft(Image playerImageWallLeft)
     {
         this.playerImageWallLeft = playerImageWallLeft;
     }
@@ -323,7 +323,7 @@ class View
      *
      * @param playerImageWallRight Image: The image to use when the player is on the right wall.
      */
-    void setPlayerImageWallRight(Image playerImageWallRight)
+    public void setPlayerImageWallRight(Image playerImageWallRight)
     {
         this.playerImageWallRight = playerImageWallRight;
     }
@@ -334,7 +334,7 @@ class View
      * @param playerX int: The X coordinate to draw the player.
      * @param playerY int: The Y coordinate to draw the player.
      */
-    void setPlayerLocation(float playerX, float playerY)
+    public void setPlayerLocation(float playerX, float playerY)
     {
         this.playerX = playerX;
         this.playerY = playerY;
@@ -346,7 +346,7 @@ class View
      *
      * @return PlayerGraphicIndex: The current player graphic identifier.
      */
-    PlayerGraphicIndex getPlayerGraphicIndex()
+    public PlayerGraphicIndex getPlayerGraphicIndex()
     {
         return playerGraphicIndex;
     }
@@ -356,7 +356,7 @@ class View
      *
      * @param playerGraphicIndex PlayerGraphicIndex: The new current player graphic identifier.
      */
-    void setPlayerGraphicIndex(PlayerGraphicIndex playerGraphicIndex)
+    public void setPlayerGraphicIndex(PlayerGraphicIndex playerGraphicIndex)
     {
         this.playerGraphicIndex = playerGraphicIndex;
     }

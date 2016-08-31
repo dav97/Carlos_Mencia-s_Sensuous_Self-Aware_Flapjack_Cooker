@@ -2,6 +2,8 @@ package overworld;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import overworld.model.Actor;
+import overworld.model.Model;
 
 /**
  * overworld.PlayerUpdater is used by the presenter to handle player logic and update the model.
