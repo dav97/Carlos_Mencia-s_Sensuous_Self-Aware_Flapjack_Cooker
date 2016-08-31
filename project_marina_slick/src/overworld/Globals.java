@@ -14,22 +14,22 @@ class Globals
     //public static final String   DEFAULT_TILED_MAP_PATH                    = "res/overworld/map/debug/debug.tmx";
     //public static final String   DEFAULT_MAP_IMAGE_PATH                    = "res/overworld/debug/debug.png";
     //public static final String   PLAYER_GRAPHICS_PATH                      = "res/overworld/actor/marina/graphic/";
-    static final        String[] MAP_HOOK_LIST                             = new String[]{"debug2", "debug_house2"};
-    static final        int      DEFAULT_MAP_ID                            = 0;
+    static final String[] MAP_HOOK_LIST              = new String[]{"debug2", "debug_house2"};
+    static final int      DEFAULT_MAP_ID             = 0;
     //this is annoying but currently necessary because the TiledMap constructor
     //adds a "/" to the tileset path... TODO: revisit
-    static final        String   MAP_RESOURCE_PATH                         = "res/overworld/map/";
-    static final        String   MAP_GRAPHIC_DIRECTORY                     = "/graphic/";
-    static final        String   MAP_TILESET_PATH                          = "res/overworld/map/tileset";
-    static final        String   TILED_MAP_EXTENSION                       = ".tmx";
-    static final        String   GRAPHICS_EXTENSION                        = ".png";
-    static final        String   TILED_REFERENCE_LAYER_NAME                = "reference";
-    static final        String   TILED_COLLISION_LAYER_NAME                = "collision";
+    static final String   MAP_RESOURCE_PATH          = "res/overworld/map/";
+    static final String   MAP_GRAPHIC_DIRECTORY      = "/";
+    static final String   MAP_TILESET_PATH           = "res/overworld/map";
+    static final String   TILED_MAP_EXTENSION        = ".tmx";
+    static final String   GRAPHICS_EXTENSION         = ".png";
+    static final String   TILED_REFERENCE_LAYER_NAME = "reference";
+    static final String   TILED_COLLISION_LAYER_NAME = "collision";
     //static final        String   TILED_FOREGROUND_LAYER_NAME               = "foreground";
     //static final        String   TILED_MIDGROUND_LAYER_NAME                = "midground";
     //static final        String   TILED_BACKGROUND_LAYER_NAME               = "background";
     //static final        String   TILED_SKYBOX_LAYER_NAME                   = "skybox";
-    static final        String   TILED_CLIP_PROPERTY_NAME                  = "clip";
+    static final String   TILED_CLIP_PROPERTY_NAME   = "clip";
     static final        String   TILED_CLIP_PROPERTY_ENABLED               = "1";
     static final        String   TILED_HOOK_PROPERTY_NAME                  = "hook";
     static final        String   TILED_HOOK_PROPERTY_DEFAULT               = "";
