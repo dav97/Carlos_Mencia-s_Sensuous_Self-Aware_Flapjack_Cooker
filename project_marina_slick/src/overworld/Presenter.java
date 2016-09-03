@@ -541,7 +541,7 @@ public class Presenter extends BasicGameState
             if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpLeft) &&
                 (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpRight))
             {
-                VIEW.setActorFall(DEFAULT_CHARACTER_IMAGE_PATH);
+                VIEW.setActorFall(DEFAULT_PLAYER_REF);
             }
             if (playerDX < 0)
             {
