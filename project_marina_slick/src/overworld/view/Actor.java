@@ -39,6 +39,16 @@ public class Actor extends Entity
         animationWallRight = null;
     }
 
+    public ActorGraphicIndex getGraphicIndex()
+    {
+        return graphicIndex;
+    }
+
+    public void setGraphicIndex(ActorGraphicIndex graphicIndex)
+    {
+        this.graphicIndex = graphicIndex;
+    }
+
     public Animation getGraphic()
     {
         switch (graphicIndex)
@@ -160,5 +170,25 @@ public class Actor extends Entity
     public void setAnimationWallRight(Animation animationWallRight)
     {
         this.animationWallRight = animationWallRight;
+    }
+
+    public void resetAnimation()
+    {
+        animationFaceLeft.restart();
+        animationFaceRight.restart();
+        animationWalkLeft.restart();
+        animationWalkRight.restart();
+        animationRunLeft.restart();
+        animationRunRight.restart();
+        animationJumpLeft.restart();
+        animationJumpRight.restart();
+        animationWallLeft.restart();
+        animationWallRight.restart();
+    }
+
+    public void setFall()
+    {
+        animationJumpLeft.setCurrentFrame(animationJumpLeft.getFrameCount() - 1);
+        animationJumpRight.setCurrentFrame(animationJumpRight.getFrameCount() - 1);
     }
 }

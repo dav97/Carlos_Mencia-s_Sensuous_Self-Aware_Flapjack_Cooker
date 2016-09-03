@@ -1,6 +1,5 @@
 package overworld.view;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.tiled.TiledMap;
@@ -33,24 +32,6 @@ public class View
     private float    mapX;
     private float    mapY;
 
-    private ActorGraphicIndex actorGraphicIndex;
-
-    //TODO: move these to a separate class
-    //private int actorGraphicIndex;
-    private Image     playerImage;
-    private Image     playerImageFaceLeft;
-    private Image     playerImageFaceRight;
-    private Animation playerAnimationWalkLeft;
-    private Animation playerAnimationWalkRight;
-    private Animation playerAnimationRunLeft;
-    private Animation playerAnimationRunRight;
-    private Animation playerAnimationJumpLeft;
-    private Animation playerAnimationJumpRight;
-    private Image     playerImageWallLeft;
-    private Image     playerImageWallRight;
-    private float     playerX;
-    private float     playerY;
-
     private Map map;
 
     private HashMap<String, Entity> entityMap;
@@ -60,7 +41,7 @@ public class View
      */
     public View()
     {
-
+        entityMap = new HashMap<>();
     }
 
     /**
@@ -96,44 +77,6 @@ public class View
                 }
             }
         }
-
-        //        //playerImage.draw(playerX, playerY);
-        //        switch (actorGraphicIndex)
-        //        {
-        //            case faceFront:
-        //                playerImage.draw(playerX, playerY);
-        //                break;
-        //            case faceLeft:
-        //                playerImageFaceLeft.draw(playerX, playerY);
-        //                break;
-        //            case faceRight:
-        //                playerImageFaceRight.draw(playerX, playerY);
-        //                break;
-        //            case walkLeft:
-        //                playerAnimationWalkLeft.draw(playerX, playerY);
-        //                break;
-        //            case walkRight:
-        //                playerAnimationWalkRight.draw(playerX, playerY);
-        //                break;
-        //            case runLeft:
-        //                playerAnimationRunLeft.draw(playerX, playerY);
-        //                break;
-        //            case runRight:
-        //                playerAnimationRunRight.draw(playerX, playerY);
-        //                break;
-        //            case jumpLeft:
-        //                playerAnimationJumpLeft.draw(playerX, playerY);
-        //                break;
-        //            case jumpRight:
-        //                playerAnimationJumpRight.draw(playerX, playerY);
-        //                break;
-        //            case wallLeft:
-        //                playerImageWallLeft.draw(playerX, playerY);
-        //                break;
-        //            case wallRight:
-        //                playerImageWallRight.draw(playerX, playerY);
-        //                break;
-        //        }
 
         mapForegroundImage.draw(mapX, mapY);
     }
@@ -207,180 +150,63 @@ public class View
         this.mapY = mapY;
     }
 
-    /**
-     * Set the default player image to use for drawing,
-     * and default draw location.
-     *
-     * @param playerImage Image: The still player character graphic.
-     */
-    public void setupPlayerViewModel(Image playerImage)
+    public void addEntity(String ref, Entity entity)
     {
-        this.playerImage = playerImage;
-        this.playerX = 0;
-        this.playerY = 0;
-        this.actorGraphicIndex = faceFront;
+        entityMap.put(ref, entity);
     }
 
-    /**
-     * Set the image to use when the player is standing still and facing left.
-     * (i.e. the faceLeft case)
-     *
-     * @param playerImageFaceLeft Image: The image to use when the player is standing still and facing left.
-     */
-    public void setPlayerImageFaceLeft(Image playerImageFaceLeft)
+    public void setEntityLocation(String ref, float x, float y)
     {
-        this.playerImageFaceLeft = playerImageFaceLeft;
+        entityMap.get(ref).setLocation(x, y);
     }
 
-    /**
-     * Set the image to use when the player is standing still and facing right.
-     * (i.e. the faceRight case)
-     *
-     * @param playerImageFaceRight Image: The image to use when the player is standing still and facing right.
-     */
-    public void setPlayerImageFaceRight(Image playerImageFaceRight)
+    public ActorGraphicIndex getActorGraphicIndex(String ref)
     {
-        this.playerImageFaceRight = playerImageFaceRight;
+        if (entityMap.get(ref) instanceof Actor)
+        {
+            return ((Actor) entityMap.get(ref)).getGraphicIndex();
+        }
+        else
+        {
+            System.out.println("Error, attempt to get graphic index of non-actor entity, ref:<" + ref + ">");
+        }
+
+        return faceFront;
     }
 
-    /**
-     * Set the animation to use when the player is walking left.
-     * (i.e. the walkLeft case)
-     * Not currently used.
-     *
-     * @param playerAnimationWalkLeft Animation: The animation to use when the player is walking left.
-     */
-    public void setPlayerAnimationWalkLeft(Animation playerAnimationWalkLeft)
+    public void setActorGraphicIndex(String ref, ActorGraphicIndex graphicIndex)
     {
-        this.playerAnimationWalkLeft = playerAnimationWalkLeft;
+        if (entityMap.get(ref) instanceof Actor)
+        {
+            ((Actor) entityMap.get(ref)).setGraphicIndex(graphicIndex);
+        }
+        else
+        {
+            System.out.println("Error, attempt to update graphic index of non-actor entity, ref:<" + ref + ">");
+        }
     }
 
-    /**
-     * Set the animation to use when the player is walking right.
-     * (i.e. the walkRight case)
-     * Not currently used.
-     *
-     * @param playerAnimationWalkRight Animation: The animation to use when the player is walking right.
-     */
-    public void setPlayerAnimationWalkRight(Animation playerAnimationWalkRight)
+    public void resetActorAnimation(String ref)
     {
-        this.playerAnimationWalkRight = playerAnimationWalkRight;
+        if (entityMap.get(ref) instanceof Actor)
+        {
+            ((Actor) entityMap.get(ref)).resetAnimation();
+        }
+        else
+        {
+            System.out.println("Error, attempt to restart animation of non-actor entity, ref:<" + ref + ">");
+        }
     }
 
-    /**
-     * Set the animation to use when the player is running left.
-     * (i.e. the runLeft case)
-     *
-     * @param playerAnimationRunLeft Animation: The animation to use when the player is running left.
-     */
-    public void setPlayerAnimationRunLeft(Animation playerAnimationRunLeft)
+    public void setActorFall(String ref)
     {
-        this.playerAnimationRunLeft = playerAnimationRunLeft;
-    }
-
-    /**
-     * Set the animation to use when the player is running right.
-     * (i.e. the runRight case)
-     *
-     * @param playerAnimationRunRight Animation: The animation to use when the player is running right.
-     */
-    public void setPlayerAnimationRunRight(Animation playerAnimationRunRight)
-    {
-        this.playerAnimationRunRight = playerAnimationRunRight;
-    }
-
-    /**
-     * Set the animation to use when the player is jumping (or falling) left.
-     * (i.e. the jumpLeft case)
-     *
-     * @param playerAnimationJumpLeft Animation: The animation to use when the player is jumping (or falling) left.
-     */
-    public void setPlayerAnimationJumpLeft(Animation playerAnimationJumpLeft)
-    {
-        this.playerAnimationJumpLeft = playerAnimationJumpLeft;
-    }
-
-    /**
-     * Set the animation to use when the player is jumping (or falling) right.
-     * (i.e. the jumpRight case)
-     *
-     * @param playerAnimationJumpRight Animation: The animation to use when the player is jumping (or falling) right.
-     */
-    public void setPlayerAnimationJumpRight(Animation playerAnimationJumpRight)
-    {
-        this.playerAnimationJumpRight = playerAnimationJumpRight;
-    }
-
-    /**
-     * Restart the player jump animation since that animation does not loop.
-     */
-    public void resetJump()
-    {
-        playerAnimationJumpLeft.restart();
-        playerAnimationJumpRight.restart();
-    }
-
-    /**
-     * Set the jump animation to its final frame since that frame is used for falls.
-     */
-    public void setFall()
-    {
-        playerAnimationJumpLeft.setCurrentFrame(playerAnimationJumpLeft.getFrameCount() - 1);
-        playerAnimationJumpRight.setCurrentFrame(playerAnimationJumpLeft.getFrameCount() - 1);
-    }
-
-    /**
-     * Set the image to use when the player is on the left wall.
-     * (i.e. the wallLeft case)
-     *
-     * @param playerImageWallLeft Image: The image to use when the player is on the left wall.
-     */
-    public void setPlayerImageWallLeft(Image playerImageWallLeft)
-    {
-        this.playerImageWallLeft = playerImageWallLeft;
-    }
-
-    /**
-     * Set the image to use when the player is on the right wall.
-     * (i.e. the wallRight case)
-     *
-     * @param playerImageWallRight Image: The image to use when the player is on the right wall.
-     */
-    public void setPlayerImageWallRight(Image playerImageWallRight)
-    {
-        this.playerImageWallRight = playerImageWallRight;
-    }
-
-    /**
-     * Updates the location to draw the player.
-     *
-     * @param playerX int: The X coordinate to draw the player.
-     * @param playerY int: The Y coordinate to draw the player.
-     */
-    public void setPlayerLocation(float playerX, float playerY)
-    {
-        this.playerX = playerX;
-        this.playerY = playerY;
-    }
-
-    /**
-     * Get the current player graphic identifier, sometimes needed to decide which animation
-     * to use next.
-     *
-     * @return ActorGraphicIndex: The current player graphic identifier.
-     */
-    public ActorGraphicIndex getActorGraphicIndex()
-    {
-        return actorGraphicIndex;
-    }
-
-    /**
-     * Set the current player graphic identifier.
-     *
-     * @param actorGraphicIndex ActorGraphicIndex: The new current player graphic identifier.
-     */
-    public void setActorGraphicIndex(ActorGraphicIndex actorGraphicIndex)
-    {
-        this.actorGraphicIndex = actorGraphicIndex;
+        if (entityMap.get(ref) instanceof Actor)
+        {
+            ((Actor) entityMap.get(ref)).setFall();
+        }
+        else
+        {
+            System.out.println("Error, attempt to set fall frame of non-actor entity, ref:<" + ref + ">");
+        }
     }
 }

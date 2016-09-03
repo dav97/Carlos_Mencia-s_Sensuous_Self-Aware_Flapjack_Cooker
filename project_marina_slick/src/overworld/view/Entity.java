@@ -9,8 +9,8 @@ public class Entity
 {
     private boolean draw;
 
-    private long x;
-    private long y;
+    private float x;
+    private float y;
 
     private Animation defaultGraphic;
 
@@ -44,7 +44,7 @@ public class Entity
         this.draw = draw;
     }
 
-    public long getX()
+    public float getX()
     {
         return x;
     }
@@ -54,13 +54,19 @@ public class Entity
         this.x = x;
     }
 
-    public long getY()
+    public float getY()
     {
         return y;
     }
 
     public void setY(long y)
     {
+        this.y = y;
+    }
+
+    public void setLocation(float x, float y)
+    {
+        this.x = x;
         this.y = y;
     }
 

@@ -88,12 +88,6 @@ public class Presenter extends BasicGameState
         //end map setup
 
         //player setup
-        InputStream inputStream = ResourceLoader.getResourceAsStream(DEFAULT_CHARACTER_IMAGE_PATH);
-        Image playerBasic =
-            new Image(inputStream, DEFAULT_CHARACTER_IMAGE_PATH, false, FILTER_NEAREST);
-
-        VIEW.setupPlayerViewModel(playerBasic);
-
         loadPlayerGraphics();
 
         PLAYER_REF = DEFAULT_PLAYER_REF;
@@ -218,28 +212,31 @@ public class Presenter extends BasicGameState
      */
     private void loadPlayerGraphics() throws SlickException
     {
-        InputStream inputStream;
+        InputStream          inputStream;
+        overworld.view.Actor actor = new overworld.view.Actor();
 
         inputStream = ResourceLoader.getResourceAsStream(
             PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
             PLAYER_GRAPHICS_WALK_POSTFIX + "1" + GRAPHICS_EXTENSION);
-        Image playerImageFaceLeft = new Image(inputStream,
-                                              PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
-                                              PLAYER_GRAPHICS_WALK_POSTFIX + "1" +
-                                              GRAPHICS_EXTENSION,
-                                              false,
-                                              FILTER_NEAREST);
+        Image[] playerFramesFaceLeft = {new Image(inputStream,
+                                                  PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
+                                                  PLAYER_GRAPHICS_WALK_POSTFIX + "1" +
+                                                  GRAPHICS_EXTENSION,
+                                                  false,
+                                                  FILTER_NEAREST)};
+        Animation playerAnimationFaceLeft = new Animation(playerFramesFaceLeft, 1, false);
 
         inputStream = ResourceLoader.getResourceAsStream(
             PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
             PLAYER_GRAPHICS_WALK_POSTFIX + "1" + GRAPHICS_EXTENSION);
-        Image playerImageFaceRight = new Image(inputStream,
-                                               PLAYER_GRAPHICS_WALK_PATH +
-                                               PLAYER_GRAPHICS_RIGHT_PREFIX +
-                                               PLAYER_GRAPHICS_WALK_POSTFIX + "1" +
-                                               GRAPHICS_EXTENSION,
-                                               false,
-                                               FILTER_NEAREST);
+        Image[] playerFramesFaceRight = {new Image(inputStream,
+                                                   PLAYER_GRAPHICS_WALK_PATH +
+                                                   PLAYER_GRAPHICS_RIGHT_PREFIX +
+                                                   PLAYER_GRAPHICS_WALK_POSTFIX + "1" +
+                                                   GRAPHICS_EXTENSION,
+                                                   false,
+                                                   FILTER_NEAREST)};
+        Animation playerAnimationFaceRight = new Animation(playerFramesFaceRight, 1, false);
 
         Image[] playerFramesWalkLeft = new Image[PLAYER_GRAPHICS_WALK_FRAME_COUNT];
         for (int i = 0; i < PLAYER_GRAPHICS_WALK_FRAME_COUNT; ++i)
@@ -354,35 +351,39 @@ public class Presenter extends BasicGameState
         inputStream = ResourceLoader.getResourceAsStream(
             PLAYER_GRAPHICS_WALL_PATH + PLAYER_GRAPHICS_WALL_PRE_PREFIX +
             PLAYER_GRAPHICS_LEFT_PREFIX + GRAPHICS_EXTENSION);
-        Image playerImageWallLeft = new Image(inputStream,
-                                              PLAYER_GRAPHICS_WALL_PATH +
-                                              PLAYER_GRAPHICS_WALL_PRE_PREFIX +
-                                              PLAYER_GRAPHICS_LEFT_PREFIX +
-                                              GRAPHICS_EXTENSION,
-                                              false,
-                                              FILTER_NEAREST);
+        Image[] playerFramesWallLeft = {new Image(inputStream,
+                                                  PLAYER_GRAPHICS_WALL_PATH +
+                                                  PLAYER_GRAPHICS_WALL_PRE_PREFIX +
+                                                  PLAYER_GRAPHICS_LEFT_PREFIX +
+                                                  GRAPHICS_EXTENSION,
+                                                  false,
+                                                  FILTER_NEAREST)};
+        Animation playerAnimationWallLeft = new Animation(playerFramesWallLeft, 1, false);
 
         inputStream = ResourceLoader.getResourceAsStream(
             PLAYER_GRAPHICS_WALL_PATH + PLAYER_GRAPHICS_WALL_PRE_PREFIX +
             PLAYER_GRAPHICS_RIGHT_PREFIX + GRAPHICS_EXTENSION);
-        Image playerImageWallRight = new Image(inputStream,
-                                               PLAYER_GRAPHICS_WALL_PATH +
-                                               PLAYER_GRAPHICS_WALL_PRE_PREFIX +
-                                               PLAYER_GRAPHICS_RIGHT_PREFIX +
-                                               GRAPHICS_EXTENSION,
-                                               false,
-                                               FILTER_NEAREST);
+        Image[] playerFramesWallRight = {new Image(inputStream,
+                                                   PLAYER_GRAPHICS_WALL_PATH +
+                                                   PLAYER_GRAPHICS_WALL_PRE_PREFIX +
+                                                   PLAYER_GRAPHICS_RIGHT_PREFIX +
+                                                   GRAPHICS_EXTENSION,
+                                                   false,
+                                                   FILTER_NEAREST)};
+        Animation playerAnimationWallRight = new Animation(playerFramesWallRight, 1, false);
 
-        VIEW.setPlayerImageFaceLeft(playerImageFaceLeft);
-        VIEW.setPlayerImageFaceRight(playerImageFaceRight);
-        VIEW.setPlayerAnimationWalkLeft(playerAnimationWalkLeft);
-        VIEW.setPlayerAnimationWalkRight(playerAnimationWalkRight);
-        VIEW.setPlayerAnimationRunLeft(playerAnimationRunLeft);
-        VIEW.setPlayerAnimationRunRight(playerAnimationRunRight);
-        VIEW.setPlayerAnimationJumpLeft(playerAnimationJumpLeft);
-        VIEW.setPlayerAnimationJumpRight(playerAnimationJumpRight);
-        VIEW.setPlayerImageWallLeft(playerImageWallLeft);
-        VIEW.setPlayerImageWallRight(playerImageWallRight);
+        actor.setAnimationFaceLeft(playerAnimationFaceLeft);
+        actor.setAnimationFaceRight(playerAnimationFaceRight);
+        actor.setAnimationWalkLeft(playerAnimationWalkLeft);
+        actor.setAnimationWalkRight(playerAnimationWalkRight);
+        actor.setAnimationRunLeft(playerAnimationRunLeft);
+        actor.setAnimationRunRight(playerAnimationRunRight);
+        actor.setAnimationJumpLeft(playerAnimationJumpLeft);
+        actor.setAnimationJumpRight(playerAnimationJumpRight);
+        actor.setAnimationWallLeft(playerAnimationWallLeft);
+        actor.setAnimationWallRight(playerAnimationWallRight);
+
+        VIEW.addEntity(DEFAULT_PLAYER_REF, actor);
     }
 
     /**
@@ -493,89 +494,99 @@ public class Presenter extends BasicGameState
         //end map draw position updating
 
         //player draw position updating
-        VIEW.setPlayerLocation(playerRenderX, playerRenderY);
+        VIEW.setEntityLocation(DEFAULT_PLAYER_REF, playerRenderX, playerRenderY);
         //end player draw position updating
 
         //player graphic/animation updating
         if (player.isOnWallLeft() && playerDY >= 0)
         {
-            VIEW.setActorGraphicIndex(wallLeft);
+            VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, wallLeft);
         }
         else if (player.isOnWallRight() && playerDY >= 0)
         {
-            VIEW.setActorGraphicIndex(wallRight);
+            VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, wallRight);
         }
         else if (playerDY < 0)
         {
             if ((player.isResetJump()) ||
-                ((VIEW.getActorGraphicIndex() != jumpLeft) && (VIEW.getActorGraphicIndex() != jumpRight)))
+                ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpLeft) &&
+                 (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpRight)))
             {
                 player.setResetJump(false);
-                VIEW.resetJump();
+                VIEW.resetActorAnimation(DEFAULT_PLAYER_REF);
             }
             if (playerDX < 0)
             {
-                VIEW.setActorGraphicIndex(jumpLeft);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpLeft);
             }
             else if (playerDX > 0)
             {
-                VIEW.setActorGraphicIndex(jumpRight);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpRight);
             }
-            else if ((VIEW.getActorGraphicIndex() == runLeft) ||
-                     (VIEW.getActorGraphicIndex() == faceLeft) || (VIEW.getActorGraphicIndex() == jumpLeft) ||
-                     (VIEW.getActorGraphicIndex() == walkLeft) || (VIEW.getActorGraphicIndex() == wallLeft))
+            else if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == runLeft) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == faceLeft) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == jumpLeft) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == walkLeft) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == wallLeft))
             {
-                VIEW.setActorGraphicIndex(jumpLeft);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpLeft);
             }
             else
             {
-                VIEW.setActorGraphicIndex(jumpRight);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpRight);
             }
         }
         else if (playerDY > 0 || !MODEL.isActorCollisionDown(player))
         {
-            if ((VIEW.getActorGraphicIndex() != jumpLeft) && (VIEW.getActorGraphicIndex() != jumpRight))
+            if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpLeft) &&
+                (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpRight))
             {
-                VIEW.setFall();
+                VIEW.setActorFall(DEFAULT_CHARACTER_IMAGE_PATH);
             }
             if (playerDX < 0)
             {
-                VIEW.setActorGraphicIndex(jumpLeft);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpLeft);
             }
             else if (playerDX > 0)
             {
-                VIEW.setActorGraphicIndex(jumpRight);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpRight);
             }
-            else if ((VIEW.getActorGraphicIndex() == runLeft) ||
-                     (VIEW.getActorGraphicIndex() == faceLeft) || (VIEW.getActorGraphicIndex() == jumpLeft) ||
-                     (VIEW.getActorGraphicIndex() == walkLeft) || (VIEW.getActorGraphicIndex() == wallLeft))
+            else if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == runLeft) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == faceLeft) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == jumpLeft) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == walkLeft) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == wallLeft))
             {
-                VIEW.setActorGraphicIndex(jumpLeft);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpLeft);
             }
             else
             {
-                VIEW.setActorGraphicIndex(jumpRight);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpRight);
             }
         }
         else if (playerDX > 0)
         {
-            VIEW.setActorGraphicIndex(runRight);
+            VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, runRight);
         }
         else if (playerDX < 0)
         {
-            VIEW.setActorGraphicIndex(runLeft);
+            VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, runLeft);
         }
         else
         {
-            if ((VIEW.getActorGraphicIndex() == runLeft) || (VIEW.getActorGraphicIndex() == walkLeft) ||
-                (VIEW.getActorGraphicIndex() == wallLeft) || (VIEW.getActorGraphicIndex() == jumpLeft))
+            if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == runLeft) ||
+                (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == walkLeft) ||
+                (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == wallLeft) ||
+                (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == jumpLeft))
             {
-                VIEW.setActorGraphicIndex(faceLeft);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, faceLeft);
             }
-            else if ((VIEW.getActorGraphicIndex() == runRight) || (VIEW.getActorGraphicIndex() == walkRight) ||
-                     (VIEW.getActorGraphicIndex() == wallRight) || (VIEW.getActorGraphicIndex() == jumpRight))
+            else if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == runRight) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == walkRight) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == wallRight) ||
+                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == jumpRight))
             {
-                VIEW.setActorGraphicIndex(faceRight);
+                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, faceRight);
             }
         }
         //end player graphic/animation updating
