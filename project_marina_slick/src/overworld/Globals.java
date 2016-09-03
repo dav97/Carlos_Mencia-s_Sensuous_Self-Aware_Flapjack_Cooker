@@ -78,7 +78,7 @@ public class Globals
     static final        long     STANDARD_MAX_DY_ON_WALL                   = 200;
     static final        String   DEFAULT_PLAYER_REF                        = "marina";
 
-    public enum PlayerGraphicIndex
+    public enum ActorGraphicIndex
     {
         faceFront,
         faceLeft,

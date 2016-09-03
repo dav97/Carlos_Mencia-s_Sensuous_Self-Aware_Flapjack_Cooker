@@ -15,8 +15,8 @@ import java.io.InputStream;
 
 import static main.Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR;
 import static org.newdawn.slick.Image.FILTER_NEAREST;
+import static overworld.Globals.ActorGraphicIndex.*;
 import static overworld.Globals.*;
-import static overworld.Globals.PlayerGraphicIndex.*;
 
 /**
  * overworld.Presenter will act as the presenter for the overworld game state, mediating between the MODEL and VIEW.
@@ -499,83 +499,83 @@ public class Presenter extends BasicGameState
         //player graphic/animation updating
         if (player.isOnWallLeft() && playerDY >= 0)
         {
-            VIEW.setPlayerGraphicIndex(wallLeft);
+            VIEW.setActorGraphicIndex(wallLeft);
         }
         else if (player.isOnWallRight() && playerDY >= 0)
         {
-            VIEW.setPlayerGraphicIndex(wallRight);
+            VIEW.setActorGraphicIndex(wallRight);
         }
         else if (playerDY < 0)
         {
             if ((player.isResetJump()) ||
-                ((VIEW.getPlayerGraphicIndex() != jumpLeft) && (VIEW.getPlayerGraphicIndex() != jumpRight)))
+                ((VIEW.getActorGraphicIndex() != jumpLeft) && (VIEW.getActorGraphicIndex() != jumpRight)))
             {
                 player.setResetJump(false);
                 VIEW.resetJump();
             }
             if (playerDX < 0)
             {
-                VIEW.setPlayerGraphicIndex(jumpLeft);
+                VIEW.setActorGraphicIndex(jumpLeft);
             }
             else if (playerDX > 0)
             {
-                VIEW.setPlayerGraphicIndex(jumpRight);
+                VIEW.setActorGraphicIndex(jumpRight);
             }
-            else if ((VIEW.getPlayerGraphicIndex() == runLeft) ||
-                     (VIEW.getPlayerGraphicIndex() == faceLeft) || (VIEW.getPlayerGraphicIndex() == jumpLeft) ||
-                     (VIEW.getPlayerGraphicIndex() == walkLeft) || (VIEW.getPlayerGraphicIndex() == wallLeft))
+            else if ((VIEW.getActorGraphicIndex() == runLeft) ||
+                     (VIEW.getActorGraphicIndex() == faceLeft) || (VIEW.getActorGraphicIndex() == jumpLeft) ||
+                     (VIEW.getActorGraphicIndex() == walkLeft) || (VIEW.getActorGraphicIndex() == wallLeft))
             {
-                VIEW.setPlayerGraphicIndex(jumpLeft);
+                VIEW.setActorGraphicIndex(jumpLeft);
             }
             else
             {
-                VIEW.setPlayerGraphicIndex(jumpRight);
+                VIEW.setActorGraphicIndex(jumpRight);
             }
         }
         else if (playerDY > 0 || !MODEL.isActorCollisionDown(player))
         {
-            if ((VIEW.getPlayerGraphicIndex() != jumpLeft) && (VIEW.getPlayerGraphicIndex() != jumpRight))
+            if ((VIEW.getActorGraphicIndex() != jumpLeft) && (VIEW.getActorGraphicIndex() != jumpRight))
             {
                 VIEW.setFall();
             }
             if (playerDX < 0)
             {
-                VIEW.setPlayerGraphicIndex(jumpLeft);
+                VIEW.setActorGraphicIndex(jumpLeft);
             }
             else if (playerDX > 0)
             {
-                VIEW.setPlayerGraphicIndex(jumpRight);
+                VIEW.setActorGraphicIndex(jumpRight);
             }
-            else if ((VIEW.getPlayerGraphicIndex() == runLeft) ||
-                     (VIEW.getPlayerGraphicIndex() == faceLeft) || (VIEW.getPlayerGraphicIndex() == jumpLeft) ||
-                     (VIEW.getPlayerGraphicIndex() == walkLeft) || (VIEW.getPlayerGraphicIndex() == wallLeft))
+            else if ((VIEW.getActorGraphicIndex() == runLeft) ||
+                     (VIEW.getActorGraphicIndex() == faceLeft) || (VIEW.getActorGraphicIndex() == jumpLeft) ||
+                     (VIEW.getActorGraphicIndex() == walkLeft) || (VIEW.getActorGraphicIndex() == wallLeft))
             {
-                VIEW.setPlayerGraphicIndex(jumpLeft);
+                VIEW.setActorGraphicIndex(jumpLeft);
             }
             else
             {
-                VIEW.setPlayerGraphicIndex(jumpRight);
+                VIEW.setActorGraphicIndex(jumpRight);
             }
         }
         else if (playerDX > 0)
         {
-            VIEW.setPlayerGraphicIndex(runRight);
+            VIEW.setActorGraphicIndex(runRight);
         }
         else if (playerDX < 0)
         {
-            VIEW.setPlayerGraphicIndex(runLeft);
+            VIEW.setActorGraphicIndex(runLeft);
         }
         else
         {
-            if ((VIEW.getPlayerGraphicIndex() == runLeft) || (VIEW.getPlayerGraphicIndex() == walkLeft) ||
-                (VIEW.getPlayerGraphicIndex() == wallLeft) || (VIEW.getPlayerGraphicIndex() == jumpLeft))
+            if ((VIEW.getActorGraphicIndex() == runLeft) || (VIEW.getActorGraphicIndex() == walkLeft) ||
+                (VIEW.getActorGraphicIndex() == wallLeft) || (VIEW.getActorGraphicIndex() == jumpLeft))
             {
-                VIEW.setPlayerGraphicIndex(faceLeft);
+                VIEW.setActorGraphicIndex(faceLeft);
             }
-            else if ((VIEW.getPlayerGraphicIndex() == runRight) || (VIEW.getPlayerGraphicIndex() == walkRight) ||
-                     (VIEW.getPlayerGraphicIndex() == wallRight) || (VIEW.getPlayerGraphicIndex() == jumpRight))
+            else if ((VIEW.getActorGraphicIndex() == runRight) || (VIEW.getActorGraphicIndex() == walkRight) ||
+                     (VIEW.getActorGraphicIndex() == wallRight) || (VIEW.getActorGraphicIndex() == jumpRight))
             {
-                VIEW.setPlayerGraphicIndex(faceRight);
+                VIEW.setActorGraphicIndex(faceRight);
             }
         }
         //end player graphic/animation updating

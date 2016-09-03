@@ -5,8 +5,11 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.tiled.TiledMap;
 
-import static overworld.Globals.PlayerGraphicIndex;
-import static overworld.Globals.PlayerGraphicIndex.faceFront;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
+import static overworld.Globals.ActorGraphicIndex;
+import static overworld.Globals.ActorGraphicIndex.faceFront;
 
 /**
  * overworld.view.View holds and renders all the graphical elements for the overworld game state,
@@ -30,10 +33,10 @@ public class View
     private float    mapX;
     private float    mapY;
 
-    private PlayerGraphicIndex playerGraphicIndex;
+    private ActorGraphicIndex actorGraphicIndex;
 
     //TODO: move these to a separate class
-    //private int playerGraphicIndex;
+    //private int actorGraphicIndex;
     private Image     playerImage;
     private Image     playerImageFaceLeft;
     private Image     playerImageFaceRight;
@@ -47,6 +50,10 @@ public class View
     private Image     playerImageWallRight;
     private float     playerX;
     private float     playerY;
+
+    private Map map;
+
+    private HashMap<String, Entity> entityMap;
 
     /**
      * Default constructor for this view.
@@ -74,43 +81,59 @@ public class View
 
         mapMidgroundImage.draw(mapX, mapY);
 
-        //playerImage.draw(playerX, playerY);
-        switch (playerGraphicIndex)
+        for (Entry<String, Entity> entry : entityMap.entrySet())
         {
-            case faceFront:
-                playerImage.draw(playerX, playerY);
-                break;
-            case faceLeft:
-                playerImageFaceLeft.draw(playerX, playerY);
-                break;
-            case faceRight:
-                playerImageFaceRight.draw(playerX, playerY);
-                break;
-            case walkLeft:
-                playerAnimationWalkLeft.draw(playerX, playerY);
-                break;
-            case walkRight:
-                playerAnimationWalkRight.draw(playerX, playerY);
-                break;
-            case runLeft:
-                playerAnimationRunLeft.draw(playerX, playerY);
-                break;
-            case runRight:
-                playerAnimationRunRight.draw(playerX, playerY);
-                break;
-            case jumpLeft:
-                playerAnimationJumpLeft.draw(playerX, playerY);
-                break;
-            case jumpRight:
-                playerAnimationJumpRight.draw(playerX, playerY);
-                break;
-            case wallLeft:
-                playerImageWallLeft.draw(playerX, playerY);
-                break;
-            case wallRight:
-                playerImageWallRight.draw(playerX, playerY);
-                break;
+            Entity entity = entry.getValue();
+            if (entity.shouldDraw())
+            {
+                if (entity instanceof Actor)
+                {
+                    ((Actor) entity).getGraphic().draw(entity.getX(), entity.getY());
+                }
+                else
+                {
+                    entity.getDefaultGraphic().draw(entity.getX(), entity.getY());
+                }
+            }
         }
+
+        //        //playerImage.draw(playerX, playerY);
+        //        switch (actorGraphicIndex)
+        //        {
+        //            case faceFront:
+        //                playerImage.draw(playerX, playerY);
+        //                break;
+        //            case faceLeft:
+        //                playerImageFaceLeft.draw(playerX, playerY);
+        //                break;
+        //            case faceRight:
+        //                playerImageFaceRight.draw(playerX, playerY);
+        //                break;
+        //            case walkLeft:
+        //                playerAnimationWalkLeft.draw(playerX, playerY);
+        //                break;
+        //            case walkRight:
+        //                playerAnimationWalkRight.draw(playerX, playerY);
+        //                break;
+        //            case runLeft:
+        //                playerAnimationRunLeft.draw(playerX, playerY);
+        //                break;
+        //            case runRight:
+        //                playerAnimationRunRight.draw(playerX, playerY);
+        //                break;
+        //            case jumpLeft:
+        //                playerAnimationJumpLeft.draw(playerX, playerY);
+        //                break;
+        //            case jumpRight:
+        //                playerAnimationJumpRight.draw(playerX, playerY);
+        //                break;
+        //            case wallLeft:
+        //                playerImageWallLeft.draw(playerX, playerY);
+        //                break;
+        //            case wallRight:
+        //                playerImageWallRight.draw(playerX, playerY);
+        //                break;
+        //        }
 
         mapForegroundImage.draw(mapX, mapY);
     }
@@ -195,7 +218,7 @@ public class View
         this.playerImage = playerImage;
         this.playerX = 0;
         this.playerY = 0;
-        this.playerGraphicIndex = faceFront;
+        this.actorGraphicIndex = faceFront;
     }
 
     /**
@@ -344,20 +367,20 @@ public class View
      * Get the current player graphic identifier, sometimes needed to decide which animation
      * to use next.
      *
-     * @return PlayerGraphicIndex: The current player graphic identifier.
+     * @return ActorGraphicIndex: The current player graphic identifier.
      */
-    public PlayerGraphicIndex getPlayerGraphicIndex()
+    public ActorGraphicIndex getActorGraphicIndex()
     {
-        return playerGraphicIndex;
+        return actorGraphicIndex;
     }
 
     /**
      * Set the current player graphic identifier.
      *
-     * @param playerGraphicIndex PlayerGraphicIndex: The new current player graphic identifier.
+     * @param actorGraphicIndex ActorGraphicIndex: The new current player graphic identifier.
      */
-    public void setPlayerGraphicIndex(PlayerGraphicIndex playerGraphicIndex)
+    public void setActorGraphicIndex(ActorGraphicIndex actorGraphicIndex)
     {
-        this.playerGraphicIndex = playerGraphicIndex;
+        this.actorGraphicIndex = actorGraphicIndex;
     }
 }
