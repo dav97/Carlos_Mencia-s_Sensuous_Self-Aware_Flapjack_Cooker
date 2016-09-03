@@ -91,7 +91,7 @@ public class Presenter extends BasicGameState
         loadPlayerGraphics();
 
         PLAYER_REF = DEFAULT_PLAYER_REF;
-        MODEL.spawnActor(DEFAULT_PLAYER_REF, MAP_HOOK, true);
+        MODEL.spawnActor(PLAYER_REF, MAP_HOOK, true);
         MODEL.getMap().setHookSpawn(MAP_HOOK);
         //end player setup
 
@@ -383,7 +383,7 @@ public class Presenter extends BasicGameState
         actor.setAnimationWallLeft(playerAnimationWallLeft);
         actor.setAnimationWallRight(playerAnimationWallRight);
 
-        VIEW.addEntity(DEFAULT_PLAYER_REF, actor);
+        VIEW.addEntity(PLAYER_REF, actor);
     }
 
     /**
@@ -494,99 +494,99 @@ public class Presenter extends BasicGameState
         //end map draw position updating
 
         //player draw position updating
-        VIEW.setEntityLocation(DEFAULT_PLAYER_REF, playerRenderX, playerRenderY);
+        VIEW.setEntityLocation(PLAYER_REF, playerRenderX, playerRenderY);
         //end player draw position updating
 
         //player graphic/animation updating
         if (player.isOnWallLeft() && playerDY >= 0)
         {
-            VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, wallLeft);
+            VIEW.setActorGraphicIndex(PLAYER_REF, wallLeft);
         }
         else if (player.isOnWallRight() && playerDY >= 0)
         {
-            VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, wallRight);
+            VIEW.setActorGraphicIndex(PLAYER_REF, wallRight);
         }
         else if (playerDY < 0)
         {
             if ((player.isResetJump()) ||
-                ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpLeft) &&
-                 (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpRight)))
+                ((VIEW.getActorGraphicIndex(PLAYER_REF) != jumpLeft) &&
+                 (VIEW.getActorGraphicIndex(PLAYER_REF) != jumpRight)))
             {
                 player.setResetJump(false);
-                VIEW.resetActorAnimation(DEFAULT_PLAYER_REF);
+                VIEW.resetActorAnimation(PLAYER_REF);
             }
             if (playerDX < 0)
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpLeft);
+                VIEW.setActorGraphicIndex(PLAYER_REF, jumpLeft);
             }
             else if (playerDX > 0)
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpRight);
+                VIEW.setActorGraphicIndex(PLAYER_REF, jumpRight);
             }
-            else if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == runLeft) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == faceLeft) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == jumpLeft) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == walkLeft) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == wallLeft))
+            else if ((VIEW.getActorGraphicIndex(PLAYER_REF) == runLeft) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == faceLeft) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == jumpLeft) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == walkLeft) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == wallLeft))
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpLeft);
+                VIEW.setActorGraphicIndex(PLAYER_REF, jumpLeft);
             }
             else
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpRight);
+                VIEW.setActorGraphicIndex(PLAYER_REF, jumpRight);
             }
         }
         else if (playerDY > 0 || !MODEL.isActorCollisionDown(player))
         {
-            if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpLeft) &&
-                (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) != jumpRight))
+            if ((VIEW.getActorGraphicIndex(PLAYER_REF) != jumpLeft) &&
+                (VIEW.getActorGraphicIndex(PLAYER_REF) != jumpRight))
             {
-                VIEW.setActorFall(DEFAULT_PLAYER_REF);
+                VIEW.setActorFall(PLAYER_REF);
             }
             if (playerDX < 0)
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpLeft);
+                VIEW.setActorGraphicIndex(PLAYER_REF, jumpLeft);
             }
             else if (playerDX > 0)
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpRight);
+                VIEW.setActorGraphicIndex(PLAYER_REF, jumpRight);
             }
-            else if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == runLeft) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == faceLeft) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == jumpLeft) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == walkLeft) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == wallLeft))
+            else if ((VIEW.getActorGraphicIndex(PLAYER_REF) == runLeft) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == faceLeft) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == jumpLeft) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == walkLeft) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == wallLeft))
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpLeft);
+                VIEW.setActorGraphicIndex(PLAYER_REF, jumpLeft);
             }
             else
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, jumpRight);
+                VIEW.setActorGraphicIndex(PLAYER_REF, jumpRight);
             }
         }
         else if (playerDX > 0)
         {
-            VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, runRight);
+            VIEW.setActorGraphicIndex(PLAYER_REF, runRight);
         }
         else if (playerDX < 0)
         {
-            VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, runLeft);
+            VIEW.setActorGraphicIndex(PLAYER_REF, runLeft);
         }
         else
         {
-            if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == runLeft) ||
-                (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == walkLeft) ||
-                (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == wallLeft) ||
-                (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == jumpLeft))
+            if ((VIEW.getActorGraphicIndex(PLAYER_REF) == runLeft) ||
+                (VIEW.getActorGraphicIndex(PLAYER_REF) == walkLeft) ||
+                (VIEW.getActorGraphicIndex(PLAYER_REF) == wallLeft) ||
+                (VIEW.getActorGraphicIndex(PLAYER_REF) == jumpLeft))
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, faceLeft);
+                VIEW.setActorGraphicIndex(PLAYER_REF, faceLeft);
             }
-            else if ((VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == runRight) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == walkRight) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == wallRight) ||
-                     (VIEW.getActorGraphicIndex(DEFAULT_PLAYER_REF) == jumpRight))
+            else if ((VIEW.getActorGraphicIndex(PLAYER_REF) == runRight) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == walkRight) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == wallRight) ||
+                     (VIEW.getActorGraphicIndex(PLAYER_REF) == jumpRight))
             {
-                VIEW.setActorGraphicIndex(DEFAULT_PLAYER_REF, faceRight);
+                VIEW.setActorGraphicIndex(PLAYER_REF, faceRight);
             }
         }
         //end player graphic/animation updating
