@@ -69,11 +69,25 @@ public class View
             {
                 if (entity instanceof Actor)
                 {
-                    ((Actor) entity).getGraphic().draw(entity.getX(), entity.getY());
+                    if (((Actor) entity).getGraphic() != null)
+                    {
+                        ((Actor) entity).getGraphic().draw(entity.getX(), entity.getY());
+                    }
+                    else
+                    {
+                        System.out.println("Warning:");
+                    }
                 }
                 else
                 {
-                    entity.getDefaultGraphic().draw(entity.getX(), entity.getY());
+                    if (entity.getDefaultGraphic() != null)
+                    {
+                        entity.getDefaultGraphic().draw(entity.getX(), entity.getY());
+                    }
+                    else
+                    {
+                        System.out.println("Warning:");
+                    }
                 }
             }
         }
@@ -157,7 +171,10 @@ public class View
 
     public void setEntityLocation(String ref, float x, float y)
     {
-        entityMap.get(ref).setLocation(x, y);
+        if (entityMap.get(ref) != null)
+        {
+            entityMap.get(ref).setLocation(x, y);
+        }
     }
 
     public ActorGraphicIndex getActorGraphicIndex(String ref)
@@ -168,7 +185,7 @@ public class View
         }
         else
         {
-            System.out.println("Error, attempt to get graphic index of non-actor entity, ref:<" + ref + ">");
+            System.out.println("Error: attempt to get graphic index of non-actor entity, ref:<" + ref + ">");
         }
 
         return faceFront;
@@ -182,7 +199,7 @@ public class View
         }
         else
         {
-            System.out.println("Error, attempt to update graphic index of non-actor entity, ref:<" + ref + ">");
+            System.out.println("Error: attempt to update graphic index of non-actor entity, ref:<" + ref + ">");
         }
     }
 
@@ -194,7 +211,7 @@ public class View
         }
         else
         {
-            System.out.println("Error, attempt to restart animation of non-actor entity, ref:<" + ref + ">");
+            System.out.println("Error: attempt to restart animation of non-actor entity, ref:<" + ref + ">");
         }
     }
 

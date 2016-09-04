@@ -22,7 +22,7 @@
   </tile>
   <tile id="3">
    <properties>
-    <property name="hook" value="save_girl"/>
+    <property name="hook" value="npc.save_girl"/>
    </properties>
   </tile>
  </tileset>
@@ -56,7 +56,7 @@
    <property name="ref" value="debug2"/>
   </properties>
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3OwQkAIAwAsXb/dazz+XADhQqSwP0vAgAAAAAAAIDfjHx9cGce/FfuAKDTAnl2BUOAJQAA
+   H4sIAAAAAAAAC+3ZoREAIAwEwaT/doD6EDQQRUR2Z86//wgAqk52LwAAAAAAAKhZA3+NnS8A+OkCxWtSlYAlAAA=
   </data>
  </layer>
 </map>

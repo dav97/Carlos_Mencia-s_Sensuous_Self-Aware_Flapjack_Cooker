@@ -59,6 +59,19 @@ public class Model
     }
 
     /**
+     * Given a reference tag, return the Entity mapped to that reference tag
+     * in this model.
+     *
+     * @param ref String: The reference tag to lookup an Entity.
+     *
+     * @return Entity: The Entity mapped to the given reference tag.
+     */
+    public Entity getEntityByRef(String ref)
+    {
+        return entityMap.get(ref);
+    }
+
+    /**
      * Set the player location and default movement values
      * based on the location of the given hook in the map.
      *
@@ -112,6 +125,30 @@ public class Model
         }
 
         return "";
+    }
+
+    public void spawnEntities()
+    {
+        for (int x = 0; x < map.getHooks().length; ++x)
+        {
+            for (int y = 0; y < map.getHooks()[x].length; ++y)
+            {
+                for (String actor_hook : ACTOR_HOOK_LIST)
+                {
+                    if (map.getHooks()[x][y].equals(actor_hook))
+                    {
+                        //Actor actor = new Actor(x * map.getTileWidth(), y * map.getTileWidth(), map.getHooks()[x][y]);
+                        System.out.println("Actor hook found");
+                        spawnActor(map.getHooks()[x][y], map.getHooks()[x][y], true);
+                    }
+                }
+            }
+        }
+    }
+
+    public void addEntity(String ref, Entity entity)
+    {
+        entityMap.put(ref, entity);
     }
 
     //TODO: consider splitting, generalizing
@@ -369,37 +406,5 @@ public class Model
         }
 
         return hooks;
-    }
-
-    /**
-     * Given a reference tag, return the Entity mapped to that reference tag
-     * in this model.
-     *
-     * @param ref String: The reference tag to lookup an Entity.
-     *
-     * @return Entity: The Entity mapped to the given reference tag.
-     */
-    public Entity getEntityByRef(String ref)
-    {
-        return entityMap.get(ref);
-    }
-
-    public void spawnEntities()
-    {
-        for (int x = 0; x < map.getHooks().length; ++x)
-        {
-            for (int y = 0; y < map.getHooks()[x].length; ++y)
-            {
-                for (String actor_hook : ACTOR_HOOK_LIST)
-                {
-                    if (map.getHooks()[x][y].equals(actor_hook))
-                    {
-                        //Actor actor = new Actor(x * map.getTileWidth(), y * map.getTileWidth(), map.getHooks()[x][y]);
-                        System.out.println("Actor hook found");
-                        spawnActor(map.getHooks()[x][y], map.getHooks()[x][y], true);
-                    }
-                }
-            }
-        }
     }
 }

@@ -90,14 +90,12 @@ public class Presenter extends BasicGameState
         //end map setup
 
         //player setup
-        loadPlayerGraphics();
-
         PLAYER_REF = DEFAULT_PLAYER_REF;
+        PLAYER_HANDLER = new ActorHandler(this, PLAYER_REF);
         MODEL.spawnActor(PLAYER_REF, MAP_HOOK, true);
+        loadPlayerGraphics();
         MODEL.getMap().setHookSpawn(MAP_HOOK);
         //end player setup
-
-        PLAYER_HANDLER = new ActorHandler(this, PLAYER_REF);
     }
 
     /**
@@ -113,6 +111,15 @@ public class Presenter extends BasicGameState
      */
     private void loadMap(String loadMapName) throws SlickException
     {
+        if (NPC_HANDLER_MAP != null)
+        {
+            NPC_HANDLER_MAP.clear();
+        }
+        else
+        {
+            NPC_HANDLER_MAP = new HashMap<>();
+        }
+
         System.out.println(MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
         InputStream inputStream = ResourceLoader.getResourceAsStream(
             MAP_RESOURCE_PATH + loadMapName + TILED_MAP_EXTENSION);
@@ -144,6 +151,24 @@ public class Presenter extends BasicGameState
                 if (!refTileHook.equals(TILED_HOOK_PROPERTY_DEFAULT))
                 {
                     System.out.println("Tile at <" + x + ", " + y + "> has reference hook <" + refTileHook + ">");
+
+                    String[] splitRef = refTileHook.split(".");
+                    if (splitRef.length > 1)
+                    {
+                        if (splitRef[0].equals("npc"))
+                        {
+                            System.out.println("Creating NPC Handler");
+
+                            NPCHandler npcHandler = new NPCHandler(MODEL,
+                                                                   VIEW,
+                                                                   splitRef[1],
+                                                                   x * tiledMap.getTileWidth() *
+                                                                   GRAPHIC_TO_LOGIC_CONVERSION,
+                                                                   y * tiledMap.getTileWidth() *
+                                                                   GRAPHIC_TO_LOGIC_CONVERSION);
+                            NPC_HANDLER_MAP.put(splitRef[1], npcHandler);
+                        }
+                    }
                 }
             }
         }
@@ -203,7 +228,7 @@ public class Presenter extends BasicGameState
 
         MAP_HOOK = loadMapName;
         MODEL.getMap().setHookCurrent(MAP_HOOK);
-        MODEL.spawnEntities();
+        //MODEL.spawnEntities();
     }
 
     /**
@@ -218,157 +243,157 @@ public class Presenter extends BasicGameState
         overworld.view.Actor actor = new overworld.view.Actor();
 
         inputStream = ResourceLoader.getResourceAsStream(
-            PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
-            PLAYER_GRAPHICS_WALK_POSTFIX + "1" + GRAPHICS_EXTENSION);
+            PLAYER_GRAPHIC_PATH_WALK + PLAYER_GRAPHIC_PREFIX_LEFT +
+            PLAYER_GRAPHIC_POSTFIX_WALK + "1" + GRAPHICS_EXTENSION);
         Image[] playerFramesFaceLeft = {new Image(inputStream,
-                                                  PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
-                                                  PLAYER_GRAPHICS_WALK_POSTFIX + "1" +
+                                                  PLAYER_GRAPHIC_PATH_WALK + PLAYER_GRAPHIC_PREFIX_LEFT +
+                                                  PLAYER_GRAPHIC_POSTFIX_WALK + "1" +
                                                   GRAPHICS_EXTENSION,
                                                   false,
                                                   FILTER_NEAREST)};
         Animation playerAnimationFaceLeft = new Animation(playerFramesFaceLeft, 1, false);
 
         inputStream = ResourceLoader.getResourceAsStream(
-            PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
-            PLAYER_GRAPHICS_WALK_POSTFIX + "1" + GRAPHICS_EXTENSION);
+            PLAYER_GRAPHIC_PATH_WALK + PLAYER_GRAPHIC_PREFIX_RIGHT +
+            PLAYER_GRAPHIC_POSTFIX_WALK + "1" + GRAPHICS_EXTENSION);
         Image[] playerFramesFaceRight = {new Image(inputStream,
-                                                   PLAYER_GRAPHICS_WALK_PATH +
-                                                   PLAYER_GRAPHICS_RIGHT_PREFIX +
-                                                   PLAYER_GRAPHICS_WALK_POSTFIX + "1" +
+                                                   PLAYER_GRAPHIC_PATH_WALK +
+                                                   PLAYER_GRAPHIC_PREFIX_RIGHT +
+                                                   PLAYER_GRAPHIC_POSTFIX_WALK + "1" +
                                                    GRAPHICS_EXTENSION,
                                                    false,
                                                    FILTER_NEAREST)};
         Animation playerAnimationFaceRight = new Animation(playerFramesFaceRight, 1, false);
 
-        Image[] playerFramesWalkLeft = new Image[PLAYER_GRAPHICS_WALK_FRAME_COUNT];
-        for (int i = 0; i < PLAYER_GRAPHICS_WALK_FRAME_COUNT; ++i)
+        Image[] playerFramesWalkLeft = new Image[PLAYER_GRAPHIC_FRAME_COUNT_WALK];
+        for (int i = 0; i < PLAYER_GRAPHIC_FRAME_COUNT_WALK; ++i)
         {
             inputStream = ResourceLoader.getResourceAsStream(
-                PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
-                PLAYER_GRAPHICS_WALK_POSTFIX + (i + 1) + GRAPHICS_EXTENSION);
+                PLAYER_GRAPHIC_PATH_WALK + PLAYER_GRAPHIC_PREFIX_LEFT +
+                PLAYER_GRAPHIC_POSTFIX_WALK + (i + 1) + GRAPHICS_EXTENSION);
             playerFramesWalkLeft[i] = new Image(inputStream,
-                                                PLAYER_GRAPHICS_WALK_PATH +
-                                                PLAYER_GRAPHICS_LEFT_PREFIX +
-                                                PLAYER_GRAPHICS_WALK_POSTFIX + (i + 1) +
+                                                PLAYER_GRAPHIC_PATH_WALK +
+                                                PLAYER_GRAPHIC_PREFIX_LEFT +
+                                                PLAYER_GRAPHIC_POSTFIX_WALK + (i + 1) +
                                                 GRAPHICS_EXTENSION,
                                                 false,
                                                 FILTER_NEAREST);
         }
         Animation playerAnimationWalkLeft =
-            new Animation(playerFramesWalkLeft, PLAYER_GRAPHICS_WALK_FRAME_DURATION, true);
+            new Animation(playerFramesWalkLeft, PLAYER_GRAPHIC_FRAME_DURATION_WALK, true);
         playerAnimationWalkLeft.setLooping(true);
         playerAnimationWalkLeft.setPingPong(true);
 
-        Image[] playerFramesWalkRight = new Image[PLAYER_GRAPHICS_WALK_FRAME_COUNT];
-        for (int i = 0; i < PLAYER_GRAPHICS_WALK_FRAME_COUNT; ++i)
+        Image[] playerFramesWalkRight = new Image[PLAYER_GRAPHIC_FRAME_COUNT_WALK];
+        for (int i = 0; i < PLAYER_GRAPHIC_FRAME_COUNT_WALK; ++i)
         {
             inputStream = ResourceLoader.getResourceAsStream(
-                PLAYER_GRAPHICS_WALK_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
-                PLAYER_GRAPHICS_WALK_POSTFIX + (i + 1) + GRAPHICS_EXTENSION);
+                PLAYER_GRAPHIC_PATH_WALK + PLAYER_GRAPHIC_PREFIX_RIGHT +
+                PLAYER_GRAPHIC_POSTFIX_WALK + (i + 1) + GRAPHICS_EXTENSION);
             playerFramesWalkRight[i] = new Image(inputStream,
-                                                 PLAYER_GRAPHICS_WALK_PATH +
-                                                 PLAYER_GRAPHICS_RIGHT_PREFIX +
-                                                 PLAYER_GRAPHICS_WALK_POSTFIX + (i + 1) +
+                                                 PLAYER_GRAPHIC_PATH_WALK +
+                                                 PLAYER_GRAPHIC_PREFIX_RIGHT +
+                                                 PLAYER_GRAPHIC_POSTFIX_WALK + (i + 1) +
                                                  GRAPHICS_EXTENSION,
                                                  false,
                                                  FILTER_NEAREST);
         }
         Animation playerAnimationWalkRight =
-            new Animation(playerFramesWalkRight, PLAYER_GRAPHICS_WALK_FRAME_DURATION, true);
+            new Animation(playerFramesWalkRight, PLAYER_GRAPHIC_FRAME_DURATION_WALK, true);
         playerAnimationWalkRight.setLooping(true);
         playerAnimationWalkRight.setPingPong(true);
 
-        Image[] playerFramesRunLeft = new Image[PLAYER_GRAPHICS_RUN_FRAME_COUNT];
-        for (int i = 0; i < PLAYER_GRAPHICS_RUN_FRAME_COUNT; ++i)
+        Image[] playerFramesRunLeft = new Image[PLAYER_GRAPHIC_FRAME_COUNT_RUN];
+        for (int i = 0; i < PLAYER_GRAPHIC_FRAME_COUNT_RUN; ++i)
         {
             inputStream = ResourceLoader.getResourceAsStream(
-                PLAYER_GRAPHICS_RUN_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
-                PLAYER_GRAPHICS_RUN_POSTFIX + (i + 1) + GRAPHICS_EXTENSION);
+                PLAYER_GRAPHIC_PATH_RUN + PLAYER_GRAPHIC_PREFIX_LEFT +
+                PLAYER_GRAPHIC_POSTFIX_RUN + (i + 1) + GRAPHICS_EXTENSION);
             playerFramesRunLeft[i] = new Image(inputStream,
-                                               PLAYER_GRAPHICS_RUN_PATH +
-                                               PLAYER_GRAPHICS_LEFT_PREFIX +
-                                               PLAYER_GRAPHICS_RUN_POSTFIX + (i + 1) +
+                                               PLAYER_GRAPHIC_PATH_RUN +
+                                               PLAYER_GRAPHIC_PREFIX_LEFT +
+                                               PLAYER_GRAPHIC_POSTFIX_RUN + (i + 1) +
                                                GRAPHICS_EXTENSION,
                                                false,
                                                FILTER_NEAREST);
         }
         Animation playerAnimationRunLeft =
-            new Animation(playerFramesRunLeft, PLAYER_GRAPHICS_RUN_FRAME_DURATION, true);
+            new Animation(playerFramesRunLeft, PLAYER_GRAPHIC_FRAME_DURATION_RUN, true);
         playerAnimationRunLeft.setLooping(true);
         playerAnimationRunLeft.setPingPong(true);
 
-        Image[] playerFramesRunRight = new Image[PLAYER_GRAPHICS_RUN_FRAME_COUNT];
-        for (int i = 0; i < PLAYER_GRAPHICS_RUN_FRAME_COUNT; ++i)
+        Image[] playerFramesRunRight = new Image[PLAYER_GRAPHIC_FRAME_COUNT_RUN];
+        for (int i = 0; i < PLAYER_GRAPHIC_FRAME_COUNT_RUN; ++i)
         {
             inputStream = ResourceLoader.getResourceAsStream(
-                PLAYER_GRAPHICS_RUN_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
-                PLAYER_GRAPHICS_RUN_POSTFIX + (i + 1) + GRAPHICS_EXTENSION);
+                PLAYER_GRAPHIC_PATH_RUN + PLAYER_GRAPHIC_PREFIX_RIGHT +
+                PLAYER_GRAPHIC_POSTFIX_RUN + (i + 1) + GRAPHICS_EXTENSION);
             playerFramesRunRight[i] = new Image(inputStream,
-                                                PLAYER_GRAPHICS_RUN_PATH +
-                                                PLAYER_GRAPHICS_RIGHT_PREFIX +
-                                                PLAYER_GRAPHICS_RUN_POSTFIX + (i + 1) +
+                                                PLAYER_GRAPHIC_PATH_RUN +
+                                                PLAYER_GRAPHIC_PREFIX_RIGHT +
+                                                PLAYER_GRAPHIC_POSTFIX_RUN + (i + 1) +
                                                 GRAPHICS_EXTENSION,
                                                 false,
                                                 FILTER_NEAREST);
         }
         Animation playerAnimationRunRight =
-            new Animation(playerFramesRunRight, PLAYER_GRAPHICS_RUN_FRAME_DURATION, true);
+            new Animation(playerFramesRunRight, PLAYER_GRAPHIC_FRAME_DURATION_RUN, true);
         playerAnimationRunRight.setLooping(true);
         playerAnimationRunRight.setPingPong(true);
 
-        Image[] playerFramesJumpLeft = new Image[PLAYER_GRAPHICS_JUMP_FRAME_COUNT];
-        for (int i = 0; i < PLAYER_GRAPHICS_JUMP_FRAME_COUNT; ++i)
+        Image[] playerFramesJumpLeft = new Image[PLAYER_GRAPHIC_FRAME_COUNT_JUMP];
+        for (int i = 0; i < PLAYER_GRAPHIC_FRAME_COUNT_JUMP; ++i)
         {
             inputStream = ResourceLoader.getResourceAsStream(
-                PLAYER_GRAPHICS_JUMP_PATH + PLAYER_GRAPHICS_LEFT_PREFIX + PLAYER_GRAPHICS_JUMP_POSTFIX + (i + 1) +
+                PLAYER_GRAPHIC_PATH_JUMP + PLAYER_GRAPHIC_PREFIX_LEFT + PLAYER_GRAPHIC_POSTFIX_JUMP + (i + 1) +
                 GRAPHICS_EXTENSION);
             playerFramesJumpLeft[i] = new Image(inputStream,
-                                                PLAYER_GRAPHICS_JUMP_PATH + PLAYER_GRAPHICS_LEFT_PREFIX +
-                                                PLAYER_GRAPHICS_JUMP_POSTFIX + (i + 1) +
+                                                PLAYER_GRAPHIC_PATH_JUMP + PLAYER_GRAPHIC_PREFIX_LEFT +
+                                                PLAYER_GRAPHIC_POSTFIX_JUMP + (i + 1) +
                                                 GRAPHICS_EXTENSION,
                                                 false,
                                                 FILTER_NEAREST);
         }
         Animation playerAnimationJumpLeft =
-            new Animation(playerFramesJumpLeft, PLAYER_GRAPHICS_JUMP_FRAME_DURATION, true);
+            new Animation(playerFramesJumpLeft, PLAYER_GRAPHIC_FRAME_DURATION_JUMP, true);
         playerAnimationJumpLeft.setLooping(false);
 
-        Image[] playerFramesJumpRight = new Image[PLAYER_GRAPHICS_JUMP_FRAME_COUNT];
-        for (int i = 0; i < PLAYER_GRAPHICS_JUMP_FRAME_COUNT; ++i)
+        Image[] playerFramesJumpRight = new Image[PLAYER_GRAPHIC_FRAME_COUNT_JUMP];
+        for (int i = 0; i < PLAYER_GRAPHIC_FRAME_COUNT_JUMP; ++i)
         {
             inputStream = ResourceLoader.getResourceAsStream(
-                PLAYER_GRAPHICS_JUMP_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX + PLAYER_GRAPHICS_JUMP_POSTFIX + (i + 1) +
+                PLAYER_GRAPHIC_PATH_JUMP + PLAYER_GRAPHIC_PREFIX_RIGHT + PLAYER_GRAPHIC_POSTFIX_JUMP + (i + 1) +
                 GRAPHICS_EXTENSION);
             playerFramesJumpRight[i] = new Image(inputStream,
-                                                 PLAYER_GRAPHICS_JUMP_PATH + PLAYER_GRAPHICS_RIGHT_PREFIX +
-                                                 PLAYER_GRAPHICS_JUMP_POSTFIX + (i + 1) +
+                                                 PLAYER_GRAPHIC_PATH_JUMP + PLAYER_GRAPHIC_PREFIX_RIGHT +
+                                                 PLAYER_GRAPHIC_POSTFIX_JUMP + (i + 1) +
                                                  GRAPHICS_EXTENSION,
                                                  false,
                                                  FILTER_NEAREST);
         }
         Animation playerAnimationJumpRight =
-            new Animation(playerFramesJumpRight, PLAYER_GRAPHICS_JUMP_FRAME_DURATION, true);
+            new Animation(playerFramesJumpRight, PLAYER_GRAPHIC_FRAME_DURATION_JUMP, true);
         playerAnimationJumpRight.setLooping(false);
 
         inputStream = ResourceLoader.getResourceAsStream(
-            PLAYER_GRAPHICS_WALL_PATH + PLAYER_GRAPHICS_WALL_PRE_PREFIX +
-            PLAYER_GRAPHICS_LEFT_PREFIX + GRAPHICS_EXTENSION);
+            PLAYER_GRAPHIC_PATH_WALL + PLAYER_GRAPHIC_PRE_PREFIX_WALL +
+            PLAYER_GRAPHIC_PREFIX_LEFT + GRAPHICS_EXTENSION);
         Image[] playerFramesWallLeft = {new Image(inputStream,
-                                                  PLAYER_GRAPHICS_WALL_PATH +
-                                                  PLAYER_GRAPHICS_WALL_PRE_PREFIX +
-                                                  PLAYER_GRAPHICS_LEFT_PREFIX +
+                                                  PLAYER_GRAPHIC_PATH_WALL +
+                                                  PLAYER_GRAPHIC_PRE_PREFIX_WALL +
+                                                  PLAYER_GRAPHIC_PREFIX_LEFT +
                                                   GRAPHICS_EXTENSION,
                                                   false,
                                                   FILTER_NEAREST)};
         Animation playerAnimationWallLeft = new Animation(playerFramesWallLeft, 1, false);
 
         inputStream = ResourceLoader.getResourceAsStream(
-            PLAYER_GRAPHICS_WALL_PATH + PLAYER_GRAPHICS_WALL_PRE_PREFIX +
-            PLAYER_GRAPHICS_RIGHT_PREFIX + GRAPHICS_EXTENSION);
+            PLAYER_GRAPHIC_PATH_WALL + PLAYER_GRAPHIC_PRE_PREFIX_WALL +
+            PLAYER_GRAPHIC_PREFIX_RIGHT + GRAPHICS_EXTENSION);
         Image[] playerFramesWallRight = {new Image(inputStream,
-                                                   PLAYER_GRAPHICS_WALL_PATH +
-                                                   PLAYER_GRAPHICS_WALL_PRE_PREFIX +
-                                                   PLAYER_GRAPHICS_RIGHT_PREFIX +
+                                                   PLAYER_GRAPHIC_PATH_WALL +
+                                                   PLAYER_GRAPHIC_PRE_PREFIX_WALL +
+                                                   PLAYER_GRAPHIC_PREFIX_RIGHT +
                                                    GRAPHICS_EXTENSION,
                                                    false,
                                                    FILTER_NEAREST)};
@@ -384,6 +409,8 @@ public class Presenter extends BasicGameState
         actor.setAnimationJumpRight(playerAnimationJumpRight);
         actor.setAnimationWallLeft(playerAnimationWallLeft);
         actor.setAnimationWallRight(playerAnimationWallRight);
+
+        System.out.println("Adding actor ref:<" + PLAYER_REF + "> to View");
 
         VIEW.addEntity(PLAYER_REF, actor);
     }
