@@ -6,12 +6,12 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.ResourceLoader;
-import overworld.model.Actor;
 import overworld.model.Model;
 import overworld.view.View;
 
 import java.awt.event.ActionListener;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import static main.Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR;
 import static org.newdawn.slick.Image.FILTER_NEAREST;
@@ -28,28 +28,30 @@ import static overworld.Globals.*;
  */
 public class Presenter extends BasicGameState
 {
-    private static int           WINDOW_WIDTH;
-    private static int           WINDOW_HEIGHT;
-    private static float         WINDOW_CENTER_HORIZONTAL;
-    private static float         WINDOW_CENTER_VERTICAL;
-    private static String        MAP_HOOK;
-    private static String        PLAYER_REF;
+    private static int                         WINDOW_WIDTH;
+    private static int                         WINDOW_HEIGHT;
+    private static float                       WINDOW_CENTER_HORIZONTAL;
+    private static float                       WINDOW_CENTER_VERTICAL;
+    private static String                      MAP_HOOK;
+    private static String                      PLAYER_REF;
     //private final ActionListener changeStateListener; //TODO: needs redoing
-    private final  int           id;
-    private        Model         MODEL;
-    private        PlayerUpdater PLAYER_UPDATER;
-    private        View          VIEW;
-    private float GRAPHIC_SCALE = 6;
+    private final  int                         STATE_ID;
+    private        ActorHandler                PLAYER_HANDLER;
+    private        HashMap<String, NPCHandler> NPC_HANDLER_MAP;
+    private        Model                       MODEL;
+    private        View                        VIEW;
+
+    private float GRAPHIC_SCALE = 6f;
 
     /**
      * State constructor. Stores reference parameters.
      *
-     * @param id                  int: The numeric id of this state.
+     * @param STATE_ID            int: The numeric STATE_ID of this state.
      * @param changeStateListener ActionListener: Callback for change state requests.
      */
-    public Presenter(int id, ActionListener changeStateListener)
+    public Presenter(int STATE_ID, ActionListener changeStateListener)
     {
-        this.id = id;
+        this.STATE_ID = STATE_ID;
         //this.changeStateListener = changeStateListener;
     }
 
@@ -59,7 +61,7 @@ public class Presenter extends BasicGameState
     @Override
     public int getID()
     {
-        return id;
+        return STATE_ID;
     }
 
     /**
@@ -95,7 +97,7 @@ public class Presenter extends BasicGameState
         MODEL.getMap().setHookSpawn(MAP_HOOK);
         //end player setup
 
-        PLAYER_UPDATER = new PlayerUpdater(this, PLAYER_REF);
+        PLAYER_HANDLER = new ActorHandler(this, PLAYER_REF);
     }
 
     /**
@@ -424,15 +426,15 @@ public class Presenter extends BasicGameState
 
         //VIEW updating
         //player
-        Actor player                 = (Actor) MODEL.getEntityByRef(PLAYER_REF);
-        long  playerX                = player.getX() + player.getGraphicOffsetX();
-        long  playerY                = player.getY() + player.getGraphicOffsetY();
-        long  playerDX               = player.getDX();
-        long  playerDY               = player.getDY();
-        long  playerWidth            = player.getWidth();
-        long  playerHeight           = player.getHeight();
-        long  playerMiddleHorizontal = playerX + (playerWidth / 2);
-        long  playerMiddleVertical   = playerY + (playerHeight / 2);
+        overworld.model.Actor player                 = (overworld.model.Actor) MODEL.getEntityByRef(PLAYER_REF);
+        long                  playerX                = player.getX() + player.getGraphicOffsetX();
+        long                  playerY                = player.getY() + player.getGraphicOffsetY();
+        long                  playerDX               = player.getDX();
+        long                  playerDY               = player.getDY();
+        long                  playerWidth            = player.getWidth();
+        long                  playerHeight           = player.getHeight();
+        long                  playerMiddleHorizontal = playerX + (playerWidth / 2);
+        long                  playerMiddleVertical   = playerY + (playerHeight / 2);
 
         float playerRenderX =
             WINDOW_CENTER_HORIZONTAL - (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
@@ -603,11 +605,11 @@ public class Presenter extends BasicGameState
     {
         //System.out.println(delta);
 
-        PLAYER_UPDATER.update(MODEL, container.getInput());
+        PLAYER_HANDLER.update(MODEL, container.getInput());
 
         //example of requesting game state change, i.e. to the main menu or fight state
         /*if (false) {
-            ActionEvent e = new ActionEvent(this, 0, String.valueOf(id));
+            ActionEvent e = new ActionEvent(this, 0, String.valueOf(STATE_ID));
             changeStateListener.actionPerformed(e);
         }*/
     }

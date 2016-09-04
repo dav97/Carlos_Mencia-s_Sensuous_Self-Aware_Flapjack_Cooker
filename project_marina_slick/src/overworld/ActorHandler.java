@@ -2,22 +2,21 @@ package overworld;
 
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import overworld.model.Actor;
 import overworld.model.Model;
 
 /**
- * overworld.PlayerUpdater is used by the presenter to handle player logic and update the model.
+ * overworld.ActorHandler is used by the presenter to handle player logic and update the model.
  *
  * @author scorple
  * @version dev02
  * @since 2016_0810
  */
-class PlayerUpdater
+class ActorHandler
 {
-    private Presenter presenter;
-    private String    playerRef;
-    private Model     model;
-    private Actor     player;
+    private Presenter             presenter;
+    private String                playerRef;
+    private Model                 model;
+    private overworld.model.Actor player;
 
     private boolean staleInputUp;
     private boolean staleInputUse;
@@ -27,7 +26,7 @@ class PlayerUpdater
      *
      * @param presenter Presenter: The presenter to call back to where applicable.
      */
-    PlayerUpdater(Presenter presenter, String playerRef)
+    ActorHandler(Presenter presenter, String playerRef)
     {
         this.presenter = presenter;
         this.playerRef = playerRef;
@@ -50,7 +49,7 @@ class PlayerUpdater
     void update(Model model, Input input) throws SlickException
     {
         this.model = model;
-        player = (Actor) model.getEntityByRef(playerRef);
+        player = (overworld.model.Actor) model.getEntityByRef(playerRef);
 
         long playerDX = player.getDX();
         long playerDY = player.getDY();
