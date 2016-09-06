@@ -49,7 +49,7 @@ public class Entity
         return x;
     }
 
-    public void setX(long x)
+    public void setX(float x)
     {
         this.x = x;
     }
@@ -59,7 +59,7 @@ public class Entity
         return y;
     }
 
-    public void setY(long y)
+    public void setY(float y)
     {
         this.y = y;
     }

@@ -49,22 +49,22 @@ public class Globals
     static final        int      PLAYER_GRAPHIC_FRAME_COUNT_RUN            = 4;
     static final        int      PLAYER_GRAPHIC_FRAME_DURATION_RUN         = 125;
     static final        String   PLAYER_GRAPHIC_POSTFIX_RUN                = "run";
-    static final        String   PLAYER_GRAPHIC_PATH_JUMP                  =
+    static final String PLAYER_GRAPHIC_PATH_JUMP           =
         "res/overworld/actor/marina/graphic/jump/";
-    static final        int      PLAYER_GRAPHIC_FRAME_COUNT_JUMP           = 2;
-    static final        int      PLAYER_GRAPHIC_FRAME_DURATION_JUMP        = 75;
-    static final        String   PLAYER_GRAPHIC_POSTFIX_JUMP               = "j";
-    static final        String   PLAYER_GRAPHIC_PATH_WALL                  =
+    static final int    PLAYER_GRAPHIC_FRAME_COUNT_JUMP    = 2;
+    static final int    PLAYER_GRAPHIC_FRAME_DURATION_JUMP = 75;
+    static final String PLAYER_GRAPHIC_POSTFIX_JUMP        = "j";
+    static final String PLAYER_GRAPHIC_PATH_WALL           =
         "res/overworld/actor/marina/graphic/action/";
-    static final        String   PLAYER_GRAPHIC_PRE_PREFIX_WALL            = "walljump_";
-    static final        String   NPC_RESOURCE_PATH                         = "res/overword/npc/";
-    static final        String   NPC_PROPERTIES_FILE                       = "/npc.xml";
-    static final        String   NPC_GRAPHIC_PREFIX_LEFT                   = "l";
-    static final        String   NPC_GRAPHIC_PREFIX_RIGHT                  = "r";
-    static final        int      NPC_GRAPHIC_FRAME_COUNT_FACE              = 1;
-    static final        int      NPC_GRAPHIC_FRAME_DURACTION_FACE          = 1;
-    static final        int      NPC_GRAPHIC_FRAME_COUNT_WALK              = 2;
-    static final        int      NPC_GRAPHIC_FRAME_DURATION_WALK           = 50;
+    static final String PLAYER_GRAPHIC_PRE_PREFIX_WALL     = "walljump_";
+    static final String NPC_RESOURCE_PATH                  = "res/overworld/npc/";
+    static final String NPC_PROPERTIES_FILE                = "/npc.xml";
+    static final String NPC_GRAPHIC_PREFIX_LEFT            = "l";
+    static final String NPC_GRAPHIC_PREFIX_RIGHT           = "r";
+    static final int    NPC_GRAPHIC_FRAME_COUNT_FACE       = 1;
+    static final int    NPC_GRAPHIC_FRAME_DURACTION_FACE   = 1;
+    static final int    NPC_GRAPHIC_FRAME_COUNT_WALK       = 2;
+    static final int    NPC_GRAPHIC_FRAME_DURATION_WALK    = 50;
     static final        int      GRAPHIC_TO_LOGIC_CONVERSION               = 10000;
     static final        long     STANDARD_DDX_DUE_TO_INPUT                 = 8;
     static final        long     STANDARD_MAX_DX_DUE_TO_INPUT              = 1000;

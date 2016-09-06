@@ -12,6 +12,7 @@ import overworld.view.View;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import static main.Globals.DRAW_SCALE_BY_CONTAINER_WIDTH_DIVISOR;
 import static org.newdawn.slick.Image.FILTER_NEAREST;
@@ -152,14 +153,16 @@ public class Presenter extends BasicGameState
                 {
                     System.out.println("Tile at <" + x + ", " + y + "> has reference hook <" + refTileHook + ">");
 
-                    String[] splitRef = refTileHook.split(".");
+                    String[] splitRef = refTileHook.split("\\.");
+
                     if (splitRef.length > 1)
                     {
                         if (splitRef[0].equals("npc"))
                         {
                             System.out.println("Creating NPC Handler");
 
-                            NPCHandler npcHandler = new NPCHandler(MODEL,
+                            NPCHandler npcHandler = new NPCHandler(this,
+                                                                   MODEL,
                                                                    VIEW,
                                                                    splitRef[1],
                                                                    x * tiledMap.getTileWidth() *
@@ -463,6 +466,9 @@ public class Presenter extends BasicGameState
         long                  playerMiddleHorizontal = playerX + (playerWidth / 2);
         long                  playerMiddleVertical   = playerY + (playerHeight / 2);
 
+        //        System.out.println(playerX);
+        //        System.out.println(playerY);
+
         float playerRenderX =
             WINDOW_CENTER_HORIZONTAL - (((float) playerWidth / GRAPHIC_TO_LOGIC_CONVERSION) / 2.0f);
         float playerRenderY =
@@ -620,6 +626,12 @@ public class Presenter extends BasicGameState
         }
         //end player graphic/animation updating
         //end VIEW updating
+
+        for (Map.Entry<String, NPCHandler> entry : NPC_HANDLER_MAP.entrySet())
+        {
+            NPCHandler npcHandler = entry.getValue();
+            npcHandler.updateView(mapRenderX, mapRenderY);
+        }
 
         VIEW.draw(g);
     }

@@ -3,6 +3,7 @@ package overworld;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import overworld.model.Model;
+import overworld.view.View;
 
 /**
  * overworld.ActorHandler is used by the presenter to handle player logic and update the model.
@@ -26,12 +27,17 @@ class ActorHandler
      *
      * @param presenter Presenter: The presenter to call back to where applicable.
      */
-    ActorHandler(Presenter presenter, String playerRef)
+    ActorHandler(Presenter presenter, String ref)
     {
         this.presenter = presenter;
-        this.playerRef = playerRef;
+        this.playerRef = ref;
         staleInputUp = false;
         staleInputUse = false;
+    }
+
+    ActorHandler(Presenter presenter, Model model, View view, String ref, long x, long y)
+    {
+
     }
 
     /**

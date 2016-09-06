@@ -5,5 +5,8 @@ package overworld.model;
  */
 public class NPC extends Entity
 {
-
+    public NPC(long x, long y)
+    {
+        super(x, y);
+    }
 }

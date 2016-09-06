@@ -62,6 +62,8 @@ public class View
 
         mapMidgroundImage.draw(mapX, mapY);
 
+        Actor actor = null;
+
         for (Entry<String, Entity> entry : entityMap.entrySet())
         {
             Entity entity = entry.getValue();
@@ -71,7 +73,10 @@ public class View
                 {
                     if (((Actor) entity).getGraphic() != null)
                     {
-                        ((Actor) entity).getGraphic().draw(entity.getX(), entity.getY());
+
+                        //((Actor) entity).getGraphic().draw(entity.getX(), entity.getY());
+                        //store and draw later - temporary measure to ensure player is drawn in front of other entities
+                        actor = (Actor) entity;
                     }
                     else
                     {
@@ -90,6 +95,11 @@ public class View
                     }
                 }
             }
+        }
+
+        if (actor != null)
+        {
+            actor.getGraphic().draw(actor.getX(), actor.getY());
         }
 
         mapForegroundImage.draw(mapX, mapY);
@@ -225,5 +235,10 @@ public class View
         {
             System.out.println("Error, attempt to set fall frame of non-actor entity, ref:<" + ref + ">");
         }
+    }
+
+    public Entity getEntityByRef(String ref)
+    {
+        return entityMap.get(ref);
     }
 }
