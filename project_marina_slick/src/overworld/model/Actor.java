@@ -9,7 +9,7 @@ import org.newdawn.slick.util.ResourceLoader;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static overworld.Globals.ACTOR_PROPERTIES_RESOURCE_PATH;
+import static overworld.Globals.ACTOR_RESOURCE_PATH;
 import static overworld.Globals.XML_EXTENSION;
 
 /**
@@ -49,12 +49,12 @@ public class Actor extends Entity
      * and a reference to load in the remainder of the Actor's properties from an .xml file.
      * Sets some logic defaults and requests property population from .xml file.
      *
-     * @param x   long: The initial x coordinate of this Actor.
-     * @param y   long: The initial y coordinate of this Actor.
      * @param ref String: A reference tag for loading the rest of this Actor's properties
      *            and referencing it later.
+     * @param x   long: The initial x coordinate of this Actor.
+     * @param y   long: The initial y coordinate of this Actor.
      */
-    Actor(long x, long y, String ref)
+    public Actor(String ref, long x, long y)
     {
         super(x, y);
         dX = 0;
@@ -62,8 +62,6 @@ public class Actor extends Entity
         onWallLeft = false;
         onWallRight = false;
         resetJump = false;
-
-        getActorStats(ref);
     }
 
     /**
@@ -78,7 +76,7 @@ public class Actor extends Entity
     {
         SAXBuilder saxBuilder = new SAXBuilder();
         InputStream inputStream = ResourceLoader.getResourceAsStream(
-            ACTOR_PROPERTIES_RESOURCE_PATH + ref + "/" + ref + XML_EXTENSION);
+            ACTOR_RESOURCE_PATH + ref + "/" + ref + XML_EXTENSION);
         Document document = null;
 
         try
@@ -217,7 +215,7 @@ public class Actor extends Entity
      *
      * @param inputDDX long: The new standard actor ddX due to input.
      */
-    void setInputDDX(long inputDDX)
+    public void setInputDDX(long inputDDX)
     {
         this.inputDDX = inputDDX;
     }
@@ -237,7 +235,7 @@ public class Actor extends Entity
      *
      * @param inputMaxDX long: The new maximum actor dX due to horizontal input.
      */
-    void setInputMaxDX(long inputMaxDX)
+    public void setInputMaxDX(long inputMaxDX)
     {
         this.inputMaxDX = inputMaxDX;
     }
@@ -257,7 +255,7 @@ public class Actor extends Entity
      *
      * @param instantaneousJumpDY long: The new dY to assert at the instant the actor jumps.
      */
-    void setInstantaneousJumpDY(long instantaneousJumpDY)
+    public void setInstantaneousJumpDY(long instantaneousJumpDY)
     {
         this.instantaneousJumpDY = instantaneousJumpDY;
     }
@@ -277,7 +275,7 @@ public class Actor extends Entity
      *
      * @param instantaneousWallJumpDX long: The new dX to assert at the instant the actor jumps from a wall.
      */
-    void setInstantaneousWallJumpDX(long instantaneousWallJumpDX)
+    public void setInstantaneousWallJumpDX(long instantaneousWallJumpDX)
     {
         this.instantaneousWallJumpDX = instantaneousWallJumpDX;
     }
@@ -297,7 +295,7 @@ public class Actor extends Entity
      *
      * @param instantaneousWallJumpDY long: The new dY to assert at the instant the actor jumps from a wall.
      */
-    void setInstantaneousWallJumpDY(long instantaneousWallJumpDY)
+    public void setInstantaneousWallJumpDY(long instantaneousWallJumpDY)
     {
         this.instantaneousWallJumpDY = instantaneousWallJumpDY;
     }
@@ -317,7 +315,7 @@ public class Actor extends Entity
      *
      * @param gravityDDY long: The new standard actor ddY due to gravity.
      */
-    void setGravityDDY(long gravityDDY)
+    public void setGravityDDY(long gravityDDY)
     {
         this.gravityDDY = gravityDDY;
     }
@@ -337,7 +335,7 @@ public class Actor extends Entity
      *
      * @param gravityMaxDY long: The new maximum actor dY due to gravity.
      */
-    void setGravityMaxDY(long gravityMaxDY)
+    public void setGravityMaxDY(long gravityMaxDY)
     {
         this.gravityMaxDY = gravityMaxDY;
     }
@@ -357,7 +355,7 @@ public class Actor extends Entity
      *
      * @param gravityMaxWallDY long: The new maximum actor dY due to gravity while on a wall.
      */
-    void setGravityMaxWallDY(long gravityMaxWallDY)
+    public void setGravityMaxWallDY(long gravityMaxWallDY)
     {
         this.gravityMaxWallDY = gravityMaxWallDY;
     }
@@ -397,7 +395,7 @@ public class Actor extends Entity
      *
      * @param graphicOffsetX long: The new logical units to horizontally offset the actor graphic.
      */
-    void setGraphicOffsetX(long graphicOffsetX)
+    public void setGraphicOffsetX(long graphicOffsetX)
     {
         this.graphicOffsetX = graphicOffsetX;
     }
@@ -417,7 +415,7 @@ public class Actor extends Entity
      *
      * @param graphicOffsetY long: The new logical units to vertically offset the actor graphic.
      */
-    void setGraphicOffsetY(long graphicOffsetY)
+    public void setGraphicOffsetY(long graphicOffsetY)
     {
         this.graphicOffsetY = graphicOffsetY;
     }

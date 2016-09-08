@@ -85,16 +85,17 @@ public class Presenter extends BasicGameState
         //end component setup
 
         //map setup
-        String defaultMapName = MAP_HOOK_LIST[DEFAULT_MAP_ID];
+        MAP_HOOK = MAP_HOOK_LIST[DEFAULT_MAP_ID];
+        //String defaultMapName = MAP_HOOK_LIST[DEFAULT_MAP_ID];
 
-        loadMap(defaultMapName);
+        loadMap(MAP_HOOK);
         //end map setup
 
         //player setup
         PLAYER_REF = DEFAULT_PLAYER_REF;
-        PLAYER_HANDLER = new ActorHandler(this, PLAYER_REF);
-        MODEL.spawnActor(PLAYER_REF, MAP_HOOK, true);
-        loadPlayerGraphics();
+        //PLAYER_HANDLER = new ActorHandler(PLAYER_REF, this, MODEL, VIEW);
+        //MODEL.spawnActor(PLAYER_REF, MAP_HOOK, true);
+        //loadPlayerGraphics();
         MODEL.getMap().setHookSpawn(MAP_HOOK);
         //end player setup
     }
